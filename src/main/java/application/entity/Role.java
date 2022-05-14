@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name="tb_roles")
 public class Role implements GrantedAuthority {
 	
 	private static final long serialVersionUID = 1L;
@@ -36,9 +37,6 @@ public class Role implements GrantedAuthority {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

@@ -4,12 +4,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="tb_users")
-public class User implements UserDetails {
+public abstract class User implements UserDetails, Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -18,7 +21,7 @@ public class User implements UserDetails {
     private Long id;
     private String name;
     private String email;
-    private String senha;
+    private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="tb_users_roles",
@@ -38,10 +41,10 @@ public class User implements UserDetails {
 
     }
 
-    public User(String nome, String email, String senha) {
+    public User(String nome, String email, String password) {
         this.name = nome;
         this.email = email;
-        this.senha = senha;
+        this.password = password;
     }
 
     public void addRole(Role role) {
@@ -69,6 +72,7 @@ public class User implements UserDetails {
         return id;
     }
 
+
     public String getName() {
         return name;
     }
@@ -85,12 +89,10 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
-    }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+
+    public void setPassword(String senha) {
+        this.password = password;
     }
 
     @Override
@@ -100,7 +102,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.senha;
+        return this.password;
     }
 
     @Override

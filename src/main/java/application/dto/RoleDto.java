@@ -6,6 +6,10 @@ public class RoleDto {
 
     private String name;
 
+    public RoleDto() {
+
+    }
+
     public RoleDto(Role role) {
         this.name = role.getName();
     }

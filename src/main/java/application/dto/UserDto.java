@@ -16,18 +16,33 @@ public class UserDto {
 
     private List<RoleDto> rolesDto = new ArrayList<>();
 
+    public UserDto() {
+
+    }
+
+    public void convertList(List<Role> roles) {
+         for(Role role : roles) {
+             rolesDto.add(new RoleDto(role));
+         }
+    }
 
     public UserDto(User user) {
         this.email=user.getEmail();
         this.name=user.getName();
         this.id=user.getId();
-        for(int i=0;i<user.getAuthorities().size();i++) {
-            rolesDto.add(new RoleDto(user.getAuthorities().get(i)));                // Método necessita de refatoração nessa parte
-        }
+        convertList(user.getAuthorities());                   // Método necessita de refatoração nessa parte
+    }
+
+    public void addRolesDto(RoleDto roleDto) {
+        rolesDto.add(roleDto);
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

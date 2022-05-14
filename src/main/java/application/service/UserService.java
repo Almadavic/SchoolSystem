@@ -30,12 +30,11 @@ public class UserService implements UserDetailsService {
         throw new UsernameNotFoundException("Dados inválidos!");
     }
 
-    public Page<UserDto> findAll(Pageable pagination,String rolesNome) {
+    public Page<UserDto> findAll(Pageable pagination,String rolesName) {
         Page<User> users;
-        rolesNome = "ROLE_"+rolesNome.toUpperCase();
-        if(rolesNome!=null) {
-            users = repository.findByRolesName(pagination,rolesNome);
-
+        rolesName = "ROLE_"+rolesName.toUpperCase();
+        if(rolesName!=null) {
+            users = repository.findByRolesName(pagination,rolesName);
         } else {
              users = repository.findAll(pagination);
         }
