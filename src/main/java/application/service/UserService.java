@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -29,8 +30,15 @@ public class UserService implements UserDetailsService {
         throw new UsernameNotFoundException("Dados inválidos!");
     }
 
-    public Page<UserDto> findAll(Pageable pagination) {
-        Page<User> users = repository.findAll(pagination);
+    public Page<UserDto> findAll(Pageable pagination,String rolesNome) {
+        Page<User> users;
+        rolesNome = "ROLE_"+rolesNome.toUpperCase();
+        if(rolesNome!=null) {
+            users = repository.findByRolesName(pagination,rolesNome);
+
+        } else {
+             users = repository.findAll(pagination);
+        }
         Page<UserDto> usersDto = users.map(UserDto::new);
         return usersDto;
     }

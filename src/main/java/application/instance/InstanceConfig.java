@@ -26,19 +26,23 @@ public class InstanceConfig implements CommandLineRunner {
 
         String senhaEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
 
-        User u1 = new User("Joao", "joao@gmail.com", senhaEncode);
-        User u2 = new User("Leticia", "leticia@gmail.com",senhaEncode);
+        User u1 = new User("Joao Lacerta", "joao@gmail.com", senhaEncode);
+        User u2 = new User("Larissa Nunez", "leticia@gmail.com",senhaEncode);
+        User u3 = new User ("Victor Almada","almadavic@live.com",senhaEncode);
+        User u4 = new User("Renato Tavares","renato@hotmail.com",senhaEncode);
 
         Role r1 = new Role("ROLE_ALUNO");
         Role r2 = new Role("ROLE_PROFESSOR");
 
-        userRepository.saveAll(Arrays.asList(u1, u2));
+        userRepository.saveAll(Arrays.asList(u1, u2,u3,u4));
         roleRepository.saveAll(Arrays.asList(r1, r2));
 
         u1.addRole(r1);
         u2.addRole(r2);
+        u3.addRole(r1);
+        u4.addRole(r1);
 
-        userRepository.saveAll(Arrays.asList(u1, u2));
+        userRepository.saveAll(Arrays.asList(u1, u2,u3,u4));
 
 
 
