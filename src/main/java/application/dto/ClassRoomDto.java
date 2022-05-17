@@ -2,16 +2,24 @@ package application.dto;
 
 import application.entity.ClassRoom;
 import application.entity.Student;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonPropertyOrder({"id","letter","teacher","students","averageClassGrade"})
 public class ClassRoomDto {
 
+    @JsonProperty("id")
     private Long id;
+    @JsonProperty("letter")
     private Character letter;
+    @JsonProperty("teacher")
     private TeacherDto teacherDto;
+    @JsonProperty("students")
     private List<StudentDto> studentsDto = new ArrayList<>();
+    @JsonProperty("averageClassGrade")
     private Double averageClassGrade;
 
     public ClassRoomDto() {
@@ -28,7 +36,7 @@ public class ClassRoomDto {
         }
         double sum = 0;
         for (StudentDto studentDto : studentsDto) {
-            sum = sum + studentDto.getAverageStudent();
+            sum = sum + studentDto.getReportCardDto().getAverageGrade();
         }
         averageClassGrade = sum / studentsDto.size();
     }

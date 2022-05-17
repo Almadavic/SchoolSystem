@@ -5,13 +5,14 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="tb_roles")
 public class Role implements GrantedAuthority {
-	
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)

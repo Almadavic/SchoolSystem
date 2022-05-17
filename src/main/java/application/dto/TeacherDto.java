@@ -13,8 +13,9 @@ public class TeacherDto extends UserDto {
 
     public TeacherDto(Teacher teacher) {
         this.setId(teacher.getId());
-        this.setUserName(teacher.getName());
+        this.setName(teacher.getName());
         this.setEmail(teacher.getEmail());
+        this.setAddressDto(new AddressDto(teacher.getAddress()));
         convertList(teacher.getAuthorities());
     }
 }

@@ -32,8 +32,8 @@ public class UserService implements UserDetailsService {
 
     public Page<UserDto> findAll(Pageable pagination,String rolesName) {
         Page<User> users;
-        rolesName = "ROLE_"+rolesName.toUpperCase();
         if(rolesName!=null) {
+            rolesName = "ROLE_"+rolesName.toUpperCase();
             users = repository.findByRolesName(pagination,rolesName);
         } else {
              users = repository.findAll(pagination);
