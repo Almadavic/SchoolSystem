@@ -30,11 +30,6 @@ public class UserDto {
 
     }
 
-    public void convertList(List<Role> roles) {
-        for (Role role : roles) {
-            rolesDto.add(new RoleDto(role));     // Método necessita de refatoração nessa parte para stream
-        }
-    }
 
     public UserDto(User user) {
         this.email = user.getEmail();
@@ -44,6 +39,11 @@ public class UserDto {
         convertList(user.getAuthorities());
     }
 
+    public void convertList(List<Role> roles) {
+        for (Role role : roles) {
+            rolesDto.add(new RoleDto(role));     // Método necessita de refatoração nessa parte para stream
+        }
+    }
     public void addRolesDto(RoleDto roleDto) {
         rolesDto.add(roleDto);
     }

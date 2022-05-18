@@ -1,6 +1,7 @@
 package application.controller;
 
 import application.dto.ClassRoomDto;
+import application.form.NewGradesForm;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
 import application.service.ClassRoomService;
@@ -10,11 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -58,5 +57,13 @@ public class ClassRoomController {
     public ResponseEntity<TeacherDto> findTeacher(@PathVariable Long id) {
         TeacherDto teacherDto = clasService.findTeacher(id);
         return ResponseEntity.ok().body(teacherDto);
+    }
+
+    @PutMapping("/{idClass}/students/{idStudent}/UpdateGrades")
+    public ResponseEntity<StudentDto> updateGrades(@PathVariable Long idClass, @PathVariable Long idStudent , Principal principal,
+                                                   @RequestBody NewGradesForm newGrades) {
+
+        StudentDto studentDto = clasService.updateGrades(idClass,idStudent,principal,newGrades);
+        return ResponseEntity.ok().body(studentDto);
     }
 }

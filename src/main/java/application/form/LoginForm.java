@@ -1,11 +1,11 @@
-package application.dto;
+package application.form;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-public class LoginDto {
+public class LoginForm {
 
 	@NotNull
 	@NotEmpty

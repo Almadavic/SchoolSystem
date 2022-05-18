@@ -16,6 +16,10 @@ public class ReportCardDto {
     @JsonProperty("grade3")
     private Double grade3;
 
+    public ReportCardDto() {
+
+    }
+
     public ReportCardDto(ReportCard reportCard) {
         this.frequency=reportCard.getFrequency();
         this.grade1= reportCard.getGrade1();
@@ -26,7 +30,7 @@ public class ReportCardDto {
     @JsonProperty("averageGrade")
     public Double getAverageGrade() {
         double average = (grade1+grade2+grade3)/3;
-        return average;
+        return Math.round(average*10.0)/10.0;
     }
 
     public Double getFrequency() {

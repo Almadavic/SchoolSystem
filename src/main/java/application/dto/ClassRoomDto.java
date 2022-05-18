@@ -34,11 +34,11 @@ public class ClassRoomDto {
         for (Student student : classRoom.getStudents()) {
             studentsDto.add(new StudentDto(student));                // Método necessita de refatoração nessa parte
         }
-        double sum = 0;
+        double sum = 0.0;
         for (StudentDto studentDto : studentsDto) {
             sum = sum + studentDto.getReportCardDto().getAverageGrade();
         }
-        averageClassGrade = sum / studentsDto.size();
+       averageClassGrade = Math.round(sum / studentsDto.size()*10.0)/10.0;
     }
 
     public Long getIdClass() {

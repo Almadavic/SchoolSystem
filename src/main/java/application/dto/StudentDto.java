@@ -5,7 +5,7 @@ import application.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"id","name","email","reportCard","roles"})
+@JsonPropertyOrder({"id","name","email","reportCard","address","roles"})
 public class StudentDto extends UserDto {
 
     @JsonProperty(value = "reportCard")

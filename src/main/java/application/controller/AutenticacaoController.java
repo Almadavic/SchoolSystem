@@ -2,7 +2,7 @@ package application.controller;
 
 import javax.validation.Valid;
 
-import application.dto.LoginDto;
+import application.form.LoginForm;
 import application.dto.TokenDto;
 import application.service.TokenService;
 import application.service.exception.DatabaseException;
@@ -31,7 +31,7 @@ public class AutenticacaoController {
 	private TokenService tokenService;
 
 	@PostMapping
-	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginDto dto) {
+	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm dto) {
 		UsernamePasswordAuthenticationToken loginData = dto.toConvert();
 		
 		try {
