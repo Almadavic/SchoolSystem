@@ -1,13 +1,15 @@
-package application.entity;
+package application.entity.users;
 
+import application.entity.ClassRoom;
+import application.entity.ReportCard;
+import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serial;
 
 @Entity
 @Table(name="tb_students")
-public class Student extends User{
+public class Student extends User {
 
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
     private ReportCard reportCard;
@@ -42,4 +44,5 @@ public class Student extends User{
     public void setReportCard(ReportCard reportCard) {
         this.reportCard = reportCard;
     }
+
 }

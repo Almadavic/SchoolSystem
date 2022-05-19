@@ -1,5 +1,8 @@
 package application.entity;
 
+import application.entity.users.Student;
+import application.entity.users.Teacher;
+
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
@@ -29,7 +32,7 @@ public class ClassRoom implements Serializable {
     }
 
     public ClassRoom(Character letter) {
-        this.letter = letter;
+        this.letter = Character.toUpperCase(letter);
     }
 
     public void addStudent(Student student) {

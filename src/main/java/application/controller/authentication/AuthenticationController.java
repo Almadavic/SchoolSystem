@@ -1,9 +1,9 @@
-package application.controller;
+package application.controller.authentication;
 
 import javax.validation.Valid;
 
 import application.form.LoginForm;
-import application.dto.TokenDto;
+import application.dto.authenticationAuthorization.TokenDto;
 import application.service.TokenService;
 import application.service.exception.DatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @Profile(value = {"prod", "test"})
-public class AutenticacaoController {
+public class AuthenticationController {
 	
 	@Autowired
 	private AuthenticationManager authManager;
@@ -31,15 +31,15 @@ public class AutenticacaoController {
 	private TokenService tokenService;
 
 	@PostMapping
-	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm dto) {
-		UsernamePasswordAuthenticationToken loginData = dto.toConvert();
+	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form) {
+		UsernamePasswordAuthenticationToken loginData = form.toConvert();
 		
 		try {
 			Authentication authentication = authManager.authenticate(loginData); // dados de login
 			String token = tokenService.gererateToken(authentication);
 			return ResponseEntity.ok(new TokenDto(token, "Bearer"));
 		} catch (AuthenticationException e) {
-			throw new DatabaseException("Erro de requisição");
+			throw new DatabaseException("Request Auth Error");
 		}
 	}
 	

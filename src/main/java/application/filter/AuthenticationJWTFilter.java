@@ -1,6 +1,6 @@
 package application.filter;
 
-import application.entity.User;
+import application.entity.users.User;
 import application.repository.UserRepository;
 import application.service.TokenService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,12 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AutenticationJWTFilter extends OncePerRequestFilter {
+public class AuthenticationJWTFilter extends OncePerRequestFilter {
 
     private TokenService tokenService;
     private UserRepository userRepository;
 
-    public AutenticationJWTFilter(TokenService tokenService, UserRepository userRepository) {
+    public AuthenticationJWTFilter(TokenService tokenService, UserRepository userRepository) {
         this.tokenService = tokenService;
         this.userRepository = userRepository;
     }
@@ -27,23 +27,23 @@ public class AutenticationJWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String token = recuperarToken(request);
+        String token = recoverToken(request);
         boolean valid = tokenService.isTokenValid(token);
         if (valid) {
-            autenticarCliente(token);
+            recoverUser(token);
         }
 
         filterChain.doFilter(request, response);
     }
 
-    private void autenticarCliente(String token) {
+    private void recoverUser(String token) {
         Long idUser = tokenService.getIdUsuario(token);
         User user = userRepository.findById(idUser).get();
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    private String recuperarToken(HttpServletRequest request) {
+    private String recoverToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if (token == null || token.isEmpty() || !token.startsWith("Bearer ")) {
             return null;

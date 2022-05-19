@@ -1,5 +1,7 @@
-package application.entity;
+package application.entity.users;
 
+import application.entity.Address;
+import application.entity.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;

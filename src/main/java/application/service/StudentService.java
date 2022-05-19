@@ -1,8 +1,8 @@
 package application.service;
 
 import application.dto.StudentDto;
-import application.entity.Student;
-import application.entity.User;
+import application.entity.users.Student;
+import application.entity.users.User;
 import application.repository.StudentRepository;
 import application.repository.UserRepository;
 import application.service.exception.ResourceNotFoundException;

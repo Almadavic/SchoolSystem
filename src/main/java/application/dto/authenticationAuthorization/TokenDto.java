@@ -1,4 +1,4 @@
-package application.dto;
+package application.dto.authenticationAuthorization;
 
 public class TokenDto {
 

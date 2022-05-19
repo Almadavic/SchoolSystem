@@ -5,11 +5,12 @@ import application.form.NewGradesForm;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
 import application.entity.ClassRoom;
-import application.entity.Student;
-import application.entity.Teacher;
+import application.entity.users.Student;
+import application.entity.users.Teacher;
 import application.repository.ClassRoomRepository;
 import application.repository.StudentRepository;
 import application.repository.TeacherRepository;
+import application.service.exception.NoPermissionException;
 import application.service.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -67,14 +68,52 @@ public class ClassRoomService {
 
     public StudentDto updateGrades(Long idClass, Long idStudent, Principal principal, NewGradesForm newGrades) {
         ClassRoom classRoom = errorNotFoundClassOtherwiseReturnClass(idClass);
-        Student student = errorNotFoundStudentOtherwiseReturnStudent(idStudent,classRoom);
+        Student student = errorNotFoundStudentOtherwiseReturnStudent(idStudent, classRoom);
         String teacherName = classRoom.getTeacher().getEmail();
         if (!teacherName.equals(principal.getName())) {
-            throw new RuntimeException("Não tem permissão");
+            throw new NoPermissionException("Permission required to access this! Teacher with no permission");
         }
         updateGrades(student, newGrades);
         student = studentRepository.save(student);
         return new StudentDto(student);
+    }
+
+    public ClassRoomDto createClassRoom() {
+        List<ClassRoom> classRooms = clasRepository.findAll();
+
+        char lastClassLetter = classRooms.get(classRooms.size() - 1).getLetter();
+
+        Character[] vector = letteringVector();
+        char letterNewClass = '.';
+
+        for (int i = 0; i < vector.length; i++) {
+            if (lastClassLetter == vector[i]) {
+                letterNewClass = vector[i + 1];
+            }
+        }
+        ClassRoom classRoom = new ClassRoom(letterNewClass);
+        classRoom = clasRepository.save(classRoom);
+        return new ClassRoomDto(classRoom);
+    }
+
+    public ClassRoomDto setTeacher(Long idClass, Long idTeacher) {
+
+        ClassRoom classRoom = errorNotFoundClassOtherwiseReturnClass(idClass);
+        Teacher teacher = teacherRepository.findById(idTeacher).get();
+        classRoom.setTeacher(teacher);
+        classRoom = clasRepository.save(classRoom);
+        return new ClassRoomDto(classRoom);
+    }
+
+    public ClassRoomDto addStudent(Long idClass, Long idStudent) {
+
+        ClassRoom classRoom = errorNotFoundClassOtherwiseReturnClass(idClass);
+        Student student = errorNotFoundStudentOtherwiseReturnStudent(idStudent, classRoom);
+        classRoom.addStudent(student);
+
+        classRoom = clasRepository.save(classRoom);
+
+        return new ClassRoomDto(classRoom);
     }
 
 
@@ -108,9 +147,14 @@ public class ClassRoomService {
         }
     }
 
-    private Student errorNotFoundStudentOtherwiseReturnStudent(Long id, ClassRoom classRoom) {
-        Student student = classRoom.getStudents().get(Integer.parseInt(String.valueOf(id-1)));
+    private Student errorNotFoundStudentOtherwiseReturnStudent(Long id, ClassRoom classRoom) {   // Método brevemente será apagado quando fizer nativeQuery
+        Student student = classRoom.getStudents().get(Integer.parseInt(String.valueOf(id - 1)));
         return student;
+    }
+
+    private Character[] letteringVector() {
+        Character[] letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'};
+        return letters;
     }
 
 }

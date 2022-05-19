@@ -1,9 +1,6 @@
 package application.dto;
 
-import application.entity.Teacher;
-
-import java.util.ArrayList;
-import java.util.List;
+import application.entity.users.Teacher;
 
 public class TeacherDto extends UserDto {
 

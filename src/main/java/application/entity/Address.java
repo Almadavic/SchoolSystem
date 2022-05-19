@@ -1,5 +1,6 @@
 package application.entity;
 
+import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;

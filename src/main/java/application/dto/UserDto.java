@@ -1,7 +1,7 @@
 package application.dto;
 
 import application.entity.Role;
-import application.entity.User;
+import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

@@ -1,12 +1,12 @@
 package application.entity;
 
 
-
-import org.springframework.jmx.export.annotation.ManagedOperationParameter;
+import application.entity.users.Student;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+
 @Entity
 @Table(name = "tb_report_card")
 public class ReportCard implements Serializable {
@@ -27,23 +27,26 @@ public class ReportCard implements Serializable {
     @MapsId
     private Student student;
 
+    @Enumerated(EnumType.STRING)
+    private Situation situation;
+
 
     public ReportCard() {
-       setZero();
+        setInitialInformations();
     }
-
 
 
     public double getAverageStudent() {
-        double average = (grade1+grade2+grade3)/3;
+        double average = (grade1 + grade2 + grade3) / 3;
         return average;
     }
 
-    private void setZero() {
+    private void setInitialInformations() {
         this.grade1 = 0.0;
         this.grade2 = 0.0;
         this.grade3 = 0.0;
         this.frequency = 0.0;
+        this.situation = Situation.DISAPPROVED;
     }
 
     public Long getId() {
@@ -93,4 +96,13 @@ public class ReportCard implements Serializable {
     public void setStudent(Student student) {
         this.student = student;
     }
+
+    public Situation getSituation() {
+        return situation;
+    }
+
+    public void setSituation(Situation situation) {
+        this.situation = situation;
+    }
+
 }

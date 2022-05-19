@@ -1,19 +1,20 @@
-package application.instance;
+package application.extraConfig;
 
 import application.entity.*;
+import application.entity.users.Student;
+import application.entity.users.Teacher;
 import application.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.datasource.AbstractDriverBasedDataSource;
 
 
 import java.util.Arrays;
 
 @Profile(value = {"test"})
 @Configuration
-public class InstanceConfig implements CommandLineRunner {
+public class StartProject implements CommandLineRunner {
 
 
     @Autowired
@@ -55,13 +56,13 @@ public class InstanceConfig implements CommandLineRunner {
         studentRepository.saveAll(Arrays.asList(u1,u2,u3));
 
 
-        Teacher teacher  = new Teacher("Raphael","raphael@gmail.com",senhaEncode,cr1);
-        Address a4 = new Address("EUA","Florida","Tampa",teacher);
-        teacher.setAddress(a4);
+        Teacher teacher1  = new Teacher("Raphael","raphael@gmail.com",senhaEncode,cr1);
+        Address a4 = new Address("EUA","Florida","Tampa",teacher1);
+        teacher1.setAddress(a4);
 
-        teacherRepository.save(teacher);
+        teacherRepository.save(teacher1);
 
-        cr1.setTeacher(teacher);
+        cr1.setTeacher(teacher1);
 
 
         Role r1 = new Role("ROLE_STUDENT");
@@ -72,7 +73,7 @@ public class InstanceConfig implements CommandLineRunner {
         u1.addRole(r1);
         u2.addRole(r1);
         u3.addRole(r1);
-        teacher.addRole(r2);
+        teacher1.addRole(r2);
 
         studentRepository.saveAll(Arrays.asList(u1,u2,u3));
 
@@ -80,9 +81,10 @@ public class InstanceConfig implements CommandLineRunner {
 
 
 
-
-
-
+          Teacher teacher2 = new Teacher("Euni","euni@gmail.com",senhaEncode);
+          Address a5 = new Address("EUA","Florida","Tampa",teacher2);
+          teacher2.addRole(r2);
+          teacherRepository.save(teacher2);
 
 
 

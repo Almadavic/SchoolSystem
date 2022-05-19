@@ -1,10 +1,11 @@
 package application.dto;
 
 import application.entity.ReportCard;
+import application.entity.Situation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"frequency","grade1","grade2","grade3","averageGrade"})
+@JsonPropertyOrder({"frequency","grade1","grade2","grade3","averageGrade","situation"})
 public class ReportCardDto {
 
     @JsonProperty("frequency")
@@ -15,6 +16,8 @@ public class ReportCardDto {
     private Double grade2;
     @JsonProperty("grade3")
     private Double grade3;
+    @JsonProperty("situation")
+    private Situation situation;
 
     public ReportCardDto() {
 
@@ -25,6 +28,7 @@ public class ReportCardDto {
         this.grade1= reportCard.getGrade1();
         this.grade2= reportCard.getGrade2();
         this.grade3= reportCard.getGrade3();
+        this.situation=reportCard.getSituation();
     }
 
     @JsonProperty("averageGrade")
@@ -65,4 +69,12 @@ public class ReportCardDto {
         this.grade3 = grade3;
     }
 
+
+    public Situation getSituation() {
+        return situation;
+    }
+
+    public void setSituation(Situation situation) {
+        this.situation = situation;
+    }
 }

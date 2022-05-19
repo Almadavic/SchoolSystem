@@ -1,6 +1,6 @@
 package application.service;
 
-import application.entity.User;
+import application.entity.users.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
