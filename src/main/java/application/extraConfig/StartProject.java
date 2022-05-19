@@ -82,8 +82,9 @@ public class StartProject implements CommandLineRunner {
 
 
           Teacher teacher2 = new Teacher("Euni","euni@gmail.com",senhaEncode);
-          Address a5 = new Address("EUA","Florida","Tampa",teacher2);
+          Address a5 = new Address("Brasil","Bahia","Salvador",teacher2);
           teacher2.addRole(r2);
+          teacher2.setAddress(a5);
           teacherRepository.save(teacher2);
 
 

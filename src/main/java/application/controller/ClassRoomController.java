@@ -29,7 +29,9 @@ public class ClassRoomController {
     @GetMapping
     // Método HTTP (GET)  , Método que me retorna uma paginação de todas as classes da plataforma, tendo algumas conf padrões para essa paginação.
     public ResponseEntity<Page<ClassRoomDto>> findAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
+
         Page<ClassRoomDto> classes = classService.findAll(pagination);
+
         return ResponseEntity.ok().body(classes);
     }
 
@@ -62,7 +64,9 @@ public class ClassRoomController {
     @GetMapping("{id}/teacher")
     // Método HTTP (GET) , Método me retorna o professor associado á classe dado o id da classe.
     public ResponseEntity<TeacherDto> findTeacher(@PathVariable Long id) {
+
         TeacherDto teacherDto = classService.findTeacher(id);
+
         return ResponseEntity.ok().body(teacherDto);
     }
 
@@ -72,6 +76,7 @@ public class ClassRoomController {
                                                    @RequestBody NewGradesForm newGrades) {
 
         StudentDto studentDto = classService.updateGrades(idClass, idStudent, principal, newGrades);
+
         return ResponseEntity.ok().body(studentDto);
     }
 
@@ -96,13 +101,9 @@ public class ClassRoomController {
     @PostMapping("/{idClass}/addStudent")
     public ResponseEntity<ClassRoomDto> addStudent(@PathVariable Long idClass, @RequestBody Long idStudent) {  //Método HTTP (POST) , Método adiciona um aluno na classe.
 
-        ClassRoomDto classRoomDto = classService.addStudent(idClass,idStudent);
+        ClassRoomDto classRoomDto = classService.addStudent(idClass,idStudent);    // Método ainda não funciona !!!
 
         return ResponseEntity.ok().body(classRoomDto);
     }
-
-
-
-
 
 }

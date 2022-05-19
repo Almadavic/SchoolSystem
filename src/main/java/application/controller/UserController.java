@@ -19,9 +19,10 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Page<UserDto>> findAll(
-            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination,@RequestParam(required=false)String rolesName)
-    {
+            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination,@RequestParam(required=false)String rolesName){
+
         Page<UserDto> usersDto = userService.findAll(pagination,rolesName);
+
         return ResponseEntity.ok().body(usersDto);
     }
 

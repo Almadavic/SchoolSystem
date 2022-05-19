@@ -13,6 +13,8 @@ import application.repository.TeacherRepository;
 import application.service.exception.NoPermissionException;
 import application.service.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ import java.util.Optional;
 public class ClassRoomService {
 
     @Autowired
-    private ClassRoomRepository clasRepository;
+    private ClassRoomRepository classRepository;
 
     @Autowired
     private StudentRepository studentRepository; // não remover
@@ -35,7 +37,7 @@ public class ClassRoomService {
     private TeacherRepository teacherRepository; // não remover
 
     public Page<ClassRoomDto> findAll(Pageable pagination) {
-        Page<ClassRoom> classes = clasRepository.findAll(pagination);
+        Page<ClassRoom> classes = classRepository.findAll(pagination);
         Page<ClassRoomDto> classesRoomDtos = classes.map(ClassRoomDto::new);
         return classesRoomDtos;
     }
@@ -65,7 +67,7 @@ public class ClassRoomService {
         return new TeacherDto(teacher);
     }
 
-
+    @CacheEvict(value = "classRoomList",allEntries = true)
     public StudentDto updateGrades(Long idClass, Long idStudent, Principal principal, NewGradesForm newGrades) {
         ClassRoom classRoom = errorNotFoundClassOtherwiseReturnClass(idClass);
         Student student = errorNotFoundStudentOtherwiseReturnStudent(idStudent, classRoom);
@@ -78,8 +80,9 @@ public class ClassRoomService {
         return new StudentDto(student);
     }
 
+    @CacheEvict(value = "classRoomList",allEntries = true)
     public ClassRoomDto createClassRoom() {
-        List<ClassRoom> classRooms = clasRepository.findAll();
+        List<ClassRoom> classRooms = classRepository.findAll();
 
         char lastClassLetter = classRooms.get(classRooms.size() - 1).getLetter();
 
@@ -92,26 +95,27 @@ public class ClassRoomService {
             }
         }
         ClassRoom classRoom = new ClassRoom(letterNewClass);
-        classRoom = clasRepository.save(classRoom);
+        classRoom = classRepository.save(classRoom);
         return new ClassRoomDto(classRoom);
     }
 
+    @CacheEvict(value = "classRoomList",allEntries = true)
     public ClassRoomDto setTeacher(Long idClass, Long idTeacher) {
 
         ClassRoom classRoom = errorNotFoundClassOtherwiseReturnClass(idClass);
         Teacher teacher = teacherRepository.findById(idTeacher).get();
         classRoom.setTeacher(teacher);
-        classRoom = clasRepository.save(classRoom);
+        classRoom = classRepository.save(classRoom);
         return new ClassRoomDto(classRoom);
     }
-
+    @CacheEvict(value = "classRoomList",allEntries = true)
     public ClassRoomDto addStudent(Long idClass, Long idStudent) {
 
         ClassRoom classRoom = errorNotFoundClassOtherwiseReturnClass(idClass);
         Student student = errorNotFoundStudentOtherwiseReturnStudent(idStudent, classRoom);
         classRoom.addStudent(student);
 
-        classRoom = clasRepository.save(classRoom);
+        classRoom = classRepository.save(classRoom);
 
         return new ClassRoomDto(classRoom);
     }
@@ -126,11 +130,16 @@ public class ClassRoomService {
     }
 
     private ClassRoom errorNotFoundClassOtherwiseReturnClass(Long id) {
-        Optional<ClassRoom> classRoom = clasRepository.findById(id);
+        Optional<ClassRoom> classRoom = classRepository.findById(id);
         if (classRoom.isEmpty()) {
             throw new ResourceNotFoundException("Class not found");
         }
         return classRoom.get();
+    }
+
+    private Student errorNotFoundStudentOtherwiseReturnStudent(Long id, ClassRoom classRoom) {   // Método brevemente será apagado quando fizer nativeQuery
+        Student student = classRoom.getStudents().get(Integer.parseInt(String.valueOf(id - 1)));
+        return student;
     }
 
     private void updateGrades(Student student, NewGradesForm newGrades) {
@@ -147,10 +156,6 @@ public class ClassRoomService {
         }
     }
 
-    private Student errorNotFoundStudentOtherwiseReturnStudent(Long id, ClassRoom classRoom) {   // Método brevemente será apagado quando fizer nativeQuery
-        Student student = classRoom.getStudents().get(Integer.parseInt(String.valueOf(id - 1)));
-        return student;
-    }
 
     private Character[] letteringVector() {
         Character[] letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'};
