@@ -38,7 +38,7 @@ public class StudentController {
         return ResponseEntity.ok().body(studentDtos);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<StudentDto> findById(@PathVariable Long id) {
 
         StudentDto studentDto = studentService.findByID(id);

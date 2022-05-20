@@ -1,6 +1,7 @@
 package application.dto;
 
 import application.entity.ClassRoom;
+import application.entity.ClassShift;
 import application.entity.users.Student;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -8,13 +9,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonPropertyOrder({"idClass","letter","teacher","students","averageClassGrade"})
+@JsonPropertyOrder({"idClass","letter","classShift","teacher","students","averageClassGrade"})
 public class ClassRoomDto {
 
     @JsonProperty("idClass")
     private Long idClass;
     @JsonProperty("letter")
     private Character letter;
+
+    @JsonProperty("classShift")
+    private ClassShift classShift;
     @JsonProperty("teacher")
     private TeacherDto teacherDto;
     @JsonProperty("students")
@@ -30,6 +34,7 @@ public class ClassRoomDto {
     public ClassRoomDto(ClassRoom classRoom) {
         this.idClass = classRoom.getId();
         this.letter = classRoom.getLetter();
+        this.classShift = classRoom.getClassShift();
         if(classRoom.getTeacher()!=null) {
             this.teacherDto = new TeacherDto(classRoom.getTeacher());
         }

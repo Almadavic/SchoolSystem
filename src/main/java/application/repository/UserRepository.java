@@ -1,6 +1,8 @@
 package application.repository;
 
+import application.entity.users.Teacher;
 import application.entity.users.User;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     Page<User> findByRolesName(Pageable pagination, String rolesName);
+
+    @Cacheable(value = "usersList")
+    Page<User> findAll(Pageable pagination);
 
 }

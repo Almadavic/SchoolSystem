@@ -5,6 +5,7 @@ import application.form.NewGradesForm;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
 import application.service.ClassRoomService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,16 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-
 import java.net.URI;
 import java.security.Principal;
-import java.util.List;
 
-@RestController        // Identificando  que é um rest-controller
-@RequestMapping("/classes")       // Recurso para "encontrar" esse controller
+@RestController                              // Identificando  que é um rest-controller
+@RequestMapping(value = "/classes")       // Recurso para "encontrar" esse controller
 public class ClassRoomController {
 
-    @Autowired  // Injeção de dependencia automatica
+    @Autowired  // Injeção de dependencia automatica - > ClassRoomService
     private ClassRoomService classService;   //
 
     @GetMapping
@@ -35,7 +34,7 @@ public class ClassRoomController {
         return ResponseEntity.ok().body(classes);
     }
 
-    @GetMapping("/{id}")  // Método HTTP (GET) , Método me retorna uma classe da plataforma dado o Id da classe.
+    @GetMapping(value = "/{id}")  // Método HTTP (GET) , Método me retorna uma classe da plataforma dado o Id da classe.
     public ResponseEntity<ClassRoomDto> findById(@PathVariable Long id) {
 
         ClassRoomDto classRoomDto = classService.findById(id);
@@ -43,16 +42,17 @@ public class ClassRoomController {
         return ResponseEntity.ok().body(classRoomDto);
     }
 
-    @GetMapping("/{id}/students")
+    @GetMapping(value = "/{idClass}/students")
     // Método HTTP (GET) , Método me retorna uma lista de alunos associados á uma classe dado o id dessa classe.
-    public ResponseEntity<List<StudentDto>> findStudentsByClass(@PathVariable Long id) {
+    public ResponseEntity<Page<StudentDto>> findStudentsByClass(@PathVariable Long idClass,
+                                                                @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination){
 
-        List<StudentDto> studentDtos = classService.findStudentsByClass(id);
+        Page<StudentDto> studentsDtos = classService.findStudentsByClass(idClass,pagination);               // Arrumar o cache aqui !
 
-        return ResponseEntity.ok().body(studentDtos);
+        return ResponseEntity.ok().body(studentsDtos);
     }
 
-    @GetMapping("/{idClass}/students/{idStudent}")
+    @GetMapping(value = "/{idClass}/students/{idStudent}")
     // Método HTTP (GET) , Método me retorna um aluno de uma certa classe, passando o id da classe e do aluno específico.
     public ResponseEntity<StudentDto> findStudentById(@PathVariable Long idClass, @PathVariable Long idStudent) {
 
@@ -61,16 +61,16 @@ public class ClassRoomController {
         return ResponseEntity.ok().body(studentDto);
     }
 
-    @GetMapping("{id}/teacher")
+    @GetMapping(value = "{idClass}/teacher")
     // Método HTTP (GET) , Método me retorna o professor associado á classe dado o id da classe.
-    public ResponseEntity<TeacherDto> findTeacher(@PathVariable Long id) {
+    public ResponseEntity<TeacherDto> findTeacher(@PathVariable Long idClass) {
 
-        TeacherDto teacherDto = classService.findTeacher(id);
+        TeacherDto teacherDto = classService.findTeacher(idClass);
 
         return ResponseEntity.ok().body(teacherDto);
     }
 
-    @PutMapping("/{idClass}/students/{idStudent}/UpdateGrades")
+    @PutMapping(value = "/{idClass}/students/{idStudent}/UpdateGrades")
     // // Método HTTP (PUT) , Método atualiza as notas de um aluno de uma respectiva sala, passando o id do aluno e da classe.
     public ResponseEntity<StudentDto> updateGrades(@PathVariable Long idClass, @PathVariable Long idStudent, Principal principal, // Me retorna o aluno com as notas atualizadas.
                                                    @RequestBody NewGradesForm newGrades) {
@@ -80,17 +80,17 @@ public class ClassRoomController {
         return ResponseEntity.ok().body(studentDto);
     }
 
-    @GetMapping("/CreateClassRoom") // Método HTTP (GET) , Método cria uma nova sala na plataforma.
-    public ResponseEntity<ClassRoomDto> createClassRoom( UriComponentsBuilder uriBuilder) {
+    @GetMapping(value = "/CreateClassRoom") // Método HTTP (GET) , Método cria uma nova sala na plataforma.
+    public ResponseEntity<ClassRoomDto> createClassRoom(String classShift, UriComponentsBuilder uriBuilder) {
 
-        ClassRoomDto classRoomDto = classService.createClassRoom();
+        ClassRoomDto classRoomDto = classService.createClassRoom(classShift);
 
         URI uri = uriBuilder.path("/classes/{id}").buildAndExpand(classRoomDto.getIdClass()).toUri();
 
         return ResponseEntity.created(uri).body(classRoomDto);
     }
 
-    @PostMapping("/{idClass}/setTeacher")      // Método HTTP (POST) , Método seta o professor em uma classe que não tenha professor.
+    @PostMapping(value = "/{idClass}/setTeacher")      // Método HTTP (POST) , Método seta o professor em uma classe que não tenha professor.
     public ResponseEntity<ClassRoomDto> setTeacher(@PathVariable Long idClass, @RequestBody Long idTeacher) {
 
         ClassRoomDto classRoomDto = classService.setTeacher(idClass,idTeacher);               // Método ainda não funcional !!! Testar
@@ -98,7 +98,7 @@ public class ClassRoomController {
         return ResponseEntity.ok().body(classRoomDto);
     }
 
-    @PostMapping("/{idClass}/addStudent")
+    @PostMapping(value = "/{idClass}/addStudent")
     public ResponseEntity<ClassRoomDto> addStudent(@PathVariable Long idClass, @RequestBody Long idStudent) {  //Método HTTP (POST) , Método adiciona um aluno na classe.
 
         ClassRoomDto classRoomDto = classService.addStudent(idClass,idStudent);    // Método ainda não funciona !!!

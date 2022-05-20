@@ -20,27 +20,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/auth")
-@Profile(value = {"prod", "test"})
+@RequestMapping(value = "/auth")    // Identificando  que é um rest-controller
+@Profile(value = {"prod", "test"})    // Recurso para "encontrar" esse controller
 public class AuthenticationController {
-	
-	@Autowired
-	private AuthenticationManager authManager;
-	
-	@Autowired
-	private TokenService tokenService;
+    @Autowired
+    private AuthenticationManager authManager;    // Injeção de dependencia automatica - > AuthenticationManager
+    @Autowired
+    private TokenService tokenService; // Injeção de dependencia automatica - > TokenService
 
-	@PostMapping
-	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form) {
-		UsernamePasswordAuthenticationToken loginData = form.toConvert();
-		
-		try {
-			Authentication authentication = authManager.authenticate(loginData); // dados de login
-			String token = tokenService.gererateToken(authentication);
-			return ResponseEntity.ok(new TokenDto(token, "Bearer"));
-		} catch (AuthenticationException e) {
-			throw new DatabaseException("Request Auth Error");
-		}
-	}
-	
+    @PostMapping
+    public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginForm form) {  // Método para fazer o login e se autenticar no sistema
+        UsernamePasswordAuthenticationToken loginData = form.toConvert();   // converter os dados passado pelo usuario em um token de autenticação
+
+        try {
+            Authentication authentication = authManager.authenticate(loginData); // autenticar usuário com base nos dados informados por ele
+            String token = tokenService.gererateToken(authentication);      // geração do token .
+            return ResponseEntity.ok(new TokenDto(token, "Bearer"));  // Devolvendo o token pro cliente e o seu tipo.
+        } catch (AuthenticationException e) {
+            throw new DatabaseException("Request Auth Error");       // Causará um erro caso os dados passados pelo usuário estejam errados.
+        }
+    }
+
 }

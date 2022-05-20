@@ -30,34 +30,33 @@ public class StartProject implements CommandLineRunner {
     private TeacherRepository teacherRepository;
 
 
-   final private String senhaEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
+    final private String senhaEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
 
     @Override
     public void run(String... args) throws Exception {
+        System.out.println(applicationInfo());
 
+        ClassRoom cr1 = new ClassRoom('A',ClassShift.MORNING);
 
-        ClassRoom cr1 = new ClassRoom('A');
+        Student u1 = new Student("Joao Lacerta", "joao@gmail.com", senhaEncode, cr1);
+        Student u2 = new Student("Victor Almada", "almadavic@live.com", senhaEncode, cr1);
+        Student u3 = new Student("Renato Tavares", "renato@hotmail.com", senhaEncode, cr1);
 
-        Student u1 = new Student("Joao Lacerta", "joao@gmail.com", senhaEncode,cr1);
-        Student u2 = new Student ("Victor Almada","almadavic@live.com",senhaEncode,cr1);
-        Student u3 = new Student("Renato Tavares","renato@hotmail.com",senhaEncode,cr1);
-
-        Address a1 = new Address("Brasil","Minas Gerais","Belo Horizonte",u1);
-        Address a2 = new Address("EUA","Georgia","Atlanta",u2);
-        Address a3 = new Address("EUA","Florida","Tampa",u3);
+        Address a1 = new Address("Brasil", "Minas Gerais", "Belo Horizonte", u1);
+        Address a2 = new Address("EUA", "Georgia", "Atlanta", u2);
+        Address a3 = new Address("EUA", "Florida", "Tampa", u3);
 
         u1.setAddress(a1);
         u2.setAddress(a2);
         u3.setAddress(a3);
 
 
-
         classRoomRepository.save(cr1);
-        studentRepository.saveAll(Arrays.asList(u1,u2,u3));
+        studentRepository.saveAll(Arrays.asList(u1, u2, u3));
 
 
-        Teacher teacher1  = new Teacher("Raphael","raphael@gmail.com",senhaEncode,cr1);
-        Address a4 = new Address("EUA","Florida","Tampa",teacher1);
+        Teacher teacher1 = new Teacher("Raphael", "raphael@gmail.com", senhaEncode, cr1);
+        Address a4 = new Address("EUA", "Florida", "Tampa", teacher1);
         teacher1.setAddress(a4);
 
         teacherRepository.save(teacher1);
@@ -75,21 +74,41 @@ public class StartProject implements CommandLineRunner {
         u3.addRole(r1);
         teacher1.addRole(r2);
 
-        studentRepository.saveAll(Arrays.asList(u1,u2,u3));
+        studentRepository.saveAll(Arrays.asList(u1, u2, u3));
 
         classRoomRepository.save(cr1);
 
 
-
-          Teacher teacher2 = new Teacher("Euni","euni@gmail.com",senhaEncode);
-          Address a5 = new Address("Brasil","Bahia","Salvador",teacher2);
-          teacher2.addRole(r2);
-          teacher2.setAddress(a5);
-          teacherRepository.save(teacher2);
-
+        Teacher teacher2 = new Teacher("Euni", "euni@gmail.com", senhaEncode);
+        Address a5 = new Address("Brasil", "Bahia", "Salvador", teacher2);
+        teacher2.addRole(r2);
+        teacher2.setAddress(a5);
+        teacherRepository.save(teacher2);
 
 
+    }
 
-
+    public String applicationInfo() {
+        StringBuilder bd = new StringBuilder();
+        bd.append("\n");
+        for(int i=0;i<70;i++) {
+           bd.append("=");
+        }
+        bd.append("\n");
+        bd.append("SCHOOL SYSTEM APPLICATION    ---    VICTOR ALMADA\n");
+        for(int i=0;i<70;i++) {
+           bd.append("=");
+        }
+        bd.append("\n");
+        bd.append("*Java Version - 17 \n");
+        bd.append("*Spring Boot Version 2.6.7 -  \n");
+        bd.append("\n");
+        bd.append("\n");
+        System.out.println("\n");
+        for(int i=0;i<70;i++) {
+           bd.append("=");
+        }
+        bd.append("\n");
+        return bd.toString();
     }
 }

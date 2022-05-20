@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClassRoomRepository extends JpaRepository<ClassRoom,Long> {
-    @Cacheable(value = "classRoomList")
+    @Cacheable(value = "classesRoomList")
     Page<ClassRoom> findAll(Pageable pageable);
 }
