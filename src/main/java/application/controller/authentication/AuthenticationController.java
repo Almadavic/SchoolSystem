@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController
-@RequestMapping(value = "/auth")    // Identificando  que é um rest-controller
-@Profile(value = {"prod", "test"})    // Recurso para "encontrar" esse controller
-public class AuthenticationController {
+@RestController   // Identificando  que é um rest-controller
+@RequestMapping(value = "/auth")   // Recurso para "encontrar" esse controller
+@Profile(value = {"prod", "test"})     // Essa classe só será chamada nos perfis de prod e test
+public class AuthenticationController {         // Controller para fazer a autenticação
     @Autowired
     private AuthenticationManager authManager;    // Injeção de dependencia automatica - > AuthenticationManager
     @Autowired

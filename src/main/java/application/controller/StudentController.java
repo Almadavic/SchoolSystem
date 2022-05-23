@@ -22,14 +22,6 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping(value = "/MyData")
-    public ResponseEntity<StudentDto> myData(Principal principal) {
-
-        StudentDto studentDto = studentService.myData(principal);
-
-        return ResponseEntity.ok().body(studentDto);
-    }
-
     @GetMapping
     public ResponseEntity<Page<StudentDto>> findAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
 

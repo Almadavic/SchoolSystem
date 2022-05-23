@@ -5,12 +5,14 @@ import application.businessRule.updateGrades.TeacherAllowed;
 import application.businessRule.updateGrades.UpdateCheck;
 import application.dto.ClassRoomDto;
 import application.entity.ClassShift;
+import application.form.CreateClassForm;
 import application.form.NewGradesForm;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
 import application.entity.ClassRoom;
 import application.entity.users.Student;
 import application.entity.users.Teacher;
+import application.form.SetTeacherForm;
 import application.repository.ClassRoomRepository;
 import application.repository.StudentRepository;
 import application.repository.TeacherRepository;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,7 +96,7 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = "classesRoomList", allEntries = true)
-    public ClassRoomDto createClassRoom(String classShift) {
+    public ClassRoomDto createClassRoom(CreateClassForm createClassForm) {
         List<ClassRoom> classRooms = classRepository.findAll();
 
         char lastClassLetter = classRooms.get(classRooms.size() - 1).getLetter();
@@ -106,16 +109,24 @@ public class ClassRoomService {
                 letterNewClass = vector[i + 1];
             }
         }
-        ClassRoom classRoom = new ClassRoom(letterNewClass, ClassShift.valueOf(classShift));
+        ClassShift classShift = ClassShift.valueOf(createClassForm.getClassShift().toUpperCase());
+        ClassRoom classRoom = new ClassRoom(letterNewClass, classShift);
         classRoom = classRepository.save(classRoom);
         return new ClassRoomDto(classRoom);
     }
 
-    @CacheEvict(value = "classesRoomList", allEntries = true)
-    public ClassRoomDto setTeacher(Long idClass, Long idTeacher) {
 
+    @CacheEvict(value = "classesRoomList", allEntries = true)
+    public ClassRoomDto setTeacher(Long idClass, SetTeacherForm setTeacherForm) {
         ClassRoom classRoom = returnClass(idClass);
+        if(classRoom.getTeacher()!=null) {
+            classRoom.getTeacher().setClassRoom(null);
+            classRoom.setTeacher(null);
+        }
+        classRoom = classRepository.save(classRoom);
+        Long idTeacher = setTeacherForm.getIdTeacher();
         Teacher teacher = teacherRepository.findById(idTeacher).get();
+        teacher.setClassRoom(classRoom);
         classRoom.setTeacher(teacher);
         classRoom = classRepository.save(classRoom);
         return new ClassRoomDto(classRoom);
@@ -140,36 +151,40 @@ public class ClassRoomService {
     }
 
 
-    private ClassRoom returnClass(Long id) {
-        Optional<ClassRoom> classRoom = classRepository.findById(id);
+    private ClassRoom returnClass(Long idClass) {
+        Optional<ClassRoom> classRoom = classRepository.findById(idClass);
         if (classRoom.isEmpty()) {
-            throw new ResourceNotFoundException(id);
+            throw new ResourceNotFoundException(idClass);
         }
         return classRoom.get();
     }
 
-    private Student returnStudent(Long id, ClassRoom classRoom) {   // Método brevemente será apagado quando fizer nativeQuery
-        long index = id - 1;
+    private Student returnStudent(Long idStudent, ClassRoom classRoom) {   // Método brevemente será apagado quando fizer nativeQuery
+        long index = idStudent - 1;
         try {
             Student student = classRoom.getStudents().get(Integer.parseInt(String.valueOf(index)));
             return student;
         } catch (IndexOutOfBoundsException e) {
-            throw new ResourceNotFoundException(id);
+            throw new ResourceNotFoundException(idStudent);
         }
     }
 
+    private Teacher returnTeacher(Long idTeacher) {
+        Optional<Teacher> teacher = teacherRepository.findById(idTeacher);
+        if (teacher.isEmpty()) {
+            throw new ResourceNotFoundException(idTeacher);
+        }
+        return teacher.get();
+    }
+
     private void updateGrades(Student student, NewGradesForm newGrades) {
-        if (newGrades.getGrade1() != null) {
-            student.getReportCard().setGrade1(newGrades.getGrade1());
-        }
 
-        if (newGrades.getGrade2() != null) {
-            student.getReportCard().setGrade2(newGrades.getGrade2());
-        }
+        student.getReportCard().setGrade1(newGrades.getGrade1());
 
-        if (newGrades.getGrade3() != null) {
-            student.getReportCard().setGrade3(newGrades.getGrade3());
-        }
+        student.getReportCard().setGrade2(newGrades.getGrade2());
+
+        student.getReportCard().setGrade3(newGrades.getGrade3());
+
     }
 
 

@@ -24,13 +24,6 @@ public class StudentService {
     @Autowired
     private UserRepository userRepository;
 
-    public StudentDto myData(Principal user) {
-        String userName = user.getName();
-        User userDataBase = userRepository.findByEmail(userName).get();               // Talvez dê pra refatorar com native query!
-        Student student = studentRepository.findById(userDataBase.getId()).get();
-        return new StudentDto(student);
-    }
-
     public Page<StudentDto> findAll(Pageable pagination) {
         Page<Student> students = studentRepository.findAll(pagination);
         Page<StudentDto> studentDtos = students.map(StudentDto::new);

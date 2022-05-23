@@ -1,9 +1,16 @@
 package application.form;
 
+import org.hibernate.validator.constraints.Range;
+
+
+
 public class NewGradesForm {
 
+    @Range(min = (long) 0.0, max = (long) 10.0)
     private Double grade1;
+    @Range(min = (long) 0.0, max = (long) 10.0)
     private Double grade2;
+    @Range(min = (long) 0.0, max = (long) 10.0)
     private Double grade3;
 
     public Double getGrade1() {

@@ -12,8 +12,9 @@ import org.springframework.context.annotation.Profile;
 
 import java.util.Arrays;
 
-@Profile(value = {"test"})
+
 @Configuration
+@Profile(value = {"test","dev"})
 public class StartProject implements CommandLineRunner {
 
 
@@ -101,7 +102,7 @@ public class StartProject implements CommandLineRunner {
         }
         bd.append("\n");
         bd.append("*Java Version - 17 \n");
-        bd.append("*Spring Boot Version 2.6.7 -  \n");
+        bd.append("*Spring Boot Version 2.6.7  \n");
         bd.append("\n");
         bd.append("\n");
         System.out.println("\n");

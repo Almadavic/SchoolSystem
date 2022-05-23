@@ -44,7 +44,7 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(GradeValueNotAllowed.class) // Quando tenta adicionar uma nota errada á um usuário.
+    @ExceptionHandler(GradeValueNotAllowed.class) // Quando tenta adicionar uma nota incorreta á um usuário.
     public ResponseEntity<StandardError> gradeValueNotAllowed(GradeValueNotAllowed e, HttpServletRequest request) {
         String error = "Value not allowed";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
@@ -52,9 +52,17 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(NullPointerException.class) // Quando algo é nulo!
+    @ExceptionHandler(NullPointerException.class) // Quando algo é nulo que não poderia ser!
     public ResponseEntity<StandardError> nullPointerException(NullPointerException e, HttpServletRequest request) {
         String error = "Value cannot be null";
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        StandardError err = new StandardError(Instant.now(),status.value(),error,e.getMessage(),request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class) // Quando passa alguma informação errada!
+    public ResponseEntity<StandardError> illegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
+        String error = "Value wrong, pass an another type!";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(),status.value(),error,e.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(err);

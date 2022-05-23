@@ -1,9 +1,11 @@
 package application.controller;
 
 import application.dto.ClassRoomDto;
+import application.form.CreateClassForm;
 import application.form.NewGradesForm;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
+import application.form.SetTeacherForm;
 import application.service.ClassRoomService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +17,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
 
 @RestController                              // Identificando  que é um rest-controller
 @RequestMapping(value = "/classes")       // Recurso para "encontrar" esse controller
-public class ClassRoomController {
+public class ClassRoomController {          // Controller relacionado á ações dentro de uma sistema de Sala de Aluno (Apenas relacionado ás salas de aula)
 
     @Autowired  // Injeção de dependencia automatica - > ClassRoomService
     private ClassRoomService classService;   //
@@ -47,7 +50,7 @@ public class ClassRoomController {
     public ResponseEntity<Page<StudentDto>> findStudentsByClass(@PathVariable Long idClass,
                                                                 @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination){
 
-        Page<StudentDto> studentsDtos = classService.findStudentsByClass(idClass,pagination);               // Arrumar o cache aqui !
+        Page<StudentDto> studentsDtos = classService.findStudentsByClass(idClass,pagination);               // Arrumar o cache aqui ! Cache não está funcionando!
 
         return ResponseEntity.ok().body(studentsDtos);
     }
@@ -73,7 +76,7 @@ public class ClassRoomController {
     @PutMapping(value = "/{idClass}/students/{idStudent}/UpdateGrades")
     // // Método HTTP (PUT) , Método atualiza as notas de um aluno de uma respectiva sala, passando o id do aluno e da classe.
     public ResponseEntity<StudentDto> updateGrades(@PathVariable Long idClass, @PathVariable Long idStudent, Principal principal, // Me retorna o aluno com as notas atualizadas.
-                                                   @RequestBody NewGradesForm newGrades) {
+                                                   @RequestBody @Valid NewGradesForm newGrades) {
 
         StudentDto studentDto = classService.updateGrades(idClass, idStudent, principal, newGrades);
 
@@ -81,19 +84,19 @@ public class ClassRoomController {
     }
 
     @GetMapping(value = "/CreateClassRoom") // Método HTTP (GET) , Método cria uma nova sala na plataforma.
-    public ResponseEntity<ClassRoomDto> createClassRoom(String classShift, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<ClassRoomDto> createClassRoom(@RequestBody @Valid CreateClassForm createClassForm, UriComponentsBuilder uriBuilder) {
 
-        ClassRoomDto classRoomDto = classService.createClassRoom(classShift);
+        ClassRoomDto classRoomDto = classService.createClassRoom(createClassForm);
 
         URI uri = uriBuilder.path("/classes/{id}").buildAndExpand(classRoomDto.getIdClass()).toUri();
 
         return ResponseEntity.created(uri).body(classRoomDto);
     }
 
-    @PostMapping(value = "/{idClass}/setTeacher")      // Método HTTP (POST) , Método seta o professor em uma classe que não tenha professor.
-    public ResponseEntity<ClassRoomDto> setTeacher(@PathVariable Long idClass, @RequestBody Long idTeacher) {
+    @PutMapping(value = "/{idClass}/setTeacher")      // Método HTTP (PUT) , Método seta o professor em uma classe que não tenha professor.
+    public ResponseEntity<ClassRoomDto> setTeacher(@PathVariable Long idClass, @RequestBody @Valid SetTeacherForm setTeacherForm) {
 
-        ClassRoomDto classRoomDto = classService.setTeacher(idClass,idTeacher);               // Método ainda não funcional !!! Testar
+        ClassRoomDto classRoomDto = classService.setTeacher(idClass,setTeacherForm);
 
         return ResponseEntity.ok().body(classRoomDto);
     }
