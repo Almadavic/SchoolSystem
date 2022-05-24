@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/teachers")
-public class TeacherController {
+public class TeacherController { // Controller que apenas o diretor tem acesso, ele pode ver as informações de todos os professores do sistema para fazer controle.
 
     @Autowired
     private TeacherService teacherService;
 
     @GetMapping
+    // Método que retorna todos os professores do sistema.
     private ResponseEntity<Page<TeacherDto>> findAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination){
 
             Page<TeacherDto> teacherDtos = teacherService.findAll(pagination);
@@ -29,6 +30,7 @@ public class TeacherController {
     }
 
     @GetMapping("/{id}")
+    // Método que retorna um teacher em específico,passando o  id.
     private ResponseEntity<TeacherDto> findById(@PathVariable Long id) {
 
         TeacherDto teacherDto = teacherService.findByID(id);

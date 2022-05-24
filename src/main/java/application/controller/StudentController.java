@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/students")
-public class StudentController {
+public class StudentController {  // Controller para o diretor, apenas quem tem essa role, ver informações de todos os alunos do sistema para fazer controle!
 
     @Autowired
     private StudentService studentService;
 
     @GetMapping
+    // Método q retorna todos os alunos do sistema registrados!
     public ResponseEntity<Page<StudentDto>> findAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
         Page<StudentDto> studentDtos = studentService.findAll(pagination);
@@ -29,6 +30,7 @@ public class StudentController {
     }
 
     @GetMapping(value = "/{id}")
+    //Método retorna um aluno em específico do sistema.
     public ResponseEntity<StudentDto> findById(@PathVariable Long id) {
 
         StudentDto studentDto = studentService.findById(id);
