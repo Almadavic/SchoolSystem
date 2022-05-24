@@ -1,4 +1,4 @@
-package application.businessRule.updateGrades;
+package application.service.businessRule.updateGrades;
 
 import application.form.NewGradesForm;
 

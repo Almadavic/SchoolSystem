@@ -2,8 +2,8 @@ package application.security;
 
 import application.filter.AuthenticationJWTFilter;
 import application.repository.UserRepository;
-import application.service.TokenService;
-import application.service.UserService;
+import application.service.serviceLayer.TokenService;
+import application.service.serviceLayer.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

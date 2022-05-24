@@ -1,7 +1,7 @@
 package application.controller;
 
 import application.dto.StudentDto;
-import application.service.StudentService;
+import application.service.serviceLayer.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/students")
@@ -33,7 +31,7 @@ public class StudentController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<StudentDto> findById(@PathVariable Long id) {
 
-        StudentDto studentDto = studentService.findByID(id);
+        StudentDto studentDto = studentService.findById(id);
 
         return ResponseEntity.ok().body(studentDto);
     }

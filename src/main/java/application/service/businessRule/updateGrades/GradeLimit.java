@@ -1,9 +1,8 @@
-package application.businessRule.updateGrades;
+package application.service.businessRule.updateGrades;
 
 import application.form.NewGradesForm;
-import application.service.exception.GradeValueNotAllowed;
+import application.service.exception.classRoom.reportCard.GradeValueNotAllowed;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package application.controller;
 
 import application.dto.UserDto;
-import application.service.UserService;
+import application.service.serviceLayer.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

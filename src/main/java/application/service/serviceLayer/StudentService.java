@@ -1,17 +1,15 @@
-package application.service;
+package application.service.serviceLayer;
 
 import application.dto.StudentDto;
 import application.entity.users.Student;
-import application.entity.users.User;
 import application.repository.StudentRepository;
 import application.repository.UserRepository;
-import application.service.exception.ResourceNotFoundException;
+import application.service.exception.database.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.Optional;
 
 
@@ -30,7 +28,7 @@ public class StudentService {
         return studentDtos;
     }
 
-    public StudentDto findByID(Long id) {
+    public StudentDto findById(Long id) {
         Student student = errorNotFoundOrReturnEntity(id);
         return new StudentDto(student);
     }

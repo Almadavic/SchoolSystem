@@ -44,6 +44,10 @@ public class ClassRoom implements Serializable {
         students.add(student);
     }
 
+    public void removeStudent(int id) {
+        students.remove(id);
+    }
+
     public double getAverageClass() {
         double average = 0;
         for(Student student : students) {

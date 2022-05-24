@@ -1,7 +1,7 @@
 package application.controller;
 
 import application.dto.TeacherDto;
-import application.service.TeacherService;
+import application.service.serviceLayer.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

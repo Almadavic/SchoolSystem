@@ -1,12 +1,13 @@
 package application.controller;
 
 import application.dto.ClassRoomDto;
+import application.form.AddStudentForm;
 import application.form.CreateClassForm;
 import application.form.NewGradesForm;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
 import application.form.SetTeacherForm;
-import application.service.ClassRoomService;
+import application.service.serviceLayer.ClassRoomService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -48,9 +49,9 @@ public class ClassRoomController {          // Controller relacionado á ações
     @GetMapping(value = "/{idClass}/students")
     // Método HTTP (GET) , Método me retorna uma lista de alunos associados á uma classe dado o id dessa classe.
     public ResponseEntity<Page<StudentDto>> findStudentsByClass(@PathVariable Long idClass,
-                                                                @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination){
+                                                                @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
-        Page<StudentDto> studentsDtos = classService.findStudentsByClass(idClass,pagination);               // Arrumar o cache aqui ! Cache não está funcionando!
+        Page<StudentDto> studentsDtos = classService.findStudentsByClass(idClass, pagination);               // Arrumar o cache aqui ! Cache não está funcionando!
 
         return ResponseEntity.ok().body(studentsDtos);
     }
@@ -93,18 +94,27 @@ public class ClassRoomController {          // Controller relacionado á ações
         return ResponseEntity.created(uri).body(classRoomDto);
     }
 
-    @PutMapping(value = "/{idClass}/setTeacher")      // Método HTTP (PUT) , Método seta o professor em uma classe que não tenha professor.
+    @PutMapping(value = "/{idClass}/setTeacher")
+    // Método HTTP (PUT) , Método seta o professor em uma classe que não tenha professor.
     public ResponseEntity<ClassRoomDto> setTeacher(@PathVariable Long idClass, @RequestBody @Valid SetTeacherForm setTeacherForm) {
 
-        ClassRoomDto classRoomDto = classService.setTeacher(idClass,setTeacherForm);
+        ClassRoomDto classRoomDto = classService.setTeacher(idClass, setTeacherForm);
 
         return ResponseEntity.ok().body(classRoomDto);
     }
 
-    @PostMapping(value = "/{idClass}/addStudent")
-    public ResponseEntity<ClassRoomDto> addStudent(@PathVariable Long idClass, @RequestBody Long idStudent) {  //Método HTTP (POST) , Método adiciona um aluno na classe.
+    @PutMapping(value = "/{idClass}/addStudent")
+    public ResponseEntity<ClassRoomDto> addStudent(@PathVariable Long idClass, @RequestBody @Valid AddStudentForm addStudentForm) {  //Método HTTP (PUT) , Método adiciona um aluno na classe.
 
-        ClassRoomDto classRoomDto = classService.addStudent(idClass,idStudent);    // Método ainda não funciona !!!
+        ClassRoomDto classRoomDto = classService.addStudent(idClass, addStudentForm);
+
+        return ResponseEntity.ok().body(classRoomDto);
+    }
+
+    @PutMapping(value = "/{idClass}/removeStudent")
+    public ResponseEntity<ClassRoomDto> removeStudent(@PathVariable Long idClass, @RequestBody @Valid AddStudentForm addStudentForm) {  //Método HTTP (PUT) , Método remove um aluno da classe.
+
+        ClassRoomDto classRoomDto = classService.removeStudent(idClass, addStudentForm);
 
         return ResponseEntity.ok().body(classRoomDto);
     }

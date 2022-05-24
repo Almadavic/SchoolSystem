@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonPropertyOrder({"idClass","letter","classShift","teacher","students","averageClassGrade"})
+@JsonPropertyOrder({"idClass","letter","classShift","teacher","numberStudents","students","averageClassGrade"})
 public class ClassRoomDto {
 
     @JsonProperty("idClass")
@@ -21,6 +21,9 @@ public class ClassRoomDto {
     private ClassShift classShift;
     @JsonProperty("teacher")
     private TeacherDto teacherDto;
+
+    @JsonProperty("numberStudents")
+    private Integer numberStudents;
     @JsonProperty("students")
     private List<StudentDto> studentsDto = new ArrayList<>();
     @JsonProperty("averageClassGrade")
@@ -38,6 +41,7 @@ public class ClassRoomDto {
         if(classRoom.getTeacher()!=null) {
             this.teacherDto = new TeacherDto(classRoom.getTeacher());
         }
+        this.numberStudents= classRoom.getStudents().size();
         for (Student student : classRoom.getStudents()) {
             studentsDto.add(new StudentDto(student));                // Método necessita de refatoração nessa parte
         }

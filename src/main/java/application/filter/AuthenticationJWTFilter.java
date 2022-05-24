@@ -2,7 +2,7 @@ package application.filter;
 
 import application.entity.users.User;
 import application.repository.UserRepository;
-import application.service.TokenService;
+import application.service.serviceLayer.TokenService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;

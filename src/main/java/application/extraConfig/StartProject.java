@@ -42,23 +42,26 @@ public class StartProject implements CommandLineRunner {
         Student u1 = new Student("Joao Lacerta", "joao@gmail.com", senhaEncode, cr1);
         Student u2 = new Student("Victor Almada", "almadavic@live.com", senhaEncode, cr1);
         Student u3 = new Student("Renato Tavares", "renato@hotmail.com", senhaEncode, cr1);
+        Student u4 = new Student("Marcos Almeida","marcos@gmail.com",senhaEncode,null);
 
         Address a1 = new Address("Brasil", "Minas Gerais", "Belo Horizonte", u1);
         Address a2 = new Address("EUA", "Georgia", "Atlanta", u2);
         Address a3 = new Address("EUA", "Florida", "Tampa", u3);
+        Address a4 = new Address("EUA", "Florida", "Tampa", u4);
 
         u1.setAddress(a1);
         u2.setAddress(a2);
         u3.setAddress(a3);
+        u4.setAddress(a4);
 
 
         classRoomRepository.save(cr1);
-        studentRepository.saveAll(Arrays.asList(u1, u2, u3));
+        studentRepository.saveAll(Arrays.asList(u1, u2, u3,u4));
 
 
         Teacher teacher1 = new Teacher("Raphael", "raphael@gmail.com", senhaEncode, cr1);
-        Address a4 = new Address("EUA", "Florida", "Tampa", teacher1);
-        teacher1.setAddress(a4);
+        Address a5 = new Address("EUA", "Florida", "Tampa", teacher1);
+        teacher1.setAddress(a5);
 
         teacherRepository.save(teacher1);
 
@@ -81,9 +84,9 @@ public class StartProject implements CommandLineRunner {
 
 
         Teacher teacher2 = new Teacher("Euni", "euni@gmail.com", senhaEncode);
-        Address a5 = new Address("Brasil", "Bahia", "Salvador", teacher2);
+        Address a6 = new Address("Brasil", "Bahia", "Salvador", teacher2);
         teacher2.addRole(r2);
-        teacher2.setAddress(a5);
+        teacher2.setAddress(a6);
         teacherRepository.save(teacher2);
 
 

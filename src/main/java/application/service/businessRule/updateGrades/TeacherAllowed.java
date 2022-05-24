@@ -1,7 +1,7 @@
-package application.businessRule.updateGrades;
+package application.service.businessRule.updateGrades;
 
 import application.form.NewGradesForm;
-import application.service.exception.NoPermissionException;
+import application.service.exception.classRoom.reportCard.NoPermissionException;
 
 public class TeacherAllowed implements UpdateCheck {
     @Override

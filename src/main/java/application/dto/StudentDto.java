@@ -4,21 +4,28 @@ import application.entity.users.Student;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"id","name","email","reportCard","address","roles"})
+@JsonPropertyOrder({"id", "name", "email", "classRoomId", "reportCard", "address", "roles"})
 public class StudentDto extends UserDto {
 
     @JsonProperty(value = "reportCard")
     private ReportCardDto reportCardDto;
 
+    @JsonProperty(value = "classRoomId")
+    private Long classRoomId;
+
     public StudentDto() {
 
     }
+
 
     public StudentDto(Student student) {
         this.setId(student.getId());
         this.setName(student.getName());
         this.setEmail(student.getEmail());
-        this.reportCardDto= new ReportCardDto(student.getReportCard());
+        if (student.getClassRoom() != null) {
+            this.classRoomId = student.getClassRoom().getId();
+        }
+        this.reportCardDto = new ReportCardDto(student.getReportCard());
         this.setAddressDto(new AddressDto(student.getAddress()));
         convertList(student.getAuthorities());
     }

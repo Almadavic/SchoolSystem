@@ -4,8 +4,8 @@ import javax.validation.Valid;
 
 import application.form.LoginForm;
 import application.dto.authenticationAuthorization.TokenDto;
-import application.service.TokenService;
-import application.service.exception.DatabaseException;
+import application.service.serviceLayer.TokenService;
+import application.service.exception.database.DatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;

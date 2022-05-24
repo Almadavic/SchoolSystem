@@ -1,10 +1,9 @@
-package application.service;
+package application.service.serviceLayer;
 
-import application.businessRule.updateGrades.GradeLimit;
-import application.businessRule.updateGrades.TeacherAllowed;
-import application.businessRule.updateGrades.UpdateCheck;
+
 import application.dto.ClassRoomDto;
 import application.entity.ClassShift;
+import application.form.AddStudentForm;
 import application.form.CreateClassForm;
 import application.form.NewGradesForm;
 import application.dto.StudentDto;
@@ -16,19 +15,22 @@ import application.form.SetTeacherForm;
 import application.repository.ClassRoomRepository;
 import application.repository.StudentRepository;
 import application.repository.TeacherRepository;
-import application.service.exception.NoPermissionException;
-import application.service.exception.ResourceNotFoundException;
-import application.service.exception.StudentAlreadyExists;
+import application.service.businessRule.addStudent.AddStudentCheck;
+import application.service.businessRule.addStudent.ClassContainsSameStudent;
+import application.service.businessRule.addStudent.StudentHasAnotherClass;
+import application.service.businessRule.setTeacher.SetTeacherCheck;
+import application.service.businessRule.setTeacher.TeacherHasAnotherClass;
+import application.service.businessRule.updateGrades.GradeLimit;
+import application.service.businessRule.updateGrades.TeacherAllowed;
+import application.service.businessRule.updateGrades.UpdateCheck;
+import application.service.exception.database.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -116,39 +118,65 @@ public class ClassRoomService {
     }
 
 
-    @CacheEvict(value = "classesRoomList", allEntries = true)
+    @CacheEvict(value = {"classesRoomList", "teachersList"}, allEntries = true)
     public ClassRoomDto setTeacher(Long idClass, SetTeacherForm setTeacherForm) {
+        List<SetTeacherCheck> validations = Arrays.asList(new TeacherHasAnotherClass());
+
         ClassRoom classRoom = returnClass(idClass);
-        if(classRoom.getTeacher()!=null) {
+        if (classRoom.getTeacher() != null) {
             classRoom.getTeacher().setClassRoom(null);
             classRoom.setTeacher(null);
+            classRoom = classRepository.save(classRoom);
         }
-        classRoom = classRepository.save(classRoom);
+
         Long idTeacher = setTeacherForm.getIdTeacher();
-        Teacher teacher = teacherRepository.findById(idTeacher).get();
+        Teacher teacher = returnTeacher(idTeacher);
+
+        Teacher finalTeacher = teacher;
+        validations.forEach(v -> v.validation(finalTeacher));
+
         teacher.setClassRoom(classRoom);
+        teacher = teacherRepository.save(teacher);
         classRoom.setTeacher(teacher);
         classRoom = classRepository.save(classRoom);
+
         return new ClassRoomDto(classRoom);
     }
 
-    @CacheEvict(value = "classesRoomList", allEntries = true)
-    public ClassRoomDto addStudent(Long idClass, Long idStudent) {
+    @CacheEvict(value = {"classesRoomList", "studentsList"}, allEntries = true)
+    public ClassRoomDto addStudent(Long idClass, AddStudentForm addStudentForm) {
+        List<AddStudentCheck> validations = Arrays.asList(new ClassContainsSameStudent(), new StudentHasAnotherClass());
 
         ClassRoom classRoom = returnClass(idClass);
-        Student student = returnStudent(idStudent, classRoom);
+        Long idStudent = addStudentForm.getIdStudent();
+        Student student = studentRepository.findById(idStudent).get();
 
-        boolean classRoomContainsNewStudent = checkIfStudentExistsInTheClassRoom(student, classRoom);      // Método pode ser refatorado depois com o uso de native query
+        ClassRoom finalClassRoom = classRoom;
+        validations.forEach(v -> v.validation(student, finalClassRoom));
 
-        if (classRoomContainsNewStudent == true) {
-            throw new StudentAlreadyExists("This class alreay contains the student");
-        }
+        student.setClassRoom(classRoom);
+
         classRoom.addStudent(student);
 
         classRoom = classRepository.save(classRoom);
 
         return new ClassRoomDto(classRoom);
     }
+
+    @CacheEvict(value = {"classesRoomList", "studentsList"}, allEntries = true)
+    public ClassRoomDto removeStudent(Long idClass, AddStudentForm addStudentForm) {
+
+        ClassRoom classRoom = returnClass(idClass);
+        Long idStudent = addStudentForm.getIdStudent();
+        Student student = returnStudent(idStudent,classRoom);
+        student.setClassRoom(null);
+        classRoom.getStudents().removeIf(s-> s.getId().equals(student.getId()));
+        classRoom = classRepository.save(classRoom);
+
+        return new ClassRoomDto(classRoom);
+    }
+
+
 
 
     private ClassRoom returnClass(Long idClass) {
@@ -160,9 +188,21 @@ public class ClassRoomService {
     }
 
     private Student returnStudent(Long idStudent, ClassRoom classRoom) {   // Método brevemente será apagado quando fizer nativeQuery
-        long index = idStudent - 1;
         try {
-            Student student = classRoom.getStudents().get(Integer.parseInt(String.valueOf(index)));
+
+            Student student = studentRepository.findById(idStudent).get();
+
+            boolean exists = false;
+            for(Student studentList : classRoom.getStudents()) {
+                if(studentList.getId() == student.getId()) {
+                    exists = true;
+                }
+            }
+
+            if(!exists) {
+                throw new ResourceNotFoundException("Doesn't have this student on this class");
+            }
+
             return student;
         } catch (IndexOutOfBoundsException e) {
             throw new ResourceNotFoundException(idStudent);
@@ -193,14 +233,5 @@ public class ClassRoomService {
         return letters;
     }
 
-    private boolean checkIfStudentExistsInTheClassRoom(Student student, ClassRoom classRoom) {
-
-        for (Student studentClass : classRoom.getStudents()) {
-            if (studentClass.equals(student)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 }

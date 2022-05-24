@@ -1,4 +1,4 @@
-package application.service;
+package application.service.serviceLayer;
 
 import application.dto.StudentDto;
 import application.entity.users.Student;
