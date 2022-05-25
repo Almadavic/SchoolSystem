@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 @Configuration
 @Profile(value = {"test", "dev"})
-public class StartProject implements CommandLineRunner {
+public class StartProject implements CommandLineRunner { // Essa classe é uma clase separada de configuração!
 
 
     @Autowired
@@ -32,7 +32,8 @@ public class StartProject implements CommandLineRunner {
 
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) throws Exception { // Esse método fala que toda vez que o programa iniciar(aplicação for pro ar)
+                                                                               // , esse método vai ser chamado, e também oq tem dentro.
         System.out.println(applicationInfo());
 
         String senhaEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
@@ -48,7 +49,7 @@ public class StartProject implements CommandLineRunner {
         Address a1 = new Address("Brasil", "Minas Gerais", "Belo Horizonte", u1);
         Address a2 = new Address("EUA", "Georgia", "Atlanta", u2);
         Address a3 = new Address("EUA", "Florida", "Tampa", u3);
-        Address a4 = new Address("EUA", "Florida", "Tampa", u4);
+        Address a4 = new Address("EUA", "Florida", "Miami", u4);
 
         u1.setAddress(a1);
         u2.setAddress(a2);
@@ -80,7 +81,7 @@ public class StartProject implements CommandLineRunner {
         u4.addRole(r1);
         teacher1.addRole(r2);
 
-        studentRepository.saveAll(Arrays.asList(u1, u2, u3));
+        studentRepository.saveAll(Arrays.asList(u1, u2, u3,u4));
 
         classRoomRepository.save(cr1);
 
@@ -107,7 +108,8 @@ public class StartProject implements CommandLineRunner {
         }
         bd.append("\n");
         bd.append("*Java Version - 17 \n");
-        bd.append("*Spring Boot Version 2.6.7  \n");
+        bd.append("*Spring Boot Version -  2.6.7  \n");
+        bd.append("\n");
         bd.append("\n");
         bd.append("\n");
         System.out.println("\n");

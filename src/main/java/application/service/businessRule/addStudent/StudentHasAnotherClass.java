@@ -2,7 +2,7 @@ package application.service.businessRule.addStudent;
 
 import application.entity.ClassRoom;
 import application.entity.users.Student;
-import application.service.exception.classRoom.students.StudentBelongsAnotherClass;
+import application.service.exception.classRoomService.StudentBelongsAnotherClass;
 
 public class StudentHasAnotherClass implements AddStudentCheck {
 

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AuthenticationJWTFilter extends OncePerRequestFilter {
+public class AuthenticationJWTFilter extends OncePerRequestFilter { // Filtro de autenticação! antes da API chamar a classe de segurança, ela vai chamar essa aqui antes.
 
     private TokenService tokenService;
     private UserRepository userRepository;

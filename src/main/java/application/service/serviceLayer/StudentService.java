@@ -4,7 +4,9 @@ import application.dto.StudentDto;
 import application.entity.users.Student;
 import application.repository.StudentRepository;
 import application.repository.UserRepository;
-import application.service.exception.database.ResourceNotFoundException;
+import application.service.exception.general.InvalidParam;
+import application.service.exception.general.ResourceNotFoundException;
+import application.service.serviceLayer.interfacee.ExtendsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +16,7 @@ import java.util.Optional;
 
 
 @Service
-public class StudentService {
+public class StudentService implements ExtendsUserService {
 
     @Autowired
     private StudentRepository studentRepository;
@@ -22,12 +24,26 @@ public class StudentService {
     @Autowired
     private UserRepository userRepository;
 
-    public Page<StudentDto> findAll(Pageable pagination) {
-        Page<Student> students = studentRepository.findAll(pagination);
+    @Override
+    public Page<StudentDto> findAll(Pageable pagination, String noClass) {
+        Page<Student> students = null;
+        if (noClass != null) {
+            if (noClass.toUpperCase().equals("TRUE")) {
+                // Ainda implementar isso, que é quando o cliente quer retornar todos os alunos que estão sem classe.
+            } else if (noClass.toUpperCase().equals("FALSE")) {
+                students = studentRepository.findAll(pagination);
+            } else {
+                throw new InvalidParam("This parameter : {" + noClass + "} is invalid");
+            }
+        } else {
+            students = studentRepository.findAll(pagination);
+        }
+
         Page<StudentDto> studentDtos = students.map(StudentDto::new);
         return studentDtos;
     }
 
+    @Override
     public StudentDto findById(Long id) {
         Student student = returnStudent(id);
         return new StudentDto(student);
@@ -36,7 +52,7 @@ public class StudentService {
     private Student returnStudent(Long id) {
         Optional<Student> student = studentRepository.findById(id);
         if (student.isEmpty()) {
-            throw new ResourceNotFoundException(id+", This student wasn't found on DataBase");
+            throw new ResourceNotFoundException("Id : " + id + ", This student wasn't found on DataBase");
         }
         return student.get();
     }

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name="tb_roles")
-public class Role implements GrantedAuthority {
+public class Role implements GrantedAuthority { // A classe que representam os perfis, roles, permissões de cada Usuário!
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -22,7 +22,7 @@ public class Role implements GrantedAuthority {
 
     @JsonIgnore
     @ManyToMany(mappedBy="roles")
-    private List<User> users = new ArrayList<>();
+    private List<User> users = new ArrayList<>(); // Um perfil tem uma lista de Usuários associados a ele.
 
     private String name;
 

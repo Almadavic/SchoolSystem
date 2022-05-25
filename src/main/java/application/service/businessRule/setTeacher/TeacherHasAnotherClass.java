@@ -1,10 +1,7 @@
 package application.service.businessRule.setTeacher;
 
-import application.entity.ClassRoom;
-import application.entity.users.Student;
 import application.entity.users.Teacher;
-import application.service.exception.classRoom.students.StudentBelongsAnotherClass;
-import application.service.exception.classRoom.teachers.TeacherBelongsAnotherClass;
+import application.service.exception.classRoomService.TeacherBelongsAnotherClass;
 
 public class TeacherHasAnotherClass implements SetTeacherCheck {
 

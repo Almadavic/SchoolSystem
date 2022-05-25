@@ -1,4 +1,4 @@
-package application.service.exception.database;
+package application.service.exception.general;
 
 import java.io.Serial;
 

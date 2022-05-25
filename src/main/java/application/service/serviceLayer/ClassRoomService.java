@@ -20,9 +20,10 @@ import application.service.businessRule.setTeacher.TeacherHasAnotherClass;
 import application.service.businessRule.updateGrades.GradeLimit;
 import application.service.businessRule.updateGrades.TeacherAllowed;
 import application.service.businessRule.updateGrades.UpdateCheck;
-import application.service.exception.classRoom.students.StudentDoesntExistInThisClass;
-import application.service.exception.classRoom.teachers.ThereIsntTeacherInThisClass;
-import application.service.exception.database.ResourceNotFoundException;
+import application.service.exception.classRoomService.StudentDoesntExistInThisClass;
+import application.service.exception.classRoomService.ThereIsntTeacherInThisClass;
+import application.service.exception.general.ResourceNotFoundException;
+import application.service.serviceLayer.interfacee.GenericMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ClassRoomService {
+public class ClassRoomService implements GenericMethodService {
 
     @Autowired
     private ClassRoomRepository classRepository;
@@ -52,6 +53,7 @@ public class ClassRoomService {
         return classesRoomDtos;
     }
 
+    @Override
     public ClassRoomDto findById(Long id) {
         ClassRoom classRoom = returnClass(id);
         ClassRoomDto classRoomDto = new ClassRoomDto(classRoom);

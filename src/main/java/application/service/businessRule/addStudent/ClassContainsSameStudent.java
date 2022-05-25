@@ -3,7 +3,7 @@ package application.service.businessRule.addStudent;
 
 import application.entity.ClassRoom;
 import application.entity.users.Student;
-import application.service.exception.classRoom.students.StudentBelongsSameClass;
+import application.service.exception.classRoomService.StudentBelongsSameClass;
 
 public class ClassContainsSameStudent implements AddStudentCheck {
 

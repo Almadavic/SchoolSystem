@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import application.form.authenticationAuthorization.LoginForm;
 import application.dto.authenticationAuthorization.TokenDto;
 import application.service.serviceLayer.TokenService;
-import application.service.exception.database.DatabaseException;
+import application.service.exception.general.DatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;

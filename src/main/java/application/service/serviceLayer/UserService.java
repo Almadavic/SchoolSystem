@@ -3,7 +3,9 @@ package application.service.serviceLayer;
 import application.dto.UserDto;
 import application.entity.users.User;
 import application.repository.UserRepository;
-import application.service.exception.database.ResourceNotFoundException;
+import application.service.exception.general.InvalidParam;
+import application.service.exception.general.ResourceNotFoundException;
+import application.service.serviceLayer.interfacee.GenericMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService, GenericMethodService {
 
     @Autowired
     private UserRepository userRepository;
@@ -24,30 +26,40 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(username);
         if (user.isPresent()) {
-            return  user.get();
+            return user.get();
         }
         throw new UsernameNotFoundException("Invalid data!");
     }
 
-    public Page<UserDto> findAll(Pageable pagination,String rolesName) {
+    public Page<UserDto> findAll(Pageable pagination, String rolesName) {
+        String rolesNameOriginal = rolesName;
         Page<User> users;
-        if(rolesName!=null) {
-            rolesName = "ROLE_"+rolesName.toUpperCase();
-            users = userRepository.findByRolesName(pagination,rolesName);
+
+        if (rolesName != null) {
+            rolesName = "ROLE_" + rolesName.toUpperCase();
+            if (rolesName.equals("ROLE_TEACHER") || rolesName.equals("ROLE_STUDENT")) {
+
+                users = userRepository.findByRolesName(pagination, rolesName);
+            } else {
+                throw new InvalidParam("This parameter : {" + rolesNameOriginal + "} is invalid");
+            }
         } else {
-             users = userRepository.findAll(pagination);
+            users = userRepository.findAll(pagination);
         }
+
         Page<UserDto> usersDto = users.map(UserDto::new);
         return usersDto;
     }
 
+    @Override
     public UserDto findById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        if(user.isEmpty()) {
-            throw new ResourceNotFoundException("User not found");
+        if (user.isEmpty()) {
+            throw new ResourceNotFoundException("Id : " + id + ", This user wasn't found on DataBase");
         }
         UserDto userDto = new UserDto(user.get());
         return userDto;
     }
+
 
 }

@@ -1,5 +1,6 @@
 package application.controller.controllerLayer;
 
+import application.controller.controllerLayer.interfacee.GenericMethodController;
 import application.dto.UserDto;
 import application.service.serviceLayer.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/users")
-public class UserController { // Controller para verificar todos os usuários do sistema. Apenas o diretor tem acesso aqui! Para fazer controle.
+public class UserController implements GenericMethodController { // Controller para verificar todos os usuários do sistema. Apenas o diretor tem acesso aqui! Para fazer controle.
 
     @Autowired
     private UserService userService;
@@ -27,6 +28,7 @@ public class UserController { // Controller para verificar todos os usuários do
         return ResponseEntity.ok().body(usersDto);
     }
 
+    @Override
     @GetMapping ("/{id}")
     // Método que me retorna um User especifico do sistema, não importa a role!
     public ResponseEntity<UserDto> findById(@PathVariable Long id) {

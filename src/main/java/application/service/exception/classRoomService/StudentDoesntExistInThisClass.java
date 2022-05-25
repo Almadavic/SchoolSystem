@@ -1,4 +1,4 @@
-package application.service.exception.classRoom.students;
+package application.service.exception.classRoomService;
 
 import java.io.Serial;
 

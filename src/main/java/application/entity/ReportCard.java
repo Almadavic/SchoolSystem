@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "tb_report_card")
-public class ReportCard implements Serializable {
+public class ReportCard implements Serializable {  // Classe do Banco - > ReportCard |  Representa os boletim  de cada aluno |
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -25,10 +25,10 @@ public class ReportCard implements Serializable {
 
     @OneToOne
     @MapsId
-    private Student student;
+    private Student student; // Um boletim tem um aluno associado á ele.
 
     @Enumerated(EnumType.STRING)
-    private Situation situation;
+    private Situation situation; // Um boletim tem um status : APROVADO/REPROVADO
 
 
     public ReportCard() {

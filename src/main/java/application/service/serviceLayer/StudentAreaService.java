@@ -6,12 +6,11 @@ import application.entity.users.User;
 import application.form.NewPasswordForm;
 import application.repository.StudentRepository;
 import application.repository.UserRepository;
-import application.service.exception.studentArea.SamePassword;
+import application.service.exception.studentAreaService.SamePassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.security.Principal;
 
 @Service
@@ -34,7 +33,7 @@ public class StudentAreaService {
         String newPassword = newPasswordForm.getNewPassword();
         String oldPassword = userDataBase.getPassword();
         String newPasswordEncoder = new BCryptPasswordEncoder().encode(newPassword);
-        checkPasswords(newPassword, oldPassword); // MÉTODO de verificar se senha é igual ainda NÃO FUNCIONA!
+        checkPasswords(newPassword, oldPassword); // MÉTODO de verificar se senha é igual, ainda NÃO FUNCIONA!
         userDataBase.setPassword(newPasswordEncoder);
         userDataBase = userRepository.save(userDataBase);
 
@@ -47,7 +46,7 @@ public class StudentAreaService {
         return userDataBase;
     }
 
-    private void checkPasswords(String oldPassword, String newPassword) {     // MÉTODO de verificar se senha é igual ainda NÃO FUNCIONA!
+    private void checkPasswords(String oldPassword, String newPassword) {     // MÉTODO de verificar se senha é igual, ainda NÃO FUNCIONA!
         if (oldPassword.equals(newPassword)) {
             throw new SamePassword("Your new password can't be equal the last one");
         }

@@ -1,5 +1,6 @@
 package application.controller.controllerLayer;
 
+import application.controller.controllerLayer.interfacee.GenericMethodController;
 import application.dto.ClassRoomDto;
 import application.form.*;
 import application.dto.StudentDto;
@@ -21,7 +22,7 @@ import java.security.Principal;
 
 @RestController                              // Identificando  que é um rest-controller
 @RequestMapping(value = "/classes")       // Recurso para "encontrar" esse controller
-public class ClassRoomController {          // Controller relacionado á ações dentro de uma sistema de Sala de Aluno (Apenas relacionado ás salas de aula)
+public class ClassRoomController implements GenericMethodController {          // Controller relacionado á ações dentro de uma sistema de Sala de Aluno (Apenas relacionado ás salas de aula)
 
     @Autowired  // Injeção de dependencia automatica - > ClassRoomService
     private ClassRoomService classService;   //
@@ -35,6 +36,7 @@ public class ClassRoomController {          // Controller relacionado á ações
         return ResponseEntity.ok().body(classes);
     }
 
+    @Override
     @GetMapping(value = "/{id}")
     // Método HTTP (GET) , Método me retorna uma classe da plataforma dado o Id da classe.
     public ResponseEntity<ClassRoomDto> findById(@PathVariable Long id) {
