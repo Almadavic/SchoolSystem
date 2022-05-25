@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({"frequency","grade1","grade2","grade3","averageGrade","situation"})
-public class ReportCardDto {
+public class ReportCardDto { // Dto da classe ReportCard
 
     @JsonProperty("frequency")
     private Double frequency;
@@ -23,7 +23,7 @@ public class ReportCardDto {
 
     }
 
-    public ReportCardDto(ReportCard reportCard) {
+    public ReportCardDto(ReportCard reportCard) {    // Transformando um ReportCard em ReportCardDto
         this.frequency=reportCard.getFrequency();
         this.grade1= reportCard.getGrade1();
         this.grade2= reportCard.getGrade2();
@@ -33,7 +33,7 @@ public class ReportCardDto {
 
     @JsonProperty("averageGrade")
     public Double getAverageGrade() {
-        double average = (grade1+grade2+grade3)/3;
+        double average = (grade1+grade2+grade3)/3;     // Método que retorna a média de notas do boletim de um aluno!
         return Math.round(average*10.0)/10.0;
     }
 

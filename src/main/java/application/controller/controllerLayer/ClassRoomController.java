@@ -1,12 +1,9 @@
-package application.controller;
+package application.controller.controllerLayer;
 
 import application.dto.ClassRoomDto;
-import application.form.AddStudentForm;
-import application.form.CreateClassForm;
-import application.form.NewGradesForm;
+import application.form.*;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
-import application.form.SetTeacherForm;
 import application.service.serviceLayer.ClassRoomService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +71,7 @@ public class ClassRoomController {          // Controller relacionado á ações
         return ResponseEntity.ok().body(teacherDto);
     }
 
-    @PutMapping(value = "/{idClass}/students/{idStudent}/UpdateGrades")
+    @PutMapping(value = "/{idClass}/students/{idStudent}/updategrades")
     // // Método HTTP (PUT) , Método atualiza as notas de um aluno de uma respectiva sala, passando o id do aluno e da classe.
     // Me retorna o aluno com as notas atualizadas.
     public ResponseEntity<StudentDto> updateGrades(@PathVariable Long idClass, @PathVariable Long idStudent, Principal principal, @RequestBody @Valid NewGradesForm newGrades) {
@@ -84,8 +81,8 @@ public class ClassRoomController {          // Controller relacionado á ações
         return ResponseEntity.ok().body(studentDto);
     }
 
-    @GetMapping(value = "/CreateClassRoom")
-    // Método HTTP (GET) , Método cria uma nova sala na plataforma, com a info Letter automatizada
+    @PostMapping (value = "/createclassroom")
+    // Método HTTP (GET) , Método cria uma nova sala na plataforma, com a info Letter automatizada.
     public ResponseEntity<ClassRoomDto> createClassRoom(@RequestBody @Valid CreateClassForm createClassForm, UriComponentsBuilder uriBuilder) {
 
         ClassRoomDto classRoomDto = classService.createClassRoom(createClassForm);
@@ -95,7 +92,7 @@ public class ClassRoomController {          // Controller relacionado á ações
         return ResponseEntity.created(uri).body(classRoomDto);
     }
 
-    @PutMapping(value = "/{idClass}/setTeacher")
+    @PutMapping(value = "/{idClass}/setteacher")
     // Método HTTP (PUT) , Método seta o professor em uma classe.
     public ResponseEntity<ClassRoomDto> setTeacher(@PathVariable Long idClass, @RequestBody @Valid SetTeacherForm setTeacherForm) {
 
@@ -104,7 +101,7 @@ public class ClassRoomController {          // Controller relacionado á ações
         return ResponseEntity.ok().body(classRoomDto);
     }
 
-    @PutMapping(value = "/{idClass}/addStudent")
+    @PutMapping(value = "/{idClass}/addstudent")
     //Método HTTP (PUT) , Método adiciona um aluno na classe.
     public ResponseEntity<ClassRoomDto> addStudent(@PathVariable Long idClass, @RequestBody @Valid AddStudentForm addStudentForm) {
 
@@ -113,11 +110,11 @@ public class ClassRoomController {          // Controller relacionado á ações
         return ResponseEntity.ok().body(classRoomDto);
     }
 
-    @PutMapping(value = "/{idClass}/removeStudent")
+    @PutMapping(value = "/{idClass}/removestudent")
     //Método HTTP (PUT) , Método remove um aluno da classe.
-    public ResponseEntity<ClassRoomDto> removeStudent(@PathVariable Long idClass, @RequestBody @Valid AddStudentForm addStudentForm) {
+    public ResponseEntity<ClassRoomDto> removeStudent(@PathVariable Long idClass, @RequestBody @Valid RemoveStudentForm removeStudentForm) {
 
-        ClassRoomDto classRoomDto = classService.removeStudent(idClass, addStudentForm);
+        ClassRoomDto classRoomDto = classService.removeStudent(idClass, removeStudentForm);
 
         return ResponseEntity.ok().body(classRoomDto);
     }

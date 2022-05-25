@@ -11,11 +11,11 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "tb_teachers")
-public class Teacher extends User implements Serializable {
+public class Teacher extends User  { // Classe do Banco - > Teacher
 
     @JsonIgnore
     @OneToOne()
-    private ClassRoom classRoom;
+    private ClassRoom classRoom; // 1 Classe tem 1 professsor | Filha de User | Representam os Professores do sistema.
 
     public Teacher() {
 

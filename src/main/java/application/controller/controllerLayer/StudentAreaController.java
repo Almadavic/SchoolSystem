@@ -1,4 +1,4 @@
-package application.controller;
+package application.controller.controllerLayer;
 
 import application.dto.StudentDto;
 import application.form.NewPasswordForm;
@@ -11,13 +11,13 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
-@RequestMapping(value = "/StudentArea")
+@RequestMapping(value = "/studentarea")
 public class StudentAreaController { // Controller onde o usuário (APENAS ALUNO) tem acesso, seria como a area do aluno!
 
     @Autowired
     private StudentAreaService studentAreaService;
 
-    @GetMapping(value = "/MyData")
+    @GetMapping(value = "/mydata")
     // Método para acessar as informações do proprio aluno logado.
     public ResponseEntity<StudentDto> myData(Principal principal) {
 
@@ -26,7 +26,7 @@ public class StudentAreaController { // Controller onde o usuário (APENAS ALUNO
         return ResponseEntity.ok().body(studentDto);
     }
 
-    @PutMapping(value = "/ChangePassword")
+    @PutMapping(value = "/changepassword")
     // Método para o aluno trocar o password, (AINDA NÃO FUNCIONAL!)
     public ResponseEntity<String> changePassword(Principal principal,@RequestBody @Valid NewPasswordForm newPasswordForm) {
 

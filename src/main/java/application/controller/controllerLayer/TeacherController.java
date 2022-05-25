@@ -1,4 +1,4 @@
-package application.controller;
+package application.controller.controllerLayer;
 
 import application.dto.TeacherDto;
 import application.service.serviceLayer.TeacherService;

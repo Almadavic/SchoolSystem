@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonPropertyOrder({"id", "name", "email", "address", "roles"})
-public class UserDto {
+public class UserDto { // Dto da classe User
 
     @JsonProperty("id")
     private Long id;
@@ -31,7 +31,7 @@ public class UserDto {
     }
 
 
-    public UserDto(User user) {
+    public UserDto(User user) { // Método que transforma um User em UserDto
         this.email = user.getEmail();
         this.name = user.getName();
         this.id = user.getId();
@@ -39,14 +39,14 @@ public class UserDto {
         convertList(user.getAuthorities());
     }
 
-    public void convertList(List<Role> roles) {
+    public void convertList(List<Role> roles) { // Método converte uma lista de Role para RolesDto
         for (Role role : roles) {
             rolesDto.add(new RoleDto(role));     // Método necessita de refatoração nessa parte para stream
         }
     }
     public void addRolesDto(RoleDto roleDto) {
         rolesDto.add(roleDto);
-    }
+    } // Adiciona uma Role
 
     public Long getId() {
         return id;

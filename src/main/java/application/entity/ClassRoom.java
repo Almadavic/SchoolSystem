@@ -7,13 +7,11 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "tb_classes")
-public class ClassRoom implements Serializable {
+public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoom | Entidade Principal | Representa as Salas de Aula do Sistema |
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -26,10 +24,10 @@ public class ClassRoom implements Serializable {
     private ClassShift classShift;
 
     @OneToOne(mappedBy="classRoom",cascade = CascadeType.ALL)
-    private Teacher teacher;
+    private Teacher teacher;       // Uma classe tem 1 teacher
 
     @OneToMany(mappedBy = "classRoom")
-    public List<Student> students = new ArrayList<>();
+    public List<Student> students = new ArrayList<>(); // Uma classe tem uma lista de alunos
 
     public ClassRoom() {
 
@@ -40,20 +38,20 @@ public class ClassRoom implements Serializable {
         this.classShift = classShift;
     }
 
-    public void addStudent(Student student) {
+    public void addStudent(Student student) { // Adiciona um estudante
         students.add(student);
     }
 
-    public void removeStudent(int id) {
+    public void removeStudent(int id) {     // Remove um estudante
         students.remove(id);
     }
 
-    public double getAverageClass() {
-        double average = 0;
+    public double getAverageClass() {          // Método que retorna a média total dos alunos da Classe !
+        double sum = 0;
         for(Student student : students) {
-            average = average+student.getReportCard().getAverageStudent();
+            sum = sum+student.getReportCard().getAverageStudent();
         }
-        return average;
+        return Math.round(sum / students.size()*10.0)/10.0;
     }
 
     public Long getId() {

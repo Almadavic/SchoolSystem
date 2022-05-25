@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "tb_users")
-public abstract class User implements UserDetails, Serializable {
+public abstract class User implements UserDetails, Serializable { // Classe  do banco - > User | Classe PARENT | Representa os usuários do sistema.
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -27,13 +27,13 @@ public abstract class User implements UserDetails, Serializable {
     private String password;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Address address;
+    private Address address;                // Um usuário tem 1 endereço.
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tb_users_roles",
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
-    private List<Role> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();       // Muitos usuários tem muitas permissões
 
 
     public User() {
@@ -48,7 +48,7 @@ public abstract class User implements UserDetails, Serializable {
 
     public void addRole(Role role) {
         roles.add(role);
-    }
+    }// Adicionar uma permissão
 
     @Override
     public int hashCode() {
@@ -88,10 +88,7 @@ public abstract class User implements UserDetails, Serializable {
         this.name = name;
     }
 
-    public void setNome(String name) {
-        this.name = name;
-    }
-    public String getNome() { return name;}
+
 
     public String getEmail() {
         return email;
@@ -101,8 +98,13 @@ public abstract class User implements UserDetails, Serializable {
         this.email = email;
     }
 
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
 
-    public void setPassword(String senha) {
+
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -124,10 +126,6 @@ public abstract class User implements UserDetails, Serializable {
         return this.roles;
     }
 
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
 
     @Override
     public String getUsername() {

@@ -29,14 +29,14 @@ public class StudentService {
     }
 
     public StudentDto findById(Long id) {
-        Student student = errorNotFoundOrReturnEntity(id);
+        Student student = returnStudent(id);
         return new StudentDto(student);
     }
 
-    private Student errorNotFoundOrReturnEntity(Long id) {
+    private Student returnStudent(Long id) {
         Optional<Student> student = studentRepository.findById(id);
         if (student.isEmpty()) {
-            throw new ResourceNotFoundException("Student not found");
+            throw new ResourceNotFoundException(id+", This student wasn't found on DataBase");
         }
         return student.get();
     }

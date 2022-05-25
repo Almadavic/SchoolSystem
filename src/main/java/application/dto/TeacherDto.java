@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({"id","name","email","classRoomId","address","roles"})
-public class TeacherDto extends UserDto {
+public class TeacherDto extends UserDto { // Dto de Teacher
 
     @JsonProperty(value = "classRoomId")
     private Long classRoomId;
@@ -14,7 +14,7 @@ public class TeacherDto extends UserDto {
 
     }
 
-    public TeacherDto(Teacher teacher) {
+    public TeacherDto(Teacher teacher) { // Método que transforma Teacher em TeacherDto
         this.setId(teacher.getId());
         this.setName(teacher.getName());
         this.setEmail(teacher.getEmail());

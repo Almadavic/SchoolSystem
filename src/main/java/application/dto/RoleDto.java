@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 @JsonPropertyOrder({"name"})
-public class RoleDto {
+public class RoleDto { // Dto da classe Role
 
     @JsonProperty("name")
     private String name;
@@ -16,7 +16,7 @@ public class RoleDto {
 
     }
 
-    public RoleDto(Role role) {
+    public RoleDto(Role role) {     // Transformando um Role em RoleDto
         this.name = role.getName();
     }
 

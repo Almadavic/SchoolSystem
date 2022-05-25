@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonPropertyOrder({"idClass","letter","classShift","teacher","numberStudents","students","averageClassGrade"})
-public class ClassRoomDto {
+public class ClassRoomDto {    // DTO da classe ClassRoom
 
     @JsonProperty("idClass")
     private Long idClass;
@@ -34,7 +34,7 @@ public class ClassRoomDto {
     }
 
 
-    public ClassRoomDto(ClassRoom classRoom) {
+    public ClassRoomDto(ClassRoom classRoom) {      // Transformando uma ClassRoom em ClassRoomDto
         this.idClass = classRoom.getId();
         this.letter = classRoom.getLetter();
         this.classShift = classRoom.getClassShift();
@@ -43,14 +43,11 @@ public class ClassRoomDto {
         }
         this.numberStudents= classRoom.getStudents().size();
         for (Student student : classRoom.getStudents()) {
-            studentsDto.add(new StudentDto(student));                // Método necessita de refatoração nessa parte
+            studentsDto.add(new StudentDto(student));       // Deve-se usar stream aqui!
         }
-        double sum = 0.0;
-        for (StudentDto studentDto : studentsDto) {
-            sum = sum + studentDto.getReportCardDto().getAverageGrade();
-        }
-       averageClassGrade = Math.round(sum / studentsDto.size()*10.0)/10.0;
+       this.averageClassGrade=classRoom.getAverageClass();
     }
+
 
     public Long getIdClass() {
         return idClass;
@@ -85,7 +82,5 @@ public class ClassRoomDto {
         return averageClassGrade;
     }
 
-    public void setAverageClassGrade(Double averageClassGrade) {
-        this.averageClassGrade = averageClassGrade;
-    }
+
 }

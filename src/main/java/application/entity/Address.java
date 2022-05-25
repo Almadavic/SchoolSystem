@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "tb_personal_information")
-public class Address implements Serializable {
+public class Address implements Serializable { // Classe do Banco - > Address | Representa os endereços dos usuários
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -24,7 +24,7 @@ public class Address implements Serializable {
     @JsonIgnore
     @OneToOne
     @MapsId
-    private User user;
+    private User user; // Um endereço tem 1 usuário associado
 
     public Address() {
 

@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 
 @Configuration
-@Profile(value = {"test","dev"})
+@Profile(value = {"test", "dev"})
 public class StartProject implements CommandLineRunner {
 
 
@@ -31,18 +31,19 @@ public class StartProject implements CommandLineRunner {
     private TeacherRepository teacherRepository;
 
 
-    final private String senhaEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
-
     @Override
     public void run(String... args) throws Exception {
         System.out.println(applicationInfo());
 
-        ClassRoom cr1 = new ClassRoom('A',ClassShift.MORNING);
+        String senhaEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
+
+        ClassRoom cr1 = new ClassRoom('A', ClassShift.MORNING);
+
 
         Student u1 = new Student("Joao Lacerta", "joao@gmail.com", senhaEncode, cr1);
         Student u2 = new Student("Victor Almada", "almadavic@live.com", senhaEncode, cr1);
         Student u3 = new Student("Renato Tavares", "renato@hotmail.com", senhaEncode, cr1);
-        Student u4 = new Student("Marcos Almeida","marcos@gmail.com",senhaEncode,null);
+        Student u4 = new Student("Marcos Almeida", "marcos@gmail.com", senhaEncode, null);
 
         Address a1 = new Address("Brasil", "Minas Gerais", "Belo Horizonte", u1);
         Address a2 = new Address("EUA", "Georgia", "Atlanta", u2);
@@ -56,7 +57,7 @@ public class StartProject implements CommandLineRunner {
 
 
         classRoomRepository.save(cr1);
-        studentRepository.saveAll(Arrays.asList(u1, u2, u3,u4));
+        studentRepository.saveAll(Arrays.asList(u1, u2, u3, u4));
 
 
         Teacher teacher1 = new Teacher("Raphael", "raphael@gmail.com", senhaEncode, cr1);
@@ -76,6 +77,7 @@ public class StartProject implements CommandLineRunner {
         u1.addRole(r1);
         u2.addRole(r1);
         u3.addRole(r1);
+        u4.addRole(r1);
         teacher1.addRole(r2);
 
         studentRepository.saveAll(Arrays.asList(u1, u2, u3));
@@ -95,13 +97,13 @@ public class StartProject implements CommandLineRunner {
     public String applicationInfo() {
         StringBuilder bd = new StringBuilder();
         bd.append("\n");
-        for(int i=0;i<70;i++) {
-           bd.append("=");
+        for (int i = 0; i < 70; i++) {
+            bd.append("=");
         }
         bd.append("\n");
         bd.append("SCHOOL SYSTEM APPLICATION    ---    VICTOR ALMADA\n");
-        for(int i=0;i<70;i++) {
-           bd.append("=");
+        for (int i = 0; i < 70; i++) {
+            bd.append("=");
         }
         bd.append("\n");
         bd.append("*Java Version - 17 \n");
@@ -109,8 +111,8 @@ public class StartProject implements CommandLineRunner {
         bd.append("\n");
         bd.append("\n");
         System.out.println("\n");
-        for(int i=0;i<70;i++) {
-           bd.append("=");
+        for (int i = 0; i < 70; i++) {
+            bd.append("=");
         }
         bd.append("\n");
         return bd.toString();

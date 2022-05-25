@@ -1,6 +1,6 @@
 package application.dto.authenticationAuthorization;
 
-public class TokenDto {
+public class TokenDto { // Esse DTO tem como objetivo retornar para o usuário o HASH token e o type pro usuario quando ele se autentica
 
 	private String token;
 	private String type;

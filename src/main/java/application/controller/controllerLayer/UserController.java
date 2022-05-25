@@ -1,4 +1,4 @@
-package application.controller;
+package application.controller.controllerLayer;
 
 import application.dto.UserDto;
 import application.service.serviceLayer.UserService;

@@ -6,17 +6,18 @@ import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="tb_students")
-public class Student extends User {
+public class Student extends User  { // Classe do Banco -> Student | Filha de User | Representa os Alunos do sistema.
 
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
-    private ReportCard reportCard;
+    private ReportCard reportCard;         // Um Estudante tem um boletim.
 
     @JsonIgnore
     @ManyToOne
-    private ClassRoom classRoom;
+    private ClassRoom classRoom; // Uma Classe tem muitos estudantes.
 
     public Student() {
 

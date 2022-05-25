@@ -3,15 +3,12 @@ package application.service.serviceLayer;
 
 import application.dto.ClassRoomDto;
 import application.entity.ClassShift;
-import application.form.AddStudentForm;
-import application.form.CreateClassForm;
-import application.form.NewGradesForm;
+import application.form.*;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
 import application.entity.ClassRoom;
 import application.entity.users.Student;
 import application.entity.users.Teacher;
-import application.form.SetTeacherForm;
 import application.repository.ClassRoomRepository;
 import application.repository.StudentRepository;
 import application.repository.TeacherRepository;
@@ -23,6 +20,8 @@ import application.service.businessRule.setTeacher.TeacherHasAnotherClass;
 import application.service.businessRule.updateGrades.GradeLimit;
 import application.service.businessRule.updateGrades.TeacherAllowed;
 import application.service.businessRule.updateGrades.UpdateCheck;
+import application.service.exception.classRoom.students.StudentDoesntExistInThisClass;
+import application.service.exception.classRoom.teachers.ThereIsntTeacherInThisClass;
 import application.service.exception.database.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -69,14 +68,14 @@ public class ClassRoomService {
 
     public StudentDto findStudentById(Long idClass, Long idStudent) {             // refatorar nativeQuery
         ClassRoom classRoom = returnClass(idClass);
-        Student student = returnStudent(idStudent, classRoom);
+        Student student = returnStudent(idStudent, classRoom, false);
         return new StudentDto(student);
     }
 
     public TeacherDto findTeacher(Long idClass) {
         Optional<Teacher> teacher = teacherRepository.findByClassRoomId(idClass);
         if (teacher.isEmpty()) {
-            throw new ResourceNotFoundException("No id passed, there is no teacher on this class");
+            throw new ThereIsntTeacherInThisClass("This class doesn't have any teacher");
         }
         return new TeacherDto(teacher.get());
     }
@@ -86,7 +85,7 @@ public class ClassRoomService {
         List<UpdateCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed());
 
         ClassRoom classRoom = returnClass(idClass);
-        Student student = returnStudent(idStudent, classRoom);
+        Student student = returnStudent(idStudent, classRoom, false);
         String teacherName = classRoom.getTeacher().getEmail();
         String userLoggedName = principal.getName();
 
@@ -124,9 +123,9 @@ public class ClassRoomService {
 
         ClassRoom classRoom = returnClass(idClass);
         if (classRoom.getTeacher() != null) {
-            classRoom.getTeacher().setClassRoom(null);
-            classRoom.setTeacher(null);
-            classRoom = classRepository.save(classRoom);
+            classRoom.getTeacher().setClassRoom(null);       // Melhorar esse método se possível ! Esses null faz com que eu não consiga
+            classRoom.setTeacher(null);                     // verificar se o teacher que vou colocar em seguida é o msm q já tava, pq sempre vou setar nullo.
+            classRoom = classRepository.save(classRoom);    // mas tem q fazer isso sem tirar esse bloco IF ao lado, NÃO MODIFICAR!!!
         }
 
         Long idTeacher = setTeacherForm.getIdTeacher();
@@ -149,7 +148,7 @@ public class ClassRoomService {
 
         ClassRoom classRoom = returnClass(idClass);
         Long idStudent = addStudentForm.getIdStudent();
-        Student student = studentRepository.findById(idStudent).get();
+        Student student = returnStudent(idStudent, classRoom, true);
 
         ClassRoom finalClassRoom = classRoom;
         validations.forEach(v -> v.validation(student, finalClassRoom));
@@ -164,55 +163,62 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = {"classesRoomList", "studentsList"}, allEntries = true)
-    public ClassRoomDto removeStudent(Long idClass, AddStudentForm addStudentForm) {
+    public ClassRoomDto removeStudent(Long idClass, RemoveStudentForm removeStudentForm) {
 
         ClassRoom classRoom = returnClass(idClass);
-        Long idStudent = addStudentForm.getIdStudent();
-        Student student = returnStudent(idStudent,classRoom);
+        Long idStudent = removeStudentForm.getIdStudent();
+        Student student = returnStudent(idStudent, classRoom, false);
         student.setClassRoom(null);
-        classRoom.getStudents().removeIf(s-> s.getId().equals(student.getId()));
+        classRoom.getStudents().removeIf(s -> s.getId().equals(student.getId()));
         classRoom = classRepository.save(classRoom);
 
         return new ClassRoomDto(classRoom);
+
+
     }
-
-
 
 
     private ClassRoom returnClass(Long idClass) {
         Optional<ClassRoom> classRoom = classRepository.findById(idClass);
         if (classRoom.isEmpty()) {
-            throw new ResourceNotFoundException(idClass);
+            throw new ResourceNotFoundException("Id : "+idClass+", This class wasn't found on DataBase");
         }
         return classRoom.get();
     }
 
-    private Student returnStudent(Long idStudent, ClassRoom classRoom) {   // Método brevemente será apagado quando fizer nativeQuery
-        try {
+    private Student returnStudent(Long idStudent, ClassRoom classRoom, boolean addMethod) {   // boolean addMethod - Se for o metodo de adicionar chamando,
+                                                                                       // pois se for, tem q chamar uma exception especifica e tirar outra.
+        Optional<Student> student = studentRepository.findById(idStudent);
+        studentDoesNotExist(student, idStudent);
+        if (!addMethod) {
+            thereIsntThisStudentInThisClass(student, classRoom);
+        }
+        return student.get();
+    }
 
-            Student student = studentRepository.findById(idStudent).get();
+    private void studentDoesNotExist(Optional<Student> student, Long idStudent) {
+        if (student.isEmpty()) {
+            throw new ResourceNotFoundException("Id : "+idStudent + ", This student wasn't found on DataBase");
+        }
 
-            boolean exists = false;
-            for(Student studentList : classRoom.getStudents()) {
-                if(studentList.getId() == student.getId()) {
-                    exists = true;
-                }
+    }
+
+    private void thereIsntThisStudentInThisClass(Optional<Student> student, ClassRoom classRoom) {
+        boolean exists = false;
+        for (Student studentList : classRoom.getStudents()) {
+            if (studentList.getId() == student.get().getId()) {                  // A classe está funcional, mas pode melhorar mais a arquitetura!
+                exists = true;
             }
-
-            if(!exists) {
-                throw new ResourceNotFoundException("Doesn't have this student on this class");
-            }
-
-            return student;
-        } catch (IndexOutOfBoundsException e) {
-            throw new ResourceNotFoundException(idStudent);
+        }
+        if (!exists) {
+            throw new StudentDoesntExistInThisClass("Doesn't have this student in this class");
         }
     }
 
     private Teacher returnTeacher(Long idTeacher) {
         Optional<Teacher> teacher = teacherRepository.findById(idTeacher);
         if (teacher.isEmpty()) {
-            throw new ResourceNotFoundException(idTeacher);
+            throw new ResourceNotFoundException("Id : "+idTeacher+", This teacher wasn't found on DataBase");
         }
         return teacher.get();
     }

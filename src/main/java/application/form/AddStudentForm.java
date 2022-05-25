@@ -2,16 +2,6 @@ package application.form;
 
 import com.sun.istack.NotNull;
 
-public class AddStudentForm {
+public class AddStudentForm extends AddRemoveStudentParentForm{ // Form filha de ADDRemoveStudentParentForm
 
-    @NotNull
-    private Long idStudent;
-
-    public Long getIdStudent() {
-        return idStudent;
-    }
-
-    public void setIdStudent(Long idStudent) {
-        this.idStudent = idStudent;
-    }
 }
