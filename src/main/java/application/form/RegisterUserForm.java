@@ -1,16 +1,13 @@
 package application.form;
 
 
-import application.service.exception.general.InvalidParam;
-import org.springframework.core.MethodParameter;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 public class RegisterUserForm { // Form que recebe informações do estudante que será cadastrado!
 
-   @NotBlank
+    @NotBlank
     private String name;
     @NotBlank
     private String email;

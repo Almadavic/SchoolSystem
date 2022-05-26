@@ -17,8 +17,15 @@ public class TokenDto { // Esse DTO tem como objetivo retornar para o usuário o
 		return token;
 	}
 
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public String getType() {
 		return type;
 	}
 
+	public void setType(String type) {
+		this.type = type;
+	}
 }

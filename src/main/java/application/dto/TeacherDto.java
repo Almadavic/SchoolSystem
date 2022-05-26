@@ -21,7 +21,6 @@ public class TeacherDto extends UserDto { // Dto de Teacher
         if(teacher.getClassRoom()!=null) {
             this.classRoomId = teacher.getClassRoom().getId();
         }
-
     }
     public Long getClassRoomId() {
         return classRoomId;

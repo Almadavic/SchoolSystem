@@ -48,7 +48,8 @@ public abstract class User implements UserDetails, Serializable { // Classe  do 
 
     public void addRole(Role role) {
         roles.add(role);
-    }// Adicionar uma permissão
+    }// Adicionar uma permissão(role).
+    public void removeRole(Long id) { roles.remove(id);} // Remove uma permissão(role).
 
     @Override
     public int hashCode() {

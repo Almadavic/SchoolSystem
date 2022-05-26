@@ -23,7 +23,7 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
     @Enumerated(EnumType.STRING)
     private ClassShift classShift;
 
-    @OneToOne(mappedBy="classRoom",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "classRoom", cascade = CascadeType.ALL)
     private Teacher teacher;       // Uma classe tem 1 teacher
 
     @OneToMany(mappedBy = "classRoom")
@@ -33,7 +33,7 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
 
     }
 
-    public ClassRoom(Character letter,ClassShift classShift) {
+    public ClassRoom(Character letter, ClassShift classShift) {
         this.letter = Character.toUpperCase(letter);
         this.classShift = classShift;
     }
@@ -47,11 +47,13 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
     }
 
     public double getAverageClass() {          // Método que retorna a média total dos alunos da Classe !
-        double sum = 0;
-        for(Student student : students) {
-            sum = sum+student.getReportCard().getAverageStudent();
+        double sum = 0.0;
+        for (Student student : students) {
+            sum = sum + student.getReportCard().getAverageStudent();      // Pode ser trocado para steam!!!
         }
-        return Math.round(sum / students.size()*10.0)/10.0;
+        double average = sum/students.size();
+        double decimal = Math.round(average * 10.0 ) / 10.0;
+        return average;
     }
 
     public Long getId() {

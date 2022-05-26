@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonPropertyOrder({"idClass","letter","classShift","teacher","numberStudents","students","averageClassGrade"})
+@JsonPropertyOrder({"idClass", "letter", "classShift", "teacher", "numberStudents", "students", "averageClassGrade"})
 public class ClassRoomDto {    // DTO da classe ClassRoom
 
     @JsonProperty("idClass")
@@ -38,16 +38,18 @@ public class ClassRoomDto {    // DTO da classe ClassRoom
         this.idClass = classRoom.getId();
         this.letter = classRoom.getLetter();
         this.classShift = classRoom.getClassShift();
-        if(classRoom.getTeacher()!=null) {
+        convertList(classRoom.getStudents());                     // Não trocar a ordem das linhas!!!
+        this.numberStudents = studentsDto.size();
+        this.averageClassGrade = classRoom.getAverageClass();
+        if (classRoom.getTeacher() != null) {
             this.teacherDto = new TeacherDto(classRoom.getTeacher());
         }
-        this.numberStudents= classRoom.getStudents().size();
-        for (Student student : classRoom.getStudents()) {
-            studentsDto.add(new StudentDto(student));       // Deve-se usar stream aqui!
-        }
-       this.averageClassGrade=classRoom.getAverageClass();
     }
-
+    private void convertList(List<Student> students) { // Isso pode ser transformado em stream!
+        for (Student student : students) {
+            studentsDto.add(new StudentDto(student));
+        }
+    }
 
     public Long getIdClass() {
         return idClass;

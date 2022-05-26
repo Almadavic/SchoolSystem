@@ -10,6 +10,7 @@ import application.form.RegisterUserForm;
 import application.repository.UserRepository;
 import application.service.exception.general.InvalidParam;
 import application.service.exception.general.ResourceNotFoundException;
+import application.service.serviceLayer.interfacee.AllUserTypeService;
 import application.service.serviceLayer.interfacee.GenericMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,13 +23,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService, GenericMethodService {
+public class UserService implements UserDetailsService, AllUserTypeService {
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // Método que mostra pro spring security como será feita a autenticação.
         Optional<User> user = userRepository.findByEmail(username);
         if (user.isPresent()) {
             return user.get();
@@ -37,6 +38,7 @@ public class UserService implements UserDetailsService, GenericMethodService {
     }
 
 
+    @Override
     public Page<UserDto> findAll(Pageable pagination, String rolesName) {
         String rolesNameOriginal = rolesName;
         Page<User> users;
@@ -66,7 +68,5 @@ public class UserService implements UserDetailsService, GenericMethodService {
         UserDto userDto = new UserDto(user.get());
         return userDto;
     }
-
-
-
+    
 }

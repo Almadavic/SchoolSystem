@@ -25,7 +25,6 @@ import application.service.exception.classRoomService.ChangeSameTeacher;
 import application.service.exception.classRoomService.StudentDoesntExistInThisClass;
 import application.service.exception.classRoomService.TeacherBelongsAnotherClass;
 import application.service.exception.classRoomService.ThereIsntTeacherInThisClass;
-import application.service.exception.general.InvalidParam;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.GenericMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +64,7 @@ public class ClassRoomService implements GenericMethodService {
     }
 
     public Page<StudentDto> findStudentsByClass(Long idClass, Pageable pagination) {
-        returnClass(idClass);
+        returnClass(idClass); // Coloquei aqui para ver se roda a exception , para ver se a classe existe!
         Page<Student> students = studentRepository.findListStudentsByClassRoomId(idClass, pagination); // Cache não está funcionando aqui
         Page<StudentDto> studentDtos = students.map(StudentDto::new);
         return studentDtos;
@@ -86,7 +85,7 @@ public class ClassRoomService implements GenericMethodService {
         return new TeacherDto(teacher.get());
     }
 
-    @CacheEvict(value = "classesRoomList", allEntries = true)
+    @CacheEvict(value = {"classesRoomList","studentsListByClassRoom"}, allEntries = true)
     public StudentDto updateGrades(Long idClass, Long idStudent, Principal user, NewGradesForm newGrades) {
         List<UpdateCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed());
 
@@ -206,7 +205,7 @@ public class ClassRoomService implements GenericMethodService {
         Optional<Student> student = studentRepository.findById(idStudent);
         studentDoesNotExist(student, idStudent);
         if (!addMethod) {
-            thereIsntThisStudentInThisClass(student, classRoom);
+            studentDoesntExistInThisClass(student, classRoom);
         }
         return student.get();
     }
@@ -218,7 +217,7 @@ public class ClassRoomService implements GenericMethodService {
 
     }
 
-    private void thereIsntThisStudentInThisClass(Optional<Student> student, ClassRoom classRoom) {
+    private void studentDoesntExistInThisClass(Optional<Student> student, ClassRoom classRoom) {
         boolean exists = false;
         for (Student studentList : classRoom.getStudents()) {
             if (studentList.getId() == student.get().getId()) {                  // A classe está funcional, mas pode melhorar mais a arquitetura!

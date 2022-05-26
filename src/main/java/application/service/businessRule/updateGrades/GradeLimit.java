@@ -23,8 +23,8 @@ public class GradeLimit implements UpdateCheck {
         for (Double grade : grades) {
             if (grade != null) {
                 if (grade > gradeLimitMax || grade < gradLimitMin) {
-                    throw new GradeValueNotAllowed("Grades is supposed to be between 0 and 10");
-                }
+                    throw new GradeValueNotAllowed("Grades is supposed to be between 0 and 10");      // Esse método precisa de melhoria, quando envia a requisição
+                }                                                                                         // com um dos campos errados, o programa não dá erro.
             }
         }
 

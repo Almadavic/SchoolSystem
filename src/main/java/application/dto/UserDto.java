@@ -39,14 +39,17 @@ public class UserDto { // Dto da classe User
         convertList(user.getAuthorities());
     }
 
-    public void convertList(List<Role> roles) { // Método converte uma lista de Role para RolesDto
+    protected void convertList(List<Role> roles) { // Método converte uma lista de Role para RolesDto
         for (Role role : roles) {
             rolesDto.add(new RoleDto(role));     // Método necessita de refatoração nessa parte para stream
         }
     }
-    public void addRolesDto(RoleDto roleDto) {
+
+    public void addRoleDto(RoleDto roleDto) {
         rolesDto.add(roleDto);
     } // Adiciona uma Role
+
+    public void removeRoleDto(Long id) { rolesDto.remove(id);} // Remove uma Role
 
     public Long getId() {
         return id;

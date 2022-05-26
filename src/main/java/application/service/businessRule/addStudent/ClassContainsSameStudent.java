@@ -21,7 +21,7 @@ public class ClassContainsSameStudent implements AddStudentCheck {
     private boolean checkIfStudentExistsInTheClassRoom(Student student, ClassRoom classRoom) { // devolve V ou F se o aluno já está presente nessa sala.
 
         for (Student studentClass : classRoom.getStudents()) {
-            if (studentClass.equals(student)) {
+            if (studentClass.equals(student)) {                // Pode ser substituido por stream!
                 return true;
             }
         }

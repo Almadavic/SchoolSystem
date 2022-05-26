@@ -9,8 +9,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="tb_students")
-public class Student extends User  { // Classe do Banco -> Student | Filha de User | Representa os Alunos do sistema.
+@Table(name = "tb_students")
+public class Student extends User { // Classe do Banco -> Student | Filha de User | Representa os Alunos do sistema.
 
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
     private ReportCard reportCard;         // Um Estudante tem um boletim.
@@ -23,15 +23,15 @@ public class Student extends User  { // Classe do Banco -> Student | Filha de Us
         instanceReportCard();
     }
 
-    public Student(String nome, String email, String password,ClassRoom classRoom) {
+    public Student(String nome, String email, String password, ClassRoom classRoom) {
         super(nome, email, password);
-        this.classRoom=classRoom;
-       instanceReportCard();
+        this.classRoom = classRoom;
+        instanceReportCard();
     }
 
 
     private void instanceReportCard() {
-        this.reportCard=new ReportCard();
+        this.reportCard = new ReportCard();
         this.reportCard.setStudent(this);
     }
 
