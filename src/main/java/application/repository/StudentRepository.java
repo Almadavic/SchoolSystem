@@ -11,10 +11,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student,Long> {
+public interface StudentRepository extends JpaRepository<Student,Long> { // Repositorio de alunos
 
     @Cacheable(value = "studentsListByClassRoom")
       Page<Student> findListStudentsByClassRoomId(Long id,Pageable pagination);
@@ -22,4 +23,5 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
     @Cacheable(value = "studentsList")
     Page<Student> findAll(Pageable pagination);
 
+    Optional<Student> findByEmail(String name);
 }

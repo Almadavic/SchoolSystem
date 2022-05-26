@@ -1,14 +1,9 @@
 package application.controller.exception;
 
-import application.service.exception.classRoomService.GradeValueNotAllowed;
-import application.service.exception.classRoomService.NoPermissionException;
-import application.service.exception.classRoomService.StudentBelongsSameClass;
-import application.service.exception.classRoomService.StudentBelongsAnotherClass;
-import application.service.exception.classRoomService.StudentDoesntExistInThisClass;
-import application.service.exception.classRoomService.TeacherBelongsAnotherClass;
-import application.service.exception.classRoomService.ThereIsntTeacherInThisClass;
+import application.service.exception.classRoomService.*;
 import application.service.exception.general.DatabaseException;
 import application.service.exception.general.InvalidParam;
+import application.service.exception.general.NoPermissionException;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.exception.studentAreaService.SamePassword;
 import org.springframework.http.HttpStatus;
@@ -81,13 +76,13 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(NullPointerException.class) // Quando algo é nulo que não poderia ser!
-    public ResponseEntity<StandardError> nullPointerException(NullPointerException e, HttpServletRequest request) {
-        String error = "Value cannot be null";
-        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+   @ExceptionHandler(NullPointerException.class) // Quando algo é nulo que não poderia ser!
+   public ResponseEntity<StandardError> nullPointerException(NullPointerException e, HttpServletRequest request) {
+       String error = "Value cannot be null";
+       HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
+       return ResponseEntity.status(status).body(err);
+   }
 
     @ExceptionHandler(IllegalArgumentException.class) // Quando passa alguma informação errada!
     public ResponseEntity<StandardError> illegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
@@ -127,6 +122,14 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
     public ResponseEntity<StandardError> invalidParam(InvalidParam e, HttpServletRequest request) {
         String error = "Invalid Param";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(ChangeSameTeacher.class) // Quando o mesmo professor é setado na mesma classa!
+    public ResponseEntity<StandardError> changeSameTeacher(ChangeSameTeacher e, HttpServletRequest request) {
+        String error = "This teacher is already here.";
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }

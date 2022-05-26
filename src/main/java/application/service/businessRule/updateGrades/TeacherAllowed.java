@@ -1,15 +1,21 @@
 package application.service.businessRule.updateGrades;
 
+import application.entity.ClassRoom;
 import application.form.NewGradesForm;
-import application.service.exception.classRoomService.NoPermissionException;
+import application.service.exception.general.NoPermissionException;
+
+import java.security.Principal;
 
 public class TeacherAllowed implements UpdateCheck {
     @Override
-    public void validation(NewGradesForm newGrades, String teacherName, String userLoggedName) { // O professor que for alterar a nota do aluno tem q ser o mesmo professor da classe.
+    public void validation(NewGradesForm newGrades, ClassRoom classRoom, Principal user) { // O professor que for alterar a nota do aluno tem q ser o mesmo professor da classe.
         newGrades = null;     //  Nullos porquê não tem função nessa classe.
 
+        String userLoggedName = user.getName();
+        String teacherName = classRoom.getTeacher().getEmail();
+
         if (!teacherName.equals(userLoggedName)) {
-            throw new NoPermissionException("Permission required to access this! Teacher with no permission");
+            throw new NoPermissionException("Permission required to access this! Just the class's Teacher can access this!");
         }
 
     }

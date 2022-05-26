@@ -21,8 +21,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 @Profile(value = {"prod", "test"})
-public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
+public class SecurityConfigurations extends WebSecurityConfigurerAdapter { // Classe de segurança a nivel de prod e test
 
+		//////
 	@Autowired
 	private UserService userSerivice;
 	
@@ -34,14 +35,14 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	@Bean
-	protected AuthenticationManager authenticationManager() throws Exception {
+	protected AuthenticationManager authenticationManager() throws Exception {    // AuthManager
 		return super.authenticationManager();
 	}
 	
 	//Configuracoes de autenticacao
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userSerivice).passwordEncoder(new BCryptPasswordEncoder());
+		auth.userDetailsService(userSerivice).passwordEncoder(new BCryptPasswordEncoder()); // Aqui diz como será a autenticação, puxando a classeserService que tem esse papel.
 	}
 	
 	//Configuracoes de autorizacao

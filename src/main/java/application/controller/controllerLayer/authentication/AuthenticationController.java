@@ -37,7 +37,7 @@ public class AuthenticationController {         // Controller para fazer a auten
             String token = tokenService.gererateToken(authentication);      // geração do token .
             return ResponseEntity.ok(new TokenDto(token, "Bearer"));  // Devolvendo o token pro cliente e o seu tipo.
         } catch (AuthenticationException e) {
-            throw new DatabaseException("Request Auth Error");       // Causará um erro caso os dados passados pelo usuário estejam errados.
+            throw new DatabaseException("E-mail and / or password is wrong!");       // Causará um erro caso os dados passados pelo usuário estejam errados.
         }
     }
 

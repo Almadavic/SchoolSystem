@@ -4,13 +4,13 @@ import org.hibernate.validator.constraints.Range;
 
 
 
-public class NewGradesForm {
+public class NewGradesForm { // Form que recebe as notas dos alunos(atualizada) para passar para um boletim monitorado pela JPA.
 
-    @Range(min = (long) 0.0, max = (long) 10.0)
+
     private Double grade1;
-    @Range(min = (long) 0.0, max = (long) 10.0)
+
     private Double grade2;
-    @Range(min = (long) 0.0, max = (long) 10.0)
+
     private Double grade3;
 
     public Double getGrade1() {

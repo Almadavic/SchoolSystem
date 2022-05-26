@@ -1,6 +1,7 @@
 package application.dto;
 
 import application.entity.users.Teacher;
+import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -14,15 +15,19 @@ public class TeacherDto extends UserDto { // Dto de Teacher
 
     }
 
-    public TeacherDto(Teacher teacher) { // Método que transforma Teacher em TeacherDto
-        this.setId(teacher.getId());
-        this.setName(teacher.getName());
-        this.setEmail(teacher.getEmail());
+    public TeacherDto(User user) {             // Método que transforma Teacher em TeacherDto
+        super(user);
+        Teacher teacher = (Teacher) user;
         if(teacher.getClassRoom()!=null) {
-
             this.classRoomId = teacher.getClassRoom().getId();
-       }
-        this.setAddressDto(new AddressDto(teacher.getAddress()));
-        convertList(teacher.getAuthorities());
+        }
+
+    }
+    public Long getClassRoomId() {
+        return classRoomId;
+    }
+
+    public void setClassRoomId(Long classRoomId) {
+        this.classRoomId = classRoomId;
     }
 }

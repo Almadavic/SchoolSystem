@@ -34,7 +34,7 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
     @Override
     public void run(String... args) throws Exception { // Esse método fala que toda vez que o programa iniciar(aplicação for pro ar)
                                                                                // , esse método vai ser chamado, e também oq tem dentro.
-        System.out.println(applicationInfo());
+        System.out.println(applicationInfo());                                // Preste atenção como as associações são feitas no método!
 
         String senhaEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
 
@@ -109,7 +109,7 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
         bd.append("\n");
         bd.append("*Java Version - 17 \n");
         bd.append("*Spring Boot Version -  2.6.7  \n");
-        bd.append("\n");
+        bd.append("*Dependencies : \n");
         bd.append("\n");
         bd.append("\n");
         System.out.println("\n");

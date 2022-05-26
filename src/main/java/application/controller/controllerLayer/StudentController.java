@@ -3,6 +3,7 @@ package application.controller.controllerLayer;
 import application.controller.controllerLayer.interfacee.ExtendsUserController;
 import application.dto.StudentDto;
 import application.dto.UserDto;
+import application.form.RegisterUserForm;
 import application.service.serviceLayer.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/students")
@@ -19,7 +24,7 @@ public class StudentController implements ExtendsUserController {  // Controller
     @Autowired
     private StudentService studentService;
 
-
+    @Override
     @GetMapping
     // Método q retorna todos os alunos do sistema registrados!
     public ResponseEntity<Page<? extends UserDto>> findAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination,
@@ -40,4 +45,16 @@ public class StudentController implements ExtendsUserController {  // Controller
         return ResponseEntity.ok().body(studentDto);
     }
 
+    @Override
+    @PostMapping(value = "/register")
+    // Cria um novo Estudante(cadastra) no banco de dados!
+    public ResponseEntity<? extends UserDto> save(@RequestBody @Valid  RegisterUserForm userForm, UriComponentsBuilder uriBuilder) {
+
+        StudentDto studentDto = studentService.save(userForm);
+
+        URI uri = uriBuilder.path("/students/{id}").buildAndExpand(studentDto.getId()).toUri();
+
+
+        return ResponseEntity.created(uri).body(studentDto);
+    }
 }

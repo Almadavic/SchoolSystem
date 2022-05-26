@@ -76,9 +76,9 @@ public class ClassRoomController implements GenericMethodController {          /
     @PutMapping(value = "/{idClass}/students/{idStudent}/updategrades")
     // // Método HTTP (PUT) , Método atualiza as notas de um aluno de uma respectiva sala, passando o id do aluno e da classe.
     // Me retorna o aluno com as notas atualizadas.
-    public ResponseEntity<StudentDto> updateGrades(@PathVariable Long idClass, @PathVariable Long idStudent, Principal principal, @RequestBody @Valid NewGradesForm newGrades) {
+    public ResponseEntity<StudentDto> updateGrades(@PathVariable Long idClass, @PathVariable Long idStudent, Principal user, @RequestBody @Valid NewGradesForm newGrades) {
 
-        StudentDto studentDto = classService.updateGrades(idClass, idStudent, principal, newGrades);
+        StudentDto studentDto = classService.updateGrades(idClass, idStudent, user, newGrades);
 
         return ResponseEntity.ok().body(studentDto);
     }
@@ -105,7 +105,7 @@ public class ClassRoomController implements GenericMethodController {          /
 
     @PutMapping(value = "/{idClass}/addstudent")
     //Método HTTP (PUT) , Método adiciona um aluno na classe.
-    public ResponseEntity<ClassRoomDto> addStudent(@PathVariable Long idClass, @RequestBody @Valid AddStudentForm addStudentForm) {
+    public ResponseEntity<ClassRoomDto> addStudent(@PathVariable Long idClass, @RequestBody @Valid AddRemoveStudentForm addStudentForm) {
 
         ClassRoomDto classRoomDto = classService.addStudent(idClass, addStudentForm);
 
@@ -114,7 +114,7 @@ public class ClassRoomController implements GenericMethodController {          /
 
     @PutMapping(value = "/{idClass}/removestudent")
     //Método HTTP (PUT) , Método remove um aluno da classe.
-    public ResponseEntity<ClassRoomDto> removeStudent(@PathVariable Long idClass, @RequestBody @Valid RemoveStudentForm removeStudentForm) {
+    public ResponseEntity<ClassRoomDto> removeStudent(@PathVariable Long idClass, @RequestBody @Valid AddRemoveStudentForm removeStudentForm) {
 
         ClassRoomDto classRoomDto = classService.removeStudent(idClass, removeStudentForm);
 

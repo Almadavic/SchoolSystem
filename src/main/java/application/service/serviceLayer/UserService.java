@@ -1,7 +1,12 @@
 package application.service.serviceLayer;
 
 import application.dto.UserDto;
+import application.entity.Address;
+import application.entity.users.Student;
+import application.entity.users.Teacher;
 import application.entity.users.User;
+import application.form.RegisterAddressForm;
+import application.form.RegisterUserForm;
 import application.repository.UserRepository;
 import application.service.exception.general.InvalidParam;
 import application.service.exception.general.ResourceNotFoundException;
@@ -30,6 +35,7 @@ public class UserService implements UserDetailsService, GenericMethodService {
         }
         throw new UsernameNotFoundException("Invalid data!");
     }
+
 
     public Page<UserDto> findAll(Pageable pagination, String rolesName) {
         String rolesNameOriginal = rolesName;
@@ -60,6 +66,7 @@ public class UserService implements UserDetailsService, GenericMethodService {
         UserDto userDto = new UserDto(user.get());
         return userDto;
     }
+
 
 
 }

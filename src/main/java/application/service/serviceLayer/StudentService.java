@@ -1,28 +1,33 @@
 package application.service.serviceLayer;
 
 import application.dto.StudentDto;
+
+import application.entity.Role;
 import application.entity.users.Student;
+import application.form.RegisterUserForm;
+import application.repository.RoleRepository;
 import application.repository.StudentRepository;
-import application.repository.UserRepository;
 import application.service.exception.general.InvalidParam;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.ExtendsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Optional;
 
 
 @Service
-public class StudentService implements ExtendsUserService {
+public class StudentService  implements ExtendsUserService {
 
     @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private RoleRepository roleRepository;
 
     @Override
     public Page<StudentDto> findAll(Pageable pagination, String noClass) {
@@ -49,6 +54,20 @@ public class StudentService implements ExtendsUserService {
         return new StudentDto(student);
     }
 
+
+    @Override
+    @CacheEvict(value = "studentsList")
+    public StudentDto save(RegisterUserForm userForm) {
+
+        Student student = new Student();
+        convertFromFormToUser(student, userForm);
+        Role role = roleRepository.findById(1l).get();
+        student.addRole(role);
+        student = studentRepository.save(student);
+        return new StudentDto(student);
+    }
+
+
     private Student returnStudent(Long id) {
         Optional<Student> student = studentRepository.findById(id);
         if (student.isEmpty()) {
@@ -56,4 +75,5 @@ public class StudentService implements ExtendsUserService {
         }
         return student.get();
     }
+
 }

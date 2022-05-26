@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
-public interface GenericMethodController <T>{ // Interface onde muitas classes no pacote controller vão implementar!
-    T findById(Long id);
+public interface AllUserTypeController extends GenericMethodController{
+    ResponseEntity<Page<? extends UserDto>> findAll(Pageable pagination, String noClass);
 
 }

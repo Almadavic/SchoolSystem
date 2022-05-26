@@ -6,7 +6,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-public class LoginForm {
+
+// Form é praticamente a mesma coisa que DTO porém os Form são das requisições que chegam, e o DTOs são as respostas que voltam!
+public class LoginForm { // Form que representa o Login do usuário, email e senha!
 
 	@NotBlank
 	private String email;

@@ -1,8 +1,8 @@
-package application.service.exception.classRoomService;
+package application.service.exception.general;
 
 import java.io.Serial;
 
-public class NoPermissionException extends RuntimeException{
+public class NoPermissionException extends RuntimeException{ // Quando alguém não tem permissão para fazer algo.
 
     @Serial
     private static final long serialVersionUID = 1L;

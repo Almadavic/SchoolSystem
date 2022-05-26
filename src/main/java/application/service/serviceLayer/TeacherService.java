@@ -1,7 +1,13 @@
 package application.service.serviceLayer;
 
+import application.dto.StudentDto;
 import application.dto.TeacherDto;
+import application.dto.UserDto;
+import application.entity.Role;
+import application.entity.users.Student;
 import application.entity.users.Teacher;
+import application.form.RegisterUserForm;
+import application.repository.RoleRepository;
 import application.repository.TeacherRepository;
 import application.service.exception.general.InvalidParam;
 import application.service.exception.general.ResourceNotFoundException;
@@ -9,15 +15,20 @@ import application.service.serviceLayer.interfacee.ExtendsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Optional;
 
 @Service
-public class TeacherService implements ExtendsUserService {
+public class TeacherService  implements ExtendsUserService {
 
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public Page<TeacherDto> findAll(Pageable pagination, String noClass) {
@@ -51,6 +62,18 @@ public class TeacherService implements ExtendsUserService {
         }
         return teacher.get();
     }
+
+
+    @Override
+    public TeacherDto save(RegisterUserForm userForm) {
+        Teacher teacher = new Teacher();
+        convertFromFormToUser(teacher, userForm);
+        Role role = roleRepository.findById(1l).get();
+        teacher.addRole(role);
+        teacher= teacherRepository.save(teacher);
+        return new TeacherDto(teacher);
+    }
+
 
 
 }

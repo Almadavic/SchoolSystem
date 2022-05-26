@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> { // Repositorio de Usuários ( No geral)
     Optional<User> findByEmail(String email);
 
     Page<User> findByRolesName(Pageable pagination, String rolesName);

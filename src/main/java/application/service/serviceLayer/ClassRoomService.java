@@ -15,13 +15,17 @@ import application.repository.TeacherRepository;
 import application.service.businessRule.addStudent.AddStudentCheck;
 import application.service.businessRule.addStudent.ClassContainsSameStudent;
 import application.service.businessRule.addStudent.StudentHasAnotherClass;
+import application.service.businessRule.setTeacher.SameTeacher;
 import application.service.businessRule.setTeacher.SetTeacherCheck;
 import application.service.businessRule.setTeacher.TeacherHasAnotherClass;
 import application.service.businessRule.updateGrades.GradeLimit;
 import application.service.businessRule.updateGrades.TeacherAllowed;
 import application.service.businessRule.updateGrades.UpdateCheck;
+import application.service.exception.classRoomService.ChangeSameTeacher;
 import application.service.exception.classRoomService.StudentDoesntExistInThisClass;
+import application.service.exception.classRoomService.TeacherBelongsAnotherClass;
 import application.service.exception.classRoomService.ThereIsntTeacherInThisClass;
+import application.service.exception.general.InvalidParam;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.GenericMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,15 +87,13 @@ public class ClassRoomService implements GenericMethodService {
     }
 
     @CacheEvict(value = "classesRoomList", allEntries = true)
-    public StudentDto updateGrades(Long idClass, Long idStudent, Principal principal, NewGradesForm newGrades) {
+    public StudentDto updateGrades(Long idClass, Long idStudent, Principal user, NewGradesForm newGrades) {
         List<UpdateCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed());
 
         ClassRoom classRoom = returnClass(idClass);
         Student student = returnStudent(idStudent, classRoom, false);
-        String teacherName = classRoom.getTeacher().getEmail();
-        String userLoggedName = principal.getName();
 
-        validations.forEach(v -> v.validation(newGrades, teacherName, userLoggedName));
+        validations.forEach(v -> v.validation(newGrades, classRoom, user));
 
         updateGrades(student, newGrades);
         student = studentRepository.save(student);
@@ -121,31 +123,42 @@ public class ClassRoomService implements GenericMethodService {
 
     @CacheEvict(value = {"classesRoomList", "teachersList"}, allEntries = true)
     public ClassRoomDto setTeacher(Long idClass, SetTeacherForm setTeacherForm) {
-        List<SetTeacherCheck> validations = Arrays.asList(new TeacherHasAnotherClass());
+        List<SetTeacherCheck> validations = Arrays.asList(new TeacherHasAnotherClass(), new SameTeacher());
 
         ClassRoom classRoom = returnClass(idClass);
+        Teacher classTeacher = classRoom.getTeacher();
         if (classRoom.getTeacher() != null) {
             classRoom.getTeacher().setClassRoom(null);       // Melhorar esse método se possível ! Esses null faz com que eu não consiga
             classRoom.setTeacher(null);                     // verificar se o teacher que vou colocar em seguida é o msm q já tava, pq sempre vou setar nullo.
             classRoom = classRepository.save(classRoom);    // mas tem q fazer isso sem tirar esse bloco IF ao lado, NÃO MODIFICAR!!!
         }
 
+
         Long idTeacher = setTeacherForm.getIdTeacher();
         Teacher teacher = returnTeacher(idTeacher);
 
         Teacher finalTeacher = teacher;
-        validations.forEach(v -> v.validation(finalTeacher));
+        try {
+            validations.forEach(v -> v.validation(finalTeacher, classTeacher));
+            teacher.setClassRoom(classRoom);
+            teacherRepository.save(teacher);
+            classRoom.setTeacher(teacher);                     // ARRUMAR MÉTODO ! não consigo testar a exception : professor já está em outra classe.
+            classRepository.save(classRoom);
+        } catch (ChangeSameTeacher e) {
+          setAndSaveAttributes(classTeacher,classRoom);
+            throw new ChangeSameTeacher("The new teacher cannot be the same than the last teacher!"); //
+        }catch (TeacherBelongsAnotherClass e) {
+            setAndSaveAttributes(classTeacher,classRoom);
+            throw new TeacherBelongsAnotherClass("The teacher already belongs an another class.");
+        }
 
-        teacher.setClassRoom(classRoom);
-        teacher = teacherRepository.save(teacher);
-        classRoom.setTeacher(teacher);
-        classRoom = classRepository.save(classRoom);
 
         return new ClassRoomDto(classRoom);
     }
 
+
     @CacheEvict(value = {"classesRoomList", "studentsList"}, allEntries = true)
-    public ClassRoomDto addStudent(Long idClass, AddStudentForm addStudentForm) {
+    public ClassRoomDto addStudent(Long idClass, AddRemoveStudentForm addStudentForm) {
         List<AddStudentCheck> validations = Arrays.asList(new ClassContainsSameStudent(), new StudentHasAnotherClass());
 
         ClassRoom classRoom = returnClass(idClass);
@@ -165,7 +178,7 @@ public class ClassRoomService implements GenericMethodService {
     }
 
     @CacheEvict(value = {"classesRoomList", "studentsList"}, allEntries = true)
-    public ClassRoomDto removeStudent(Long idClass, RemoveStudentForm removeStudentForm) {
+    public ClassRoomDto removeStudent(Long idClass, AddRemoveStudentForm removeStudentForm) {
 
         ClassRoom classRoom = returnClass(idClass);
         Long idStudent = removeStudentForm.getIdStudent();
@@ -183,13 +196,13 @@ public class ClassRoomService implements GenericMethodService {
     private ClassRoom returnClass(Long idClass) {
         Optional<ClassRoom> classRoom = classRepository.findById(idClass);
         if (classRoom.isEmpty()) {
-            throw new ResourceNotFoundException("Id : "+idClass+", This class wasn't found on DataBase");
+            throw new ResourceNotFoundException("Id : " + idClass + ", This class wasn't found on DataBase");
         }
         return classRoom.get();
     }
 
     private Student returnStudent(Long idStudent, ClassRoom classRoom, boolean addMethod) {   // boolean addMethod - Se for o metodo de adicionar chamando,
-                                                                                       // pois se for, tem q chamar uma exception especifica e tirar outra.
+        // pois se for, tem q chamar uma exception especifica e tirar outra.
         Optional<Student> student = studentRepository.findById(idStudent);
         studentDoesNotExist(student, idStudent);
         if (!addMethod) {
@@ -200,7 +213,7 @@ public class ClassRoomService implements GenericMethodService {
 
     private void studentDoesNotExist(Optional<Student> student, Long idStudent) {
         if (student.isEmpty()) {
-            throw new ResourceNotFoundException("Id : "+idStudent + ", This student wasn't found on DataBase");
+            throw new ResourceNotFoundException("Id : " + idStudent + ", This student wasn't found on DataBase");
         }
 
     }
@@ -220,19 +233,32 @@ public class ClassRoomService implements GenericMethodService {
     private Teacher returnTeacher(Long idTeacher) {
         Optional<Teacher> teacher = teacherRepository.findById(idTeacher);
         if (teacher.isEmpty()) {
-            throw new ResourceNotFoundException("Id : "+idTeacher+", This teacher wasn't found on DataBase");
+            throw new ResourceNotFoundException("Id : " + idTeacher + ", This teacher wasn't found on DataBase");
         }
         return teacher.get();
     }
 
     private void updateGrades(Student student, NewGradesForm newGrades) {
 
-        student.getReportCard().setGrade1(newGrades.getGrade1());
+        if (newGrades.getGrade1() != null) {
+            student.getReportCard().setGrade1(newGrades.getGrade1());
+        }
 
-        student.getReportCard().setGrade2(newGrades.getGrade2());
+        if (newGrades.getGrade2() != null) {
+            student.getReportCard().setGrade2(newGrades.getGrade2());
+        }
 
-        student.getReportCard().setGrade3(newGrades.getGrade3());
+        if (newGrades.getGrade3() != null) {
+            student.getReportCard().setGrade3(newGrades.getGrade3());
+        }
 
+    }
+
+    private void setAndSaveAttributes(Teacher classTeacher, ClassRoom classRoom) {
+        classTeacher.setClassRoom(classRoom);
+        teacherRepository.save(classTeacher);
+        classRoom.setTeacher(classTeacher);
+        classRepository.save(classRoom);
     }
 
 

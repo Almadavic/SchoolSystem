@@ -1,8 +1,11 @@
 package application.service.businessRule.updateGrades;
 
+import application.entity.ClassRoom;
 import application.form.NewGradesForm;
 
-public interface UpdateCheck {
+import java.security.Principal;
 
-    void validation(NewGradesForm newGrades,String teacherName,String userLoggedName); // Regras de négocio relacionado ao setar/mudar uma nota de algum aluno.
+public interface UpdateCheck { // Regras de négocio relacionado ao setar/mudar uma nota de algum aluno.
+
+    void validation(NewGradesForm newGrades, ClassRoom classRoom, Principal user);  // Validação
 }

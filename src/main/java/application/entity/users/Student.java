@@ -20,12 +20,17 @@ public class Student extends User  { // Classe do Banco -> Student | Filha de Us
     private ClassRoom classRoom; // Uma Classe tem muitos estudantes.
 
     public Student() {
-
+        instanceReportCard();
     }
 
     public Student(String nome, String email, String password,ClassRoom classRoom) {
         super(nome, email, password);
         this.classRoom=classRoom;
+       instanceReportCard();
+    }
+
+
+    private void instanceReportCard() {
         this.reportCard=new ReportCard();
         this.reportCard.setStudent(this);
     }
