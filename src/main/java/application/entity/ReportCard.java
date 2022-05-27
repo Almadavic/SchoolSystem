@@ -16,8 +16,6 @@ public class ReportCard implements Serializable {  // Classe do Banco - > Report
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Double frequency;
     private Double grade1;
     private Double grade2;
     private Double grade3;
@@ -45,7 +43,6 @@ public class ReportCard implements Serializable {  // Classe do Banco - > Report
         this.grade1 = 0.0;
         this.grade2 = 0.0;
         this.grade3 = 0.0;
-        this.frequency = 0.0;
         this.situation = Situation.DISAPPROVED;
     }
 
@@ -57,13 +54,6 @@ public class ReportCard implements Serializable {  // Classe do Banco - > Report
         this.id = id;
     }
 
-    public Double getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(Double frequency) {
-        this.frequency = frequency;
-    }
 
     public Double getGrade1() {
         return grade1;

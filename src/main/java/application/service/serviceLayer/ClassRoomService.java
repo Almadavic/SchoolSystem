@@ -3,6 +3,7 @@ package application.service.serviceLayer;
 
 import application.dto.ClassRoomDto;
 import application.entity.ClassShift;
+import application.entity.Situation;
 import application.form.*;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
@@ -85,7 +86,7 @@ public class ClassRoomService implements GenericMethodService {
         return new TeacherDto(teacher.get());
     }
 
-    @CacheEvict(value = {"classesRoomList","studentsListByClassRoom"}, allEntries = true)
+    @CacheEvict(value = {"classesRoomList", "studentsListByClassRoom"}, allEntries = true)
     public StudentDto updateGrades(Long idClass, Long idStudent, Principal user, NewGradesForm newGrades) {
         List<UpdateCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed());
 
@@ -95,6 +96,7 @@ public class ClassRoomService implements GenericMethodService {
         validations.forEach(v -> v.validation(newGrades, classRoom, user));
 
         updateGrades(student, newGrades);
+        approve(student);
         student = studentRepository.save(student);
         return new StudentDto(student);
     }
@@ -122,35 +124,25 @@ public class ClassRoomService implements GenericMethodService {
 
     @CacheEvict(value = {"classesRoomList", "teachersList"}, allEntries = true)
     public ClassRoomDto setTeacher(Long idClass, SetTeacherForm setTeacherForm) {
-        List<SetTeacherCheck> validations = Arrays.asList(new TeacherHasAnotherClass(), new SameTeacher());
+        List<SetTeacherCheck> validations = Arrays.asList(new SameTeacher(),new TeacherHasAnotherClass());
 
         ClassRoom classRoom = returnClass(idClass);
-        Teacher classTeacher = classRoom.getTeacher();
-        if (classRoom.getTeacher() != null) {
-            classRoom.getTeacher().setClassRoom(null);       // Melhorar esse método se possível ! Esses null faz com que eu não consiga
-            classRoom.setTeacher(null);                     // verificar se o teacher que vou colocar em seguida é o msm q já tava, pq sempre vou setar nullo.
-            classRoom = classRepository.save(classRoom);    // mas tem q fazer isso sem tirar esse bloco IF ao lado, NÃO MODIFICAR!!!
-        }
-
-
         Long idTeacher = setTeacherForm.getIdTeacher();
         Teacher teacher = returnTeacher(idTeacher);
-
-        Teacher finalTeacher = teacher;
-        try {
-            validations.forEach(v -> v.validation(finalTeacher, classTeacher));
-            teacher.setClassRoom(classRoom);
-            teacherRepository.save(teacher);
-            classRoom.setTeacher(teacher);                     // ARRUMAR MÉTODO ! não consigo testar a exception : professor já está em outra classe.
-            classRepository.save(classRoom);
-        } catch (ChangeSameTeacher e) {
-          setAndSaveAttributes(classTeacher,classRoom);
-            throw new ChangeSameTeacher("The new teacher cannot be the same than the last teacher!"); //
-        }catch (TeacherBelongsAnotherClass e) {
-            setAndSaveAttributes(classTeacher,classRoom);
-            throw new TeacherBelongsAnotherClass("The teacher already belongs an another class.");
+        Teacher classTeacher = classRoom.getTeacher();
+        if (classRoom.getTeacher() != null) {
+            validations.forEach(v -> v.validation(teacher, classTeacher));
+        } else {
+            validations.forEach(v -> v.validation(teacher, null));
+        }
+        if (classRoom.getTeacher() != null) {
+           classRoom.getTeacher().setClassRoom(null);
         }
 
+        teacher.setClassRoom(classRoom);  // DESC DO MÉTODO : EU SÓ POSSO COLOCAR UM PROFESSOR QUE NÃO TENHA NENHUMA SALA
+        teacherRepository.save(teacher); // E NÃO SEJA O MESMO PROFESSOR DESSA!
+        classRoom.setTeacher(teacher);                     // MÉTODO PARECE ESTAR 100% Funcional, NÃO ALTERAR A LÓGICA!!!!! APENAS ARRUMAR A ARQUITETURA DO CÓDIGO.
+        classRepository.save(classRoom);
 
         return new ClassRoomDto(classRoom);
     }
@@ -163,6 +155,7 @@ public class ClassRoomService implements GenericMethodService {
         ClassRoom classRoom = returnClass(idClass);
         Long idStudent = addStudentForm.getIdStudent();
         Student student = returnStudent(idStudent, classRoom, true);
+
 
         ClassRoom finalClassRoom = classRoom;
         validations.forEach(v -> v.validation(student, finalClassRoom));
@@ -187,8 +180,24 @@ public class ClassRoomService implements GenericMethodService {
         classRoom = classRepository.save(classRoom);
 
         return new ClassRoomDto(classRoom);
+    }
 
+    public ClassRoomDto removeTeacher(Long idClass) {
 
+        ClassRoom classRoom = returnClass(idClass);
+        classRoom.getTeacher().setClassRoom(null);
+        classRoom.setTeacher(null);
+        classRoom = classRepository.save(classRoom);
+
+        return new ClassRoomDto(classRoom);
+    }
+
+    public String removeClass(Long idClass) {      // Só é possivel remover uma classe caso ela não tenha estudante nem professores!
+
+        ClassRoom classRoom = returnClass(idClass);
+        classRepository.delete(classRoom);
+
+        return "Class : "+idClass+" removed!";
     }
 
 
@@ -237,6 +246,12 @@ public class ClassRoomService implements GenericMethodService {
         return teacher.get();
     }
 
+    private void approve(Student student) {
+        if(student.getReportCard().getAverageStudent() >=6) {
+            student.getReportCard().setSituation(Situation.APPROVED);
+        }
+    }
+
     private void updateGrades(Student student, NewGradesForm newGrades) {
 
         if (newGrades.getGrade1() != null) {
@@ -265,6 +280,5 @@ public class ClassRoomService implements GenericMethodService {
         Character[] letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'};
         return letters;
     }
-
 
 }

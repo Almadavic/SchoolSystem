@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "tb_teachers")
-public class Teacher extends User  { // Classe do Banco - > Teacher
+public class Teacher extends User { // Classe do Banco - > Teacher
 
     @JsonIgnore
     @OneToOne()
@@ -39,4 +39,10 @@ public class Teacher extends User  { // Classe do Banco - > Teacher
     public void setClassRoom(ClassRoom classRoom) {
         this.classRoom = classRoom;
     }
+
+    @Override
+    public String toString() {
+        return "Teacher : "+getEmail()+", Id : "+getId();
+    }
+
 }

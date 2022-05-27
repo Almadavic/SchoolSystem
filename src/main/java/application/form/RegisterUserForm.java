@@ -1,8 +1,7 @@
 package application.form;
 
 
-
-
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 public class RegisterUserForm { // Form que recebe informações do estudante que será cadastrado!
@@ -13,7 +12,7 @@ public class RegisterUserForm { // Form que recebe informações do estudante qu
     private String email;
     @NotBlank
     private String password;
-
+    @Valid // Temos que usar isso quando temos um form dentro de outro form!
     private RegisterAddressForm addressForm; // Resolver a anotação emcima!
 
 

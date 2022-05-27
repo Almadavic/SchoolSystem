@@ -30,9 +30,9 @@ public class UserAreaController { // Onde os professores e alunos tem acesso, fi
     @PutMapping(value = "/changepassword")
     public ResponseEntity<String> changePassword(Principal user,@RequestBody @Valid NewPasswordForm newPasswordForm) {
 
-        String newPassword = userAreaService.changePassword(user,newPasswordForm);
+        String message = userAreaService.changePassword(user,newPasswordForm);
 
-        return ResponseEntity.ok().body(newPassword);
+        return ResponseEntity.ok().body(message);
     }
 }
 

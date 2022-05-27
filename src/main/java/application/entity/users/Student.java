@@ -51,4 +51,9 @@ public class Student extends User { // Classe do Banco -> Student | Filha de Use
         this.reportCard = reportCard;
     }
 
+    @Override
+    public String toString() {
+        return "Student : "+getEmail()+", Id : "+getId();
+    }
+
 }

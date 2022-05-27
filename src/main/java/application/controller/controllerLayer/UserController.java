@@ -38,5 +38,12 @@ public class UserController implements AllUserTypeController { // Controller par
 
         return ResponseEntity.ok().body(userDto);
     }
+    @DeleteMapping(value = "/{id}/remove")
+    public ResponseEntity<String> remove(@PathVariable Long id) {
+
+        String message = userService.remove(id);
+
+        return ResponseEntity.ok().body(message);
+    }
 
 }

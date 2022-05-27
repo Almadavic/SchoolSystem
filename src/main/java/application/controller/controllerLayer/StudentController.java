@@ -37,12 +37,12 @@ public class StudentController implements ExtendsUserController {  // Controller
 
     @Override
     @GetMapping(value = "/{id}")
-    //Método retorna um aluno em específico do sistema.
-    public ResponseEntity<StudentDto> findById(@PathVariable Long id) {
+   // Método retorna um aluno em específico do sistema.
+   public ResponseEntity<StudentDto> findById(@PathVariable Long id) {
 
         StudentDto studentDto = studentService.findById(id);
 
-        return ResponseEntity.ok().body(studentDto);
+       return ResponseEntity.ok().body(studentDto);
     }
 
     @Override
@@ -57,4 +57,6 @@ public class StudentController implements ExtendsUserController {  // Controller
 
         return ResponseEntity.created(uri).body(studentDto);
     }
+
+
 }

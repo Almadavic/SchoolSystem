@@ -5,11 +5,10 @@ import application.entity.Situation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"frequency", "grade1", "grade2", "grade3", "averageGrade", "situation"})
+@JsonPropertyOrder({"grade1", "grade2", "grade3", "averageGrade", "situation"})
 public class ReportCardDto { // Dto da classe ReportCard
 
-    @JsonProperty("frequency")
-    private Double frequency;
+
     @JsonProperty("grade1")
     private Double grade1;
     @JsonProperty("grade2")
@@ -24,7 +23,6 @@ public class ReportCardDto { // Dto da classe ReportCard
     }
 
     public ReportCardDto(ReportCard reportCard) {    // Transformando um ReportCard em ReportCardDto
-        this.frequency = reportCard.getFrequency();
         this.grade1 = reportCard.getGrade1();
         this.grade2 = reportCard.getGrade2();
         this.grade3 = reportCard.getGrade3();
@@ -36,14 +34,6 @@ public class ReportCardDto { // Dto da classe ReportCard
         double average = (grade1 + grade2 + grade3) / 3;     // Método que retorna a média de notas do boletim de um aluno!
         double decimal = Math.round(average * 10.0) / 10.0; // Feito isso para ficar em decimal!
         return decimal;
-    }
-
-    public Double getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(Double frequency) {
-        this.frequency = frequency;
     }
 
     public Double getGrade1() {

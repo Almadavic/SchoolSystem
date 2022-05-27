@@ -68,7 +68,7 @@ public class TeacherService  implements ExtendsUserService {
     public TeacherDto save(RegisterUserForm userForm) {
         Teacher teacher = new Teacher();
         convertFromFormToUser(teacher, userForm);
-        Role role = roleRepository.findById(1l).get();
+        Role role = roleRepository.findById(2l).get();
         teacher.addRole(role);
         teacher= teacherRepository.save(teacher);
         return new TeacherDto(teacher);

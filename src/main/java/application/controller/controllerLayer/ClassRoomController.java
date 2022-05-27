@@ -76,7 +76,7 @@ public class ClassRoomController implements GenericMethodController {          /
     @PutMapping(value = "/{idClass}/students/{idStudent}/updategrades")
     // // Método HTTP (PUT) , Método atualiza as notas de um aluno de uma respectiva sala, passando o id do aluno e da classe.
     // Me retorna o aluno com as notas atualizadas.
-    public ResponseEntity<StudentDto> updateGrades(@PathVariable Long idClass, @PathVariable Long idStudent, Principal user, @RequestBody @Valid NewGradesForm newGrades) {
+    public ResponseEntity<StudentDto> updateGrades(@PathVariable Long idClass, @PathVariable Long idStudent, Principal user, @RequestBody NewGradesForm newGrades) {
 
         StudentDto studentDto = classService.updateGrades(idClass, idStudent, user, newGrades);
 
@@ -119,6 +119,24 @@ public class ClassRoomController implements GenericMethodController {          /
         ClassRoomDto classRoomDto = classService.removeStudent(idClass, removeStudentForm);
 
         return ResponseEntity.ok().body(classRoomDto);
+    }
+
+    @PutMapping(value = "/{idClass}/removeteacher")
+    // Método HTTP (PUT) , Método remove o professor da sala.
+    public ResponseEntity<ClassRoomDto> removeTeacher(@PathVariable Long idClass) {
+
+        ClassRoomDto classRoomDto = classService.removeTeacher(idClass);
+
+        return ResponseEntity.ok().body(classRoomDto);
+    }
+
+    @DeleteMapping(value = "/{idClass}/removeclass")
+    // Método HTTP ( DELETE) Apaga uma classe do sistema!
+    public ResponseEntity<String> removeClass(@PathVariable Long idClass) {
+
+        String message = classService.removeClass(idClass);
+
+        return ResponseEntity.ok().body(message);
     }
 
 }

@@ -2,8 +2,11 @@ package application.service.serviceLayer;
 
 import application.dto.StudentDto;
 
+import application.entity.Address;
 import application.entity.Role;
 import application.entity.users.Student;
+import application.entity.users.User;
+import application.form.RegisterAddressForm;
 import application.form.RegisterUserForm;
 import application.repository.RoleRepository;
 import application.repository.StudentRepository;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
+import java.security.Principal;
 import java.util.Optional;
 
 
@@ -66,7 +70,6 @@ public class StudentService  implements ExtendsUserService {
         student = studentRepository.save(student);
         return new StudentDto(student);
     }
-
 
     private Student returnStudent(Long id) {
         Optional<Student> student = studentRepository.findById(id);

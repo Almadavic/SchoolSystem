@@ -40,9 +40,40 @@ public class UserService implements UserDetailsService, AllUserTypeService {
 
     @Override
     public Page<UserDto> findAll(Pageable pagination, String rolesName) {
+
+        Page<User> users = verifyParameters(pagination, rolesName);
+        Page<UserDto> usersDto = users.map(UserDto::new);
+
+        return usersDto;
+    }
+
+    @Override
+    public UserDto findById(Long id) {
+        User user = returnUser(id);
+        return new UserDto(user);
+    }
+
+    public String remove(Long id) { // Esse método serve tanto para teacher como estudante. //
+
+        User user = returnUser(id);
+        String userInfo = user.toString();
+        verifyInstance(user);
+        userRepository.delete(user);
+
+        return "User  : " + userInfo + " removed with success!";
+    }
+
+    private User returnUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new ResourceNotFoundException("Id : " + id + ", This student wasn't found on DataBase");
+        }
+        return user.get();
+    }
+
+    private Page<User> verifyParameters(Pageable pagination, String rolesName) {
         String rolesNameOriginal = rolesName;
         Page<User> users;
-
         if (rolesName != null) {
             rolesName = "ROLE_" + rolesName.toUpperCase();
             if (rolesName.equals("ROLE_TEACHER") || rolesName.equals("ROLE_STUDENT")) {
@@ -51,22 +82,21 @@ public class UserService implements UserDetailsService, AllUserTypeService {
             } else {
                 throw new InvalidParam("This parameter : {" + rolesNameOriginal + "} is invalid");
             }
+
         } else {
             users = userRepository.findAll(pagination);
         }
-
-        Page<UserDto> usersDto = users.map(UserDto::new);
-        return usersDto;
+        return users;
     }
 
-    @Override
-    public UserDto findById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
-            throw new ResourceNotFoundException("Id : " + id + ", This user wasn't found on DataBase");
+    private void verifyInstance(User user) {
+        if (user instanceof Teacher) {
+            Teacher teacher = (Teacher) user;
+            if(teacher.getClassRoom()!=null) {
+                teacher.getClassRoom().setTeacher(null);
+                teacher.setClassRoom(null);
+            }
         }
-        UserDto userDto = new UserDto(user.get());
-        return userDto;
     }
-    
+
 }
