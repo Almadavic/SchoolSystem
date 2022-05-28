@@ -8,7 +8,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "tb_personal_information")
+@Table(name = "tb_address")
 public class Address implements Serializable { // Classe do Banco - > Address | Representa os endereços dos usuários
 
     @Serial

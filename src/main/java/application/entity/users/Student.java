@@ -2,11 +2,9 @@ package application.entity.users;
 
 import application.entity.ClassRoom;
 import application.entity.ReportCard;
-import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "tb_students")

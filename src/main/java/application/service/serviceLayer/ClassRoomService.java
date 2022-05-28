@@ -22,14 +22,14 @@ import application.service.businessRule.setTeacher.TeacherHasAnotherClass;
 import application.service.businessRule.updateGrades.GradeLimit;
 import application.service.businessRule.updateGrades.TeacherAllowed;
 import application.service.businessRule.updateGrades.UpdateCheck;
-import application.service.exception.classRoomService.ChangeSameTeacher;
 import application.service.exception.classRoomService.StudentDoesntExistInThisClass;
-import application.service.exception.classRoomService.TeacherBelongsAnotherClass;
 import application.service.exception.classRoomService.ThereIsntTeacherInThisClass;
+import application.service.exception.general.DatabaseException;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.GenericMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -148,7 +148,7 @@ public class ClassRoomService implements GenericMethodService {
     }
 
 
-    @CacheEvict(value = {"classesRoomList", "studentsList"}, allEntries = true)
+    @CacheEvict(value = {"classesRoomList", "studentsList","studentsListByClassRoom"}, allEntries = true)
     public ClassRoomDto addStudent(Long idClass, AddRemoveStudentForm addStudentForm) {
         List<AddStudentCheck> validations = Arrays.asList(new ClassContainsSameStudent(), new StudentHasAnotherClass());
 
@@ -169,7 +169,7 @@ public class ClassRoomService implements GenericMethodService {
         return new ClassRoomDto(classRoom);
     }
 
-    @CacheEvict(value = {"classesRoomList", "studentsList"}, allEntries = true)
+    @CacheEvict(value = {"classesRoomList", "studentsList","studentsListByClassRoom"}, allEntries = true)
     public ClassRoomDto removeStudent(Long idClass, AddRemoveStudentForm removeStudentForm) {
 
         ClassRoom classRoom = returnClass(idClass);
@@ -195,8 +195,11 @@ public class ClassRoomService implements GenericMethodService {
     public String removeClass(Long idClass) {      // Só é possivel remover uma classe caso ela não tenha estudante nem professores!
 
         ClassRoom classRoom = returnClass(idClass);
-        classRepository.delete(classRoom);
-
+       try {
+           classRepository.delete(classRoom);
+       }catch(DataIntegrityViolationException e) {
+           throw new DatabaseException("You can't delete a class that has teachers and students!");
+       }
         return "Class : "+idClass+" removed!";
     }
 

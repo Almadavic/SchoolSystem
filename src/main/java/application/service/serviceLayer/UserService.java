@@ -1,26 +1,21 @@
 package application.service.serviceLayer;
 
 import application.dto.UserDto;
-import application.entity.Address;
-import application.entity.users.Student;
 import application.entity.users.Teacher;
 import application.entity.users.User;
-import application.form.RegisterAddressForm;
-import application.form.RegisterUserForm;
 import application.repository.UserRepository;
 import application.service.exception.general.InvalidParam;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.AllUserTypeService;
-import application.service.serviceLayer.interfacee.GenericMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService, AllUserTypeService {
@@ -31,20 +26,14 @@ public class UserService implements UserDetailsService, AllUserTypeService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // Método que mostra pro spring security como será feita a autenticação.
         Optional<User> user = userRepository.findByEmail(username);
-        if (user.isPresent()) {
-            return user.get();
-        }
-        throw new UsernameNotFoundException("Invalid data!");
+        return user.get();
     }
 
 
     @Override
-    public Page<UserDto> findAll(Pageable pagination, String rolesName) {
-
-        Page<User> users = verifyParameters(pagination, rolesName);
-        Page<UserDto> usersDto = users.map(UserDto::new);
-
-        return usersDto;
+    public List<UserDto> findAll(String rolesName) {
+        List<UserDto> userDtos = verifyParameters(rolesName);
+        return userDtos;
     }
 
     @Override
@@ -71,28 +60,32 @@ public class UserService implements UserDetailsService, AllUserTypeService {
         return user.get();
     }
 
-    private Page<User> verifyParameters(Pageable pagination, String rolesName) {
+    @Override
+    public List<UserDto> verifyParameters(String rolesName) {
         String rolesNameOriginal = rolesName;
-        Page<User> users;
+        List<User> users;
         if (rolesName != null) {
             rolesName = "ROLE_" + rolesName.toUpperCase();
             if (rolesName.equals("ROLE_TEACHER") || rolesName.equals("ROLE_STUDENT")) {
-
-                users = userRepository.findByRolesName(pagination, rolesName);
+                users = userRepository.findByRolesName(rolesName);
             } else {
                 throw new InvalidParam("This parameter : {" + rolesNameOriginal + "} is invalid");
             }
-
         } else {
-            users = userRepository.findAll(pagination);
+            users = userRepository.findAll();
         }
-        return users;
+        List<UserDto> userDtos = convertToDto(users);
+        return userDtos;
     }
 
-    private void verifyInstance(User user) {
+    private List<UserDto> convertToDto(List<? extends User> users) {
+        return users.stream().map(UserDto::new).collect(Collectors.toList());
+    }
+
+    private void verifyInstance(User user) { // Tive que fazer só para professor por causa da relação no banco de dados!
         if (user instanceof Teacher) {
             Teacher teacher = (Teacher) user;
-            if(teacher.getClassRoom()!=null) {
+            if (teacher.getClassRoom() != null) {
                 teacher.getClassRoom().setTeacher(null);
                 teacher.setClassRoom(null);
             }

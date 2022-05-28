@@ -1,9 +1,6 @@
 package application.form;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.validator.constraints.Range;
-
-
 
 @JsonIgnoreProperties(ignoreUnknown = false)
 public class NewGradesForm { // Form que recebe as notas dos alunos(atualizada) para passar para um boletim monitorado pela JPA.

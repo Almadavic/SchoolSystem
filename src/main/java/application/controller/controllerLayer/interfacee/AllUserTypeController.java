@@ -1,11 +1,11 @@
 package application.controller.controllerLayer.interfacee;
 
 import application.dto.UserDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface AllUserTypeController extends GenericMethodController{
-    ResponseEntity<Page<? extends UserDto>> findAll(Pageable pagination, String noClass);
+    ResponseEntity<List<? extends UserDto>> findAll(String param); // Interface onde todos os usuários vão importar esse método!
 
 }

@@ -1,6 +1,7 @@
 package application.extraConfig;
 
 import application.entity.*;
+import application.entity.users.Principal;
 import application.entity.users.Student;
 import application.entity.users.Teacher;
 import application.repository.*;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.core.parameters.P;
 
 
 import java.util.Arrays;
@@ -25,21 +27,21 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
     private ClassRoomRepository classRoomRepository;
 
     @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private TeacherRepository teacherRepository;
+    private UserRepository userRepository;
 
 
     @Override
     public void run(String... args) throws Exception { // Esse método fala que toda vez que o programa iniciar(aplicação for pro ar)
-                                                                               // , esse método vai ser chamado, e também oq tem dentro.
+        // , esse método vai ser chamado, e também oq tem dentro.
         System.out.println(applicationInfo());                                // Preste atenção como as associações são feitas no método!
 
         String senhaEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
 
         ClassRoom cr1 = new ClassRoom('A', ClassShift.MORNING);
 
+
+      ///  Principal principal = new Principal("Barbara Borges", "barbara@gmail.com", senhaEncode);
+       /// Address principalAdress = new Address("Brasil","Minas Gerais","contagem",principal);
 
         Student u1 = new Student("Joao Lacerta", "joao@gmail.com", senhaEncode, cr1);
         Student u2 = new Student("Victor Almada", "almadavic@live.com", senhaEncode, cr1);
@@ -55,33 +57,35 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
         u2.setAddress(a2);
         u3.setAddress(a3);
         u4.setAddress(a4);
+      //  principal.setAddress(principalAdress);
 
 
         classRoomRepository.save(cr1);
-        studentRepository.saveAll(Arrays.asList(u1, u2, u3, u4));
+        userRepository.saveAll(Arrays.asList(u1, u2, u3, u4));
 
 
         Teacher teacher1 = new Teacher("Raphael", "raphael@gmail.com", senhaEncode, cr1);
         Address a5 = new Address("EUA", "Florida", "Tampa", teacher1);
         teacher1.setAddress(a5);
 
-        teacherRepository.save(teacher1);
+        userRepository.save(teacher1);
 
         cr1.setTeacher(teacher1);
 
 
         Role r1 = new Role("ROLE_STUDENT");
         Role r2 = new Role("ROLE_TEACHER");
+        Role r3 = new Role("ROLE_PRINCIPAL");
 
 
-        roleRepository.saveAll(Arrays.asList(r1, r2));
+        roleRepository.saveAll(Arrays.asList(r1, r2, r3));
         u1.addRole(r1);
         u2.addRole(r1);
         u3.addRole(r1);
         u4.addRole(r1);
         teacher1.addRole(r2);
 
-        studentRepository.saveAll(Arrays.asList(u1, u2, u3,u4));
+        userRepository.saveAll(Arrays.asList(u1, u2, u3,u4));
 
         classRoomRepository.save(cr1);
 
@@ -90,7 +94,7 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
         Address a6 = new Address("Brasil", "Bahia", "Salvador", teacher2);
         teacher2.addRole(r2);
         teacher2.setAddress(a6);
-        teacherRepository.save(teacher2);
+        userRepository.save(teacher2);
 
 
     }

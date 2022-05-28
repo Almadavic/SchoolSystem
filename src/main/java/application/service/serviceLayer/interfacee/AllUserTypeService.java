@@ -1,9 +1,15 @@
 package application.service.serviceLayer.interfacee;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import application.dto.UserDto;
+import application.entity.users.Student;
+import application.entity.users.User;
+
+import java.util.List;
 
 public interface AllUserTypeService<T> extends GenericMethodService {
 
-    Page<T> findAll(Pageable pagination, String parameter);
+    List<UserDto> findAll(String parameter);
+
+    List<UserDto> verifyParameters(String parameter);
+
 }

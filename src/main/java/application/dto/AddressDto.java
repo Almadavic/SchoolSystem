@@ -1,10 +1,8 @@
 package application.dto;
 
 import application.entity.Address;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.springframework.data.annotation.Transient;
 
 @JsonPropertyOrder({"city","state","country"}) // Ordenação de atributos
 public class AddressDto {  // DTO da classe Address

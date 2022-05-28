@@ -5,7 +5,6 @@ import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import javax.validation.constraints.NotNull;
 
 @JsonPropertyOrder({"id", "name", "email", "classRoomId", "reportCard", "address", "roles"})
 public class StudentDto extends UserDto { // Dto da classe Student
@@ -20,8 +19,6 @@ public class StudentDto extends UserDto { // Dto da classe Student
 
     }
 
-
-
     public StudentDto(User user) {  // Método para transformar um Student em StudentDto
         super(user);
         Student student = (Student) user;
@@ -30,7 +27,6 @@ public class StudentDto extends UserDto { // Dto da classe Student
         }
         this.reportCardDto = new ReportCardDto(student.getReportCard());
     }
-
 
     public ReportCardDto getReportCardDto() {
         return reportCardDto;

@@ -1,5 +1,6 @@
 package application.service.serviceLayer;
 
+import application.dto.PrincipalDto;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
 import application.dto.UserDto;
@@ -21,15 +22,15 @@ public class UserAreaService {
     private UserRepository userRepository;
 
     public UserDto myData(Principal user) {
+
           User userDataBase =  returnUser(user);
           if(userDataBase instanceof Teacher) {
-              Teacher teacher = (Teacher) userDataBase;
-              return new TeacherDto(teacher);
+              return new TeacherDto(userDataBase);
           } else if( userDataBase instanceof Student) {
-              Student student = (Student) userDataBase;
-              return new StudentDto(student);
+              return new StudentDto(userDataBase);
+          } else {                             // Esse Else é referente ao diretor! Se houvesse mais cargos futuramente, poderia ter conflito. Mas só vão ter 3 cargos.
+              return new PrincipalDto(userDataBase);
           }
-         return null;
     }
 
     public String changePassword(Principal user, NewPasswordForm newPasswordForm) { // Posso fazer uma lista de SOLID AQUI DENTRO!, checkPassword sendo uma das regras de negocio, e implementar mais!
@@ -42,13 +43,14 @@ public class UserAreaService {
         System.out.println("-----------------------------------NOVA : " + newPasswordEncoder);
         checkPasswords(newPasswordEncoder, oldPassword); // MÉTODO de verificar se senha é igual, ainda NÃO FUNCIONA!
         userDataBase.setPassword(newPasswordEncoder);
-        userDataBase = userRepository.save(userDataBase);
+        userRepository.save(userDataBase);
 
         return "SUCCESS! You just changed your password!";
     }
 
 
     private void checkPasswords(String oldPassword, String newPassword) {     // MÉTODO de verificar se senha é igual, ainda NÃO FUNCIONA! //
+
         if (oldPassword.equals(newPassword)) {
             throw new SamePassword("Your new password can't be equal the last one");
         }

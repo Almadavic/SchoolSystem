@@ -6,7 +6,11 @@ import javax.persistence.*;
 @Table(name = "tb_principals")
 public class Principal extends User { // Classe do Banco - > Principal| Filha de User | Representa os diretores no banco
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
+    public Principal() {
+    }
+
+    public Principal(String nome, String email, String password) {
+        super(nome, email, password);
+    }
 }
