@@ -2,7 +2,7 @@ package application.service.businessRule.setTeacher;
 
 
 import application.entity.users.Teacher;
-import application.service.exception.classRoomService.ChangeSameTeacher;
+import application.service.exception.classRoomService.SameTeacherException;
 
 
 public class SameTeacher implements SetTeacherCheck {
@@ -11,7 +11,7 @@ public class SameTeacher implements SetTeacherCheck {
     public void validation(Teacher teacher, Teacher classTeacher) {
         if(classTeacher!=null) {
             if (classTeacher.getId() == teacher.getId()) {
-                throw new ChangeSameTeacher("The new teacher cannot be the same than the last teacher!");
+                throw new SameTeacherException("The new teacher cannot be the same than the last teacher!");
             }
         }
     }

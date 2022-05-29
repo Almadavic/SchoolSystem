@@ -4,7 +4,7 @@ import application.dto.UserDto;
 import application.entity.users.Teacher;
 import application.entity.users.User;
 import application.repository.UserRepository;
-import application.service.exception.general.InvalidParam;
+import application.service.exception.general.InvalidParamException;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.AllUserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +32,8 @@ public class UserService implements UserDetailsService, AllUserTypeService {
 
     @Override
     public List<UserDto> findAll(String rolesName) {
-        List<UserDto> userDtos = verifyParameters(rolesName);
-        return userDtos;
+        List<UserDto> usersDto = verifyParameters(rolesName);
+        return usersDto;
     }
 
     @Override
@@ -69,16 +69,16 @@ public class UserService implements UserDetailsService, AllUserTypeService {
             if (rolesName.equals("ROLE_TEACHER") || rolesName.equals("ROLE_STUDENT")) {
                 users = userRepository.findByRolesName(rolesName);
             } else {
-                throw new InvalidParam("This parameter : {" + rolesNameOriginal + "} is invalid");
+                throw new InvalidParamException("This parameter : {" + rolesNameOriginal + "} is invalid");
             }
         } else {
             users = userRepository.findAll();
         }
-        List<UserDto> userDtos = convertToDto(users);
-        return userDtos;
+        List<UserDto> usersDto = convertToDto(users);
+        return usersDto;
     }
 
-    private List<UserDto> convertToDto(List<? extends User> users) {
+    public List<UserDto> convertToDto(List<User> users) {          // Se possível, colocar esse método na interface! Para todos que herdam usuário terem.
         return users.stream().map(UserDto::new).collect(Collectors.toList());
     }
 

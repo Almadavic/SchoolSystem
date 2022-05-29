@@ -9,7 +9,7 @@ import application.entity.users.Teacher;
 import application.entity.users.User;
 import application.form.NewPasswordForm;
 import application.repository.UserRepository;
-import application.service.exception.studentAreaService.SamePassword;
+import application.service.exception.studentAreaService.SamePasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,7 +52,7 @@ public class UserAreaService {
     private void checkPasswords(String oldPassword, String newPassword) {     // MÉTODO de verificar se senha é igual, ainda NÃO FUNCIONA! //
 
         if (oldPassword.equals(newPassword)) {
-            throw new SamePassword("Your new password can't be equal the last one");
+            throw new SamePasswordException("Your new password can't be equal the last one");
         }
     }
 

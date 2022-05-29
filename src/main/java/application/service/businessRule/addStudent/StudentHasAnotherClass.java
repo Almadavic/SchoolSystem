@@ -2,7 +2,7 @@ package application.service.businessRule.addStudent;
 
 import application.entity.ClassRoom;
 import application.entity.users.Student;
-import application.service.exception.classRoomService.StudentBelongsAnotherClass;
+import application.service.exception.classRoomService.StudentHasAnotherClassException;
 
 public class StudentHasAnotherClass implements AddStudentCheck {
 
@@ -11,7 +11,7 @@ public class StudentHasAnotherClass implements AddStudentCheck {
     public void validation(Student student, ClassRoom classRoom) { // Se o aluno já estiver em uma classe, não pode estar em outra.
         classRoom=null; // Só para deixar claro que não tem uso aqui.
          if(student.getClassRoom()!=null) {
-           throw new StudentBelongsAnotherClass("The student already has an another class.");
+           throw new StudentHasAnotherClassException("The student already has an another class.");
          }
     }
 

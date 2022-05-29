@@ -3,7 +3,7 @@ package application.service.businessRule.addStudent;
 
 import application.entity.ClassRoom;
 import application.entity.users.Student;
-import application.service.exception.classRoomService.StudentBelongsSameClass;
+import application.service.exception.classRoomService.ClassContainsSameStudentException;
 
 public class ClassContainsSameStudent implements AddStudentCheck {
 
@@ -14,7 +14,7 @@ public class ClassContainsSameStudent implements AddStudentCheck {
         boolean classRoomContainsNewStudent = checkIfStudentExistsInTheClassRoom(student, classRoom);
 
         if (classRoomContainsNewStudent) {
-            throw new StudentBelongsSameClass("This class already contains this student");
+            throw new ClassContainsSameStudentException("This class already contains this student");
         }
     }
 

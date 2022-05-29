@@ -1,23 +1,21 @@
 package application.service.serviceLayer;
 
-import application.dto.StudentDto;
 import application.dto.TeacherDto;
-import application.dto.UserDto;
 import application.entity.Role;
-import application.entity.users.Student;
 import application.entity.users.Teacher;
-import application.entity.users.User;
 import application.form.RegisterUserForm;
 import application.repository.RoleRepository;
 import application.repository.TeacherRepository;
-import application.service.exception.general.InvalidParam;
+import application.repository.UserRepository;
+import application.service.businessRule.RegisterUser.EmailAlreadyRegistered;
+import application.service.businessRule.RegisterUser.RegisterUserCheck;
+import application.service.exception.general.InvalidParamException;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.ExtendsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,10 +24,13 @@ import java.util.stream.Collectors;
 public class TeacherService implements ExtendsUserService {
 
     @Autowired
-    private TeacherRepository teacherRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     @Override
     public List<TeacherDto> findAll(String noClass) {
@@ -54,9 +55,13 @@ public class TeacherService implements ExtendsUserService {
 
     @Override
     public TeacherDto save(RegisterUserForm userForm) {
+        List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered());
+
+        validations.forEach(v->v.validation(userForm,userRepository));
+
         Teacher teacher = new Teacher();
         convertFromFormToUser(teacher, userForm);           // Ajustar método, não deixar o banco salavar um usuário com mesmo email!
-        Role role = roleRepository.findById(2l).get();
+        Role role = roleRepository.findByName("ROLE_TEACHER").get();
         teacher.addRole(role);
         teacher = teacherRepository.save(teacher);
         return new TeacherDto(teacher);
@@ -74,7 +79,7 @@ public class TeacherService implements ExtendsUserService {
             } else if (noClass.toUpperCase().equals("FALSE")) {
                 teachers = teacherRepository.findAll();
             } else {
-                throw new InvalidParam("This parameter : {" + noClass + "} is invalid");
+                throw new InvalidParamException("This parameter : {" + noClass + "} is invalid");
             }
         } else {
             teachers = teacherRepository.findAll();
@@ -83,7 +88,7 @@ public class TeacherService implements ExtendsUserService {
         return teachersDtos;
     }
 
-    private List<TeacherDto> convertToDto(List<? extends User> teachers) {
+    private List<TeacherDto> convertToDto(List<Teacher> teachers) {
         return teachers.stream().map(TeacherDto::new).collect(Collectors.toList());
     }
 

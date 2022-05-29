@@ -5,6 +5,4 @@ public interface GenericMethodService<T> { // Interface onde muitas classes no p
 
   T findById(Long id);
 
-
-
 }

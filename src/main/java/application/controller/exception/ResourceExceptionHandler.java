@@ -1,11 +1,13 @@
 package application.controller.exception;
 
+import application.service.businessRule.RegisterUser.EmailAlreadyRegistered;
 import application.service.exception.classRoomService.*;
 import application.service.exception.general.DatabaseException;
-import application.service.exception.general.InvalidParam;
+import application.service.exception.general.InvalidParamException;
 import application.service.exception.general.NoPermissionException;
 import application.service.exception.general.ResourceNotFoundException;
-import application.service.exception.studentAreaService.SamePassword;
+import application.service.exception.studentAreaService.SamePasswordException;
+import application.service.exception.usersService.EmailAlreadyRegisteredException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -41,35 +43,35 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(StudentBelongsSameClass.class)
+    @ExceptionHandler(ClassContainsSameStudentException.class)
     // Quando tenta adicionar um usuário em uma classe em que ele já está adicionado.
-    public ResponseEntity<StandardError> studentBelongsSameClass(StudentBelongsSameClass e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> classContainsSameStudent(ClassContainsSameStudentException e, HttpServletRequest request) {
         String error = "Student already exists";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(TeacherBelongsAnotherClass.class)
+    @ExceptionHandler(TeacherHasAnotherClassException.class)
     // Quando tentam setar o professor na mesma classe que ele pertence.
-    public ResponseEntity<StandardError> teacherBelongsAnotherClass(TeacherBelongsAnotherClass e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> teacherHasAnotherClass(TeacherHasAnotherClassException e, HttpServletRequest request) {
         String error = "Teacher already has an another class";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(StudentBelongsAnotherClass.class)
+    @ExceptionHandler(StudentHasAnotherClassException.class)
     // Quando tenta adicionar um usuário em uma classe sendo que ele já está em outra.
-    public ResponseEntity<StandardError> studentBelongsAnotherClass(StudentBelongsAnotherClass e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> studentHasAnotherClass(StudentHasAnotherClassException e, HttpServletRequest request) {
         String error = "Student already has a class.";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(GradeValueNotAllowed.class) // Quando tenta adicionar uma nota incorreta á um usuário.
-    public ResponseEntity<StandardError> gradeValueNotAllowed(GradeValueNotAllowed e, HttpServletRequest request) {
+    @ExceptionHandler(GradeLimitException.class) // Quando tenta adicionar uma nota incorreta á um usuário.
+    public ResponseEntity<StandardError> gradeLimit(GradeLimitException e, HttpServletRequest request) {
         String error = "Value not allowed";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -77,7 +79,7 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
     }
 
    @ExceptionHandler(NullPointerException.class) // Quando algo é nulo que não poderia ser!
-   public ResponseEntity<StandardError> nullPointerException(NullPointerException e, HttpServletRequest request) {
+   public ResponseEntity<StandardError> nullPointer(NullPointerException e, HttpServletRequest request) {
        String error = "Value cannot be null";
        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -85,15 +87,15 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
    }
 
     @ExceptionHandler(IllegalArgumentException.class) // Quando passa alguma informação errada!
-    public ResponseEntity<StandardError> illegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> illegalArgument(IllegalArgumentException e, HttpServletRequest request) {
         String error = "Value wrong, pass an another type!";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(StudentDoesntExistInThisClass.class) // Quando tenta buscar um usuário que não existe na sala!
-    public ResponseEntity<StandardError> StudentDoesntExistInThisRoom(StudentDoesntExistInThisClass e, HttpServletRequest request) {
+    @ExceptionHandler(StudentDoesntExistInThisClassException.class) // Quando tenta buscar um usuário que não existe na sala!
+    public ResponseEntity<StandardError> studentDoesntExistInThisRoom(StudentDoesntExistInThisClassException e, HttpServletRequest request) {
         String error = "Student wasn't found here!";
         HttpStatus status = HttpStatus.NOT_FOUND;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -101,8 +103,8 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
     }
 
 
-    @ExceptionHandler(SamePassword.class) // Quando a senha alterada é igual á anterior.
-    public ResponseEntity<StandardError> samePassword(SamePassword e, HttpServletRequest request) {
+    @ExceptionHandler(SamePasswordException.class) // Quando a senha alterada é igual á anterior.
+    public ResponseEntity<StandardError> samePassword(SamePasswordException e, HttpServletRequest request) {
         String error = "Same password";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -110,26 +112,42 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
     }
 
 
-    @ExceptionHandler(ThereIsntTeacherInThisClass.class) // Quando a classe não tem nenhum professor!
-    public ResponseEntity<StandardError> thereIsntTeacherInThisClass(ThereIsntTeacherInThisClass e, HttpServletRequest request) {
+    @ExceptionHandler(ThereIsntTeacherInThisClassException.class) // Quando a classe não tem nenhum professor!
+    public ResponseEntity<StandardError> thereIsntTeacherInThisClass(ThereIsntTeacherInThisClassException e, HttpServletRequest request) {
         String error = "No teachers here";
         HttpStatus status = HttpStatus.NOT_FOUND;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(InvalidParam.class) // Quando o usuário passa algum parametro errado!
-    public ResponseEntity<StandardError> invalidParam(InvalidParam e, HttpServletRequest request) {
+    @ExceptionHandler(InvalidParamException.class) // Quando o usuário passa algum parametro errado!
+    public ResponseEntity<StandardError> invalidParam(InvalidParamException e, HttpServletRequest request) {
         String error = "Invalid Param";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(ChangeSameTeacher.class) // Quando o mesmo professor é setado na mesma classa!
-    public ResponseEntity<StandardError> changeSameTeacher(ChangeSameTeacher e, HttpServletRequest request) {
+    @ExceptionHandler(SameTeacherException.class) // Quando o mesmo professor é setado na mesma classa!
+    public ResponseEntity<StandardError> sameTeacher(SameTeacherException e, HttpServletRequest request) {
         String error = "This teacher is already here.";
         HttpStatus status = HttpStatus.UNAUTHORIZED;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(FullListException.class) // Quando a lista de alunos está cheia!
+    public ResponseEntity<StandardError> fullList(FullListException e, HttpServletRequest request) {
+        String error = "The list of students is full";
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(EmailAlreadyRegisteredException.class) // Quando tenta cadastrar um usuário com o mesmmo email !
+    public ResponseEntity<StandardError> emailAlreadyRegistered(EmailAlreadyRegisteredException e, HttpServletRequest request) {
+        String error = "Email already exists";
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }

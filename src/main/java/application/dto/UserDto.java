@@ -1,12 +1,14 @@
 package application.dto;
 
 import application.entity.Role;
+import application.entity.users.Student;
 import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @JsonPropertyOrder({"id", "name", "email", "address", "roles"})
 public class UserDto { // Dto da classe User
@@ -36,13 +38,11 @@ public class UserDto { // Dto da classe User
         this.name = user.getName();
         this.id = user.getId();
         this.addressDto = new AddressDto(user.getAddress());
-        convertList(user.getAuthorities());
+        this.rolesDto = convertList(user.getAuthorities());
     }
 
-    protected void convertList(List<Role> roles) { // Método converte uma lista de Role para RolesDto
-        for (Role role : roles) {
-            rolesDto.add(new RoleDto(role));     // Método necessita de refatoração nessa parte para stream
-        }
+    private List<RoleDto> convertList(List<Role> roles) {                    // Método converte uma lista de Role para RolesDto
+        return roles.stream().map(RoleDto::new).collect(Collectors.toList());
     }
 
     public void addRoleDto(RoleDto roleDto) {

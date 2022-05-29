@@ -4,11 +4,14 @@ import application.dto.StudentDto;
 
 import application.entity.Role;
 import application.entity.users.Student;
-import application.entity.users.User;
 import application.form.RegisterUserForm;
 import application.repository.RoleRepository;
 import application.repository.StudentRepository;
-import application.service.exception.general.InvalidParam;
+import application.repository.TeacherRepository;
+import application.repository.UserRepository;
+import application.service.businessRule.RegisterUser.EmailAlreadyRegistered;
+import application.service.businessRule.RegisterUser.RegisterUserCheck;
+import application.service.exception.general.InvalidParamException;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.ExtendsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,10 +29,13 @@ import java.util.stream.Collectors;
 public class StudentService  implements ExtendsUserService {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Override
     public List<StudentDto> findAll(String noClass) {
@@ -45,12 +52,13 @@ public class StudentService  implements ExtendsUserService {
     @Override
     @CacheEvict(value = "studentsList")
     public StudentDto save(RegisterUserForm userForm) {
-
+        List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered());
+        validations.forEach(v -> v.validation(userForm, userRepository));
         Student student = new Student();
         convertFromFormToUser(student, userForm);               // Ajustar método, não deixar o banco salavar um usuário com mesmo email!
-        Role role = roleRepository.findById(1l).get();
+        Role role = roleRepository.findByName("ROLE_STUDENT").get();
         student.addRole(role);
-        student = studentRepository.save(student);
+        student = userRepository.save(student);
         return new StudentDto(student);
     }
 
@@ -72,7 +80,7 @@ public class StudentService  implements ExtendsUserService {
             } else if (noClass.toUpperCase().equals("FALSE")) {
                 students = studentRepository.findAll();
             } else {
-                throw new InvalidParam("This parameter : {" + noClass + "} is invalid.");
+                throw new InvalidParamException("This parameter : {" + noClass + "} is invalid.");
             }
         } else {
             students = studentRepository.findAll();

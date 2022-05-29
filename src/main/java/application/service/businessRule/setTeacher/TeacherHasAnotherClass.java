@@ -1,7 +1,7 @@
 package application.service.businessRule.setTeacher;
 
 import application.entity.users.Teacher;
-import application.service.exception.classRoomService.TeacherBelongsAnotherClass;
+import application.service.exception.classRoomService.TeacherHasAnotherClassException;
 
 public class TeacherHasAnotherClass implements SetTeacherCheck {
 
@@ -10,7 +10,7 @@ public class TeacherHasAnotherClass implements SetTeacherCheck {
         classTeacher=null; // null
 
         if(teacher.getClassRoom()!=null) {
-            throw new TeacherBelongsAnotherClass("The teacher already belongs an another class.");
+            throw new TeacherHasAnotherClassException("The teacher already belongs an another class.");
         }
     }
 }

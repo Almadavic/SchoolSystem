@@ -2,12 +2,13 @@ package application.service.exception.classRoomService;
 
 import java.io.Serial;
 
-public class StudentBelongsSameClass extends RuntimeException { // Quando o estudante já pertence a mesma classe.
+
+public class GradeLimitException extends RuntimeException { // Quando o client passa um valor inválido para uma nota.
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public StudentBelongsSameClass(String msg) {
+    public GradeLimitException(String msg) {
         super(msg);
     }
 }

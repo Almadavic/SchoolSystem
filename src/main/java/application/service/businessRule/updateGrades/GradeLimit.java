@@ -2,7 +2,7 @@ package application.service.businessRule.updateGrades;
 
 import application.entity.ClassRoom;
 import application.form.NewGradesForm;
-import application.service.exception.classRoomService.GradeValueNotAllowed;
+import application.service.exception.classRoomService.GradeLimitException;
 
 import java.security.Principal;
 import java.util.Arrays;
@@ -23,7 +23,7 @@ public class GradeLimit implements UpdateCheck {
         for (Double grade : grades) {
             if (grade != null) {
                 if (grade > gradeLimitMax || grade < gradLimitMin) {
-                    throw new GradeValueNotAllowed("Grades is supposed to be between 0 and 10");      // Esse método precisa de melhoria, quando envia a requisição
+                    throw new GradeLimitException("Grades is supposed to be between 0 and 10");      // Esse método precisa de melhoria, quando envia a requisição
                 }                                                                                         // com um dos campos errados, o programa não dá erro.
             }
         }

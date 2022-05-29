@@ -15,6 +15,7 @@ import application.repository.StudentRepository;
 import application.repository.TeacherRepository;
 import application.service.businessRule.addStudent.AddStudentCheck;
 import application.service.businessRule.addStudent.ClassContainsSameStudent;
+import application.service.businessRule.addStudent.FullList;
 import application.service.businessRule.addStudent.StudentHasAnotherClass;
 import application.service.businessRule.setTeacher.SameTeacher;
 import application.service.businessRule.setTeacher.SetTeacherCheck;
@@ -22,8 +23,8 @@ import application.service.businessRule.setTeacher.TeacherHasAnotherClass;
 import application.service.businessRule.updateGrades.GradeLimit;
 import application.service.businessRule.updateGrades.TeacherAllowed;
 import application.service.businessRule.updateGrades.UpdateCheck;
-import application.service.exception.classRoomService.StudentDoesntExistInThisClass;
-import application.service.exception.classRoomService.ThereIsntTeacherInThisClass;
+import application.service.exception.classRoomService.StudentDoesntExistInThisClassException;
+import application.service.exception.classRoomService.ThereIsntTeacherInThisClassException;
 import application.service.exception.general.DatabaseException;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.GenericMethodService;
@@ -81,7 +82,7 @@ public class ClassRoomService implements GenericMethodService {
     public TeacherDto findTeacher(Long idClass) {
         Optional<Teacher> teacher = teacherRepository.findByClassRoomId(idClass);
         if (teacher.isEmpty()) {
-            throw new ThereIsntTeacherInThisClass("This class doesn't have any teacher");
+            throw new ThereIsntTeacherInThisClassException("This class doesn't have any teacher");
         }
         return new TeacherDto(teacher.get());
     }
@@ -150,7 +151,7 @@ public class ClassRoomService implements GenericMethodService {
 
     @CacheEvict(value = {"classesRoomList", "studentsList","studentsListByClassRoom"}, allEntries = true)
     public ClassRoomDto addStudent(Long idClass, AddRemoveStudentForm addStudentForm) {
-        List<AddStudentCheck> validations = Arrays.asList(new ClassContainsSameStudent(), new StudentHasAnotherClass());
+        List<AddStudentCheck> validations = Arrays.asList(new FullList(), new ClassContainsSameStudent(), new StudentHasAnotherClass());
 
         ClassRoom classRoom = returnClass(idClass);
         Long idStudent = addStudentForm.getIdStudent();
@@ -237,7 +238,7 @@ public class ClassRoomService implements GenericMethodService {
             }
         }
         if (!exists) {
-            throw new StudentDoesntExistInThisClass("Doesn't have this student in this class");
+            throw new StudentDoesntExistInThisClassException("Doesn't have this student in this class");
         }
     }
 
