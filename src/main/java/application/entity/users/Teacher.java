@@ -3,10 +3,13 @@ package application.entity.users;
 
 import application.entity.ClassRoom;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "tb_teachers")
 public class Teacher extends User { // Classe do Banco - > Teacher
@@ -29,14 +32,6 @@ public class Teacher extends User { // Classe do Banco - > Teacher
         this.classRoom = classRoom;
     }
 
-
-    public ClassRoom getClassRoom() {
-        return classRoom;
-    }
-
-    public void setClassRoom(ClassRoom classRoom) {
-        this.classRoom = classRoom;
-    }
 
     @Override
     public String toString() {

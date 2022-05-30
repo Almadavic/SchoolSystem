@@ -49,7 +49,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter { // Cl
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/**").permitAll()
+				.antMatchers("/userarea/**").authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and().addFilterBefore(new AuthenticationJWTFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);

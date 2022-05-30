@@ -18,13 +18,13 @@ public interface TeacherRepository extends ExtendsUserRepository,JpaRepository<T
 
     @Override
     @Cacheable(value = "teachersList")
-    Page<Teacher> findAll(Pageable pagination);
+    Page<Teacher> findAll(Pageable pageable);
 
     @Override
     @Query(value = "select * from tb_teachers  " +
             "inner join tb_users on tb_teachers.id = tb_users.id " +
             "inner join tb_address on tb_users.id = tb_address.user_id " +
-            "inner join tb_users_roles on tb_users_roles.user_id = tb_users_roles.role_id " +         // Arrumar query, por as para diminuir o tamanho da query!
+            "inner join tb_users_roles on tb_users_roles.user_id = tb_users_roles.role_id " +
             "where tb_teachers.class_room_id is null",nativeQuery = true)
     List<Teacher> findAllWhereClassRoomIsNull();
 }

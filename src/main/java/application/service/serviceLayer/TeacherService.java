@@ -40,16 +40,14 @@ public class TeacherService implements ExtendsUserService {
 
     @Override
     public TeacherDto findById(Long id) {
-        Teacher teacher = returnTeacher(id);
+        Teacher teacher = returnUser(id);
         return new TeacherDto(teacher);
     }
 
-    private Teacher returnTeacher(Long id) {
+    @Override
+    public Teacher returnUser(Long id) {
         Optional<Teacher> teacher = teacherRepository.findById(id);
-        if (teacher.isEmpty()) {
-            throw new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase");
-        }
-        return teacher.get();
+        return teacher.orElseThrow(()->new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
     }
 
 
@@ -60,7 +58,7 @@ public class TeacherService implements ExtendsUserService {
         validations.forEach(v->v.validation(userForm,userRepository));
 
         Teacher teacher = new Teacher();
-        convertFromFormToUser(teacher, userForm);           // Ajustar método, não deixar o banco salavar um usuário com mesmo email!
+        convertFromFormToUser(teacher, userForm);
         Role role = roleRepository.findByName("ROLE_TEACHER").get();
         teacher.addRole(role);
         teacher = teacherRepository.save(teacher);

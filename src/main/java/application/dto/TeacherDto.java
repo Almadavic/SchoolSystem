@@ -4,7 +4,9 @@ import application.entity.users.Teacher;
 import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Getter;
 
+@Getter
 @JsonPropertyOrder({"id","name","email","classRoomId","address","roles"})
 public class TeacherDto extends UserDto { // Dto de Teacher
 
@@ -21,12 +23,5 @@ public class TeacherDto extends UserDto { // Dto de Teacher
         if(teacher.getClassRoom()!=null) {
             this.classRoomId = teacher.getClassRoom().getId();
         }
-    }
-    public Long getClassRoomId() {
-        return classRoomId;
-    }
-
-    public void setClassRoomId(Long classRoomId) {
-        this.classRoomId = classRoomId;
     }
 }

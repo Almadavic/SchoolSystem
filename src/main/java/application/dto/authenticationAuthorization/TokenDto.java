@@ -1,5 +1,9 @@
 package application.dto.authenticationAuthorization;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
 public class TokenDto { // Esse DTO tem como objetivo retornar para o usuário o HASH token e o type pro usuario quando ele se autentica
 	private String token;
 	private String type;
@@ -13,19 +17,4 @@ public class TokenDto { // Esse DTO tem como objetivo retornar para o usuário o
 		this.type = type;
 	}
 
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 }

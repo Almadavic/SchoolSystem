@@ -58,7 +58,7 @@ public class UserAreaService {
 
 
     private User returnUser(Principal user) {                                 // Método que retorna um usuário
-        User userDataBase = userRepository.findByEmail(user.getName()).get();
+        User userDataBase = userRepository.findByEmail(user.getName()).get(); // Não retorna um Optinal pois não tem como estar vazio!
         return userDataBase;
     }
 

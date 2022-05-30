@@ -51,13 +51,10 @@ public class UserService implements UserDetailsService, AllUserTypeService {
 
         return "User  : " + userInfo + " removed with success!";
     }
-
-    private User returnUser(Long id) {
+    @Override
+    public User returnUser(Long id) {
         Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
-            throw new ResourceNotFoundException("Id : " + id + ", This student wasn't found on DataBase");
-        }
-        return user.get();
+        return user.orElseThrow(()->new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
     }
 
     @Override

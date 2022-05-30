@@ -7,7 +7,6 @@ import application.entity.users.Student;
 import application.form.RegisterUserForm;
 import application.repository.RoleRepository;
 import application.repository.StudentRepository;
-import application.repository.TeacherRepository;
 import application.repository.UserRepository;
 import application.service.businessRule.RegisterUser.EmailAlreadyRegistered;
 import application.service.businessRule.RegisterUser.RegisterUserCheck;
@@ -45,7 +44,7 @@ public class StudentService  implements ExtendsUserService {
 
     @Override
     public StudentDto findById(Long id) {
-        Student student = returnStudent(id);
+        Student student = returnUser(id);
         return new StudentDto(student);
     }
 
@@ -55,24 +54,21 @@ public class StudentService  implements ExtendsUserService {
         List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered());
         validations.forEach(v -> v.validation(userForm, userRepository));
         Student student = new Student();
-        convertFromFormToUser(student, userForm);               // Ajustar método, não deixar o banco salavar um usuário com mesmo email!
+        convertFromFormToUser(student, userForm);
         Role role = roleRepository.findByName("ROLE_STUDENT").get();
         student.addRole(role);
         student = userRepository.save(student);
         return new StudentDto(student);
     }
 
-    private Student returnStudent(Long id) {
+    @Override
+    public Student returnUser(Long id) {
         Optional<Student> student = studentRepository.findById(id);
-        if (student.isEmpty()) {
-            throw new ResourceNotFoundException("Id : " + id + ", This student wasn't found on DataBase");
-        }
-        return student.get();
+        return student.orElseThrow(()->new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
     }
 
     @Override
     public List<StudentDto> verifyParameters(String noClass) {
-        System.out.println(noClass);
         List<Student> students = null;
         if (noClass != null) {
             if (noClass.toUpperCase().equals("TRUE")) {
@@ -85,7 +81,6 @@ public class StudentService  implements ExtendsUserService {
         } else {
             students = studentRepository.findAll();
         }
-        students.forEach(System.out::println);
         List<StudentDto> studentDtos = convertToDto(students);
         return studentDtos;
     }

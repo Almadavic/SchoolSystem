@@ -47,10 +47,10 @@ public class ClassRoomService implements GenericMethodService {
     private ClassRoomRepository classRepository;
 
     @Autowired
-    private StudentRepository studentRepository; // não remover
+    private StudentRepository studentRepository;
 
     @Autowired
-    private TeacherRepository teacherRepository; // não remover
+    private TeacherRepository teacherRepository;
 
     public Page<ClassRoomDto> findAll(Pageable pagination) {
         Page<ClassRoom> classes = classRepository.findAll(pagination);
@@ -73,18 +73,16 @@ public class ClassRoomService implements GenericMethodService {
     }
 
 
-    public StudentDto findStudentById(Long idClass, Long idStudent) {             // refatorar nativeQuery
+    public StudentDto findStudentById(Long idClass, Long idStudent) {
         ClassRoom classRoom = returnClass(idClass);
-        Student student = returnStudent(idStudent, classRoom, false);
+        Student student = returnStudent(classRoom,idStudent,false);
         return new StudentDto(student);
     }
 
     public TeacherDto findTeacher(Long idClass) {
+        returnClass(idClass); // Coloquei aqui para ver se roda a exception , para ver se a classe existe!
         Optional<Teacher> teacher = teacherRepository.findByClassRoomId(idClass);
-        if (teacher.isEmpty()) {
-            throw new ThereIsntTeacherInThisClassException("This class doesn't have any teacher");
-        }
-        return new TeacherDto(teacher.get());
+        return new TeacherDto(teacher.orElseThrow(()->  new ThereIsntTeacherInThisClassException("This class doesn't have any teacher")));
     }
 
     @CacheEvict(value = {"classesRoomList", "studentsListByClassRoom"}, allEntries = true)
@@ -92,7 +90,7 @@ public class ClassRoomService implements GenericMethodService {
         List<UpdateCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed());
 
         ClassRoom classRoom = returnClass(idClass);
-        Student student = returnStudent(idStudent, classRoom, false);
+        Student student = returnStudent(classRoom, idStudent,false);
 
         validations.forEach(v -> v.validation(newGrades, classRoom, user));
 
@@ -155,7 +153,7 @@ public class ClassRoomService implements GenericMethodService {
 
         ClassRoom classRoom = returnClass(idClass);
         Long idStudent = addStudentForm.getIdStudent();
-        Student student = returnStudent(idStudent, classRoom, true);
+        Student student = returnStudent(classRoom,idStudent, true);
 
 
         ClassRoom finalClassRoom = classRoom;
@@ -175,7 +173,7 @@ public class ClassRoomService implements GenericMethodService {
 
         ClassRoom classRoom = returnClass(idClass);
         Long idStudent = removeStudentForm.getIdStudent();
-        Student student = returnStudent(idStudent, classRoom, false);
+        Student student = returnStudent(classRoom,idStudent, false);
         student.setClassRoom(null);
         classRoom.getStudents().removeIf(s -> s.getId().equals(student.getId()));
         classRoom = classRepository.save(classRoom);
@@ -199,7 +197,7 @@ public class ClassRoomService implements GenericMethodService {
        try {
            classRepository.delete(classRoom);
        }catch(DataIntegrityViolationException e) {
-           throw new DatabaseException("You can't delete a class that has teachers and students!");
+           throw new DatabaseException("You can't delete a class that has teachers and students, remove them first!");
        }
         return "Class : "+idClass+" removed!";
     }
@@ -207,47 +205,22 @@ public class ClassRoomService implements GenericMethodService {
 
     private ClassRoom returnClass(Long idClass) {
         Optional<ClassRoom> classRoom = classRepository.findById(idClass);
-        if (classRoom.isEmpty()) {
-            throw new ResourceNotFoundException("Id : " + idClass + ", This class wasn't found on DataBase");
-        }
-        return classRoom.get();
+        return classRoom.orElseThrow(()-> new ResourceNotFoundException("Id : " + idClass + ", This class wasn't found on DataBase"));
     }
 
-    private Student returnStudent(Long idStudent, ClassRoom classRoom, boolean addMethod) {   // boolean addMethod - Se for o metodo de adicionar chamando,
+    private Student returnStudent(ClassRoom classRoom,Long idStudent,  boolean addMethod) {   // boolean addMethod - Se for o metodo de adicionar chamando,
         // pois se for, tem q chamar uma exception especifica e tirar outra.
-        Optional<Student> student = studentRepository.findById(idStudent);
-        studentDoesNotExist(student, idStudent);
-        if (!addMethod) {
-            studentDoesntExistInThisClass(student, classRoom);
+        Optional<Student> studentOptionalDataBase = studentRepository.findById(idStudent); // Pesquisar se o aluno existe no BANCO, se n existir, erro na linha 220!
+        if (!addMethod) {  // SE NÃO FOR O MÉTODO DE ADICIONAR
+            Student studentOptionalClass = studentRepository.findStudentById(classRoom.getId(),idStudent)// Pesquisa se o aluno existe nessa CLASSE!
+                    .orElseThrow(()-> new StudentDoesntExistInThisClassException("This student isn't in this classroom")); // Se não existir, ERRO!
         }
-        return student.get();
-    }
-
-    private void studentDoesNotExist(Optional<Student> student, Long idStudent) {
-        if (student.isEmpty()) {
-            throw new ResourceNotFoundException("Id : " + idStudent + ", This student wasn't found on DataBase");
-        }
-
-    }
-
-    private void studentDoesntExistInThisClass(Optional<Student> student, ClassRoom classRoom) {
-        boolean exists = false;
-        for (Student studentList : classRoom.getStudents()) {
-            if (studentList.getId() == student.get().getId()) {                  // A classe está funcional, mas pode melhorar mais a arquitetura!
-                exists = true;
-            }
-        }
-        if (!exists) {
-            throw new StudentDoesntExistInThisClassException("Doesn't have this student in this class");
-        }
+        return studentOptionalDataBase.orElseThrow(()->new ResourceNotFoundException("Id : " + idStudent + ", This student wasn't found on DataBase"));
     }
 
     private Teacher returnTeacher(Long idTeacher) {
         Optional<Teacher> teacher = teacherRepository.findById(idTeacher);
-        if (teacher.isEmpty()) {
-            throw new ResourceNotFoundException("Id : " + idTeacher + ", This teacher wasn't found on DataBase");
-        }
-        return teacher.get();
+        return teacher.orElseThrow(()-> new ResourceNotFoundException("Id : " + idTeacher + ", This teacher wasn't found on DataBase"));
     }
 
     private void approve(Student student) {

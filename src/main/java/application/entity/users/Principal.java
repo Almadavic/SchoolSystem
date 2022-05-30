@@ -1,11 +1,13 @@
 package application.entity.users;
 
 import application.entity.Responsibility;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "tb_principals")
 public class Principal extends User { // Classe do Banco - > Principal| Filha de User | Representa os diretores no banco
@@ -28,8 +30,6 @@ public class Principal extends User { // Classe do Banco - > Principal| Filha de
         super(nome, email, password);
     }
 
-    public List<Responsibility> getResponsibilities() {
-        return responsibilities;
-    }
+
 
 }

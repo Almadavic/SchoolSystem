@@ -5,11 +5,13 @@ import application.entity.users.Principal;
 import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 @JsonPropertyOrder(value = {"id","name","email","classRoomId","address","roles","responsibilities"})
 public class PrincipalDto extends UserDto{
 
@@ -29,8 +31,5 @@ public class PrincipalDto extends UserDto{
         return responsibilities.stream().map(ResponsibilityDto::new).collect(Collectors.toList());
     }
 
-    public List<ResponsibilityDto> getResponsibilitiesDto() {
-        return responsibilitiesDto;
-    }
 
 }

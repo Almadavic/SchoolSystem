@@ -4,10 +4,11 @@ import application.entity.users.Student;
 import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Getter;
 
-
+@Getter
 @JsonPropertyOrder({"id", "name", "email", "classRoomId", "reportCard", "address", "roles"})
-public class StudentDto extends UserDto { // Dto da classe Student
+public class StudentDto extends UserDto implements Comparable<StudentDto>{ // Dto da classe Student
 
     @JsonProperty(value = "reportCard")
     private ReportCardDto reportCardDto;
@@ -28,19 +29,8 @@ public class StudentDto extends UserDto { // Dto da classe Student
         this.reportCardDto = new ReportCardDto(student.getReportCard());
     }
 
-    public ReportCardDto getReportCardDto() {
-        return reportCardDto;
-    }
-
-    public void setReportCardDto(ReportCardDto reportCardDto) {
-        this.reportCardDto = reportCardDto;
-    }
-
-    public Long getClassRoomId() {
-        return classRoomId;
-    }
-
-    public void setClassRoomId(Long classRoomId) {
-        this.classRoomId = classRoomId;
+    @Override
+    public int compareTo(StudentDto studentDto) {
+        return getName().compareTo(studentDto.getName());
     }
 }

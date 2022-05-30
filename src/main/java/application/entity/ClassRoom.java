@@ -2,6 +2,7 @@ package application.entity;
 
 import application.entity.users.Student;
 import application.entity.users.Teacher;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter                    // Não tem setter para não quebrar o encapsulamento e ter setter de List
 @Entity
 @Table(name = "tb_classes")
 public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoom | Entidade Principal | Representa as Salas de Aula do Sistema |
@@ -26,6 +28,7 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
     @OneToOne(mappedBy = "classRoom", cascade = CascadeType.ALL)
     private Teacher teacher;       // Uma classe tem 1 teacher
 
+    
     @OneToMany(mappedBy = "classRoom")
     public List<Student> students = new ArrayList<>(); // Uma classe tem uma lista de alunos
 
@@ -52,41 +55,20 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
             sum = sum + student.getReportCard().getAverageStudent();      // Pode ser trocado para steam!!!
         }
         double average = sum/students.size();
-        double decimal = Math.round(average * 10.0 ) / 10.0;
         return average;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Character getLetter() {
-        return letter;
     }
 
     public void setLetter(Character letter) {
         this.letter = letter;
     }
 
-
-    public ClassShift getClassShift() {
-        return classShift;
-    }
-
     public void setClassShift(ClassShift classShift) {
         this.classShift = classShift;
     }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
 
-    public List<Student> getStudents() {
-        return students;
-    }
+
 }

@@ -13,4 +13,6 @@ public interface AllUserTypeService<T> extends GenericMethodService {
 
     List<UserDto> verifyParameters(String parameter);
 
+    User returnUser(Long id);
+
 }

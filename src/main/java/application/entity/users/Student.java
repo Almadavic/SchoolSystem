@@ -3,9 +3,12 @@ package application.entity.users;
 import application.entity.ClassRoom;
 import application.entity.ReportCard;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-
+@Getter
+@Setter
 @Entity
 @Table(name = "tb_students")
 public class Student extends User { // Classe do Banco -> Student | Filha de User | Representa os Alunos do sistema.
@@ -31,22 +34,6 @@ public class Student extends User { // Classe do Banco -> Student | Filha de Use
     private void instanceReportCard() {
         this.reportCard = new ReportCard();
         this.reportCard.setStudent(this);
-    }
-
-    public ClassRoom getClassRoom() {
-        return classRoom;
-    }
-
-    public void setClassRoom(ClassRoom classRoom) {
-        this.classRoom = classRoom;
-    }
-
-    public ReportCard getReportCard() {
-        return reportCard;
-    }
-
-    public void setReportCard(ReportCard reportCard) {
-        this.reportCard = reportCard;
     }
 
     @Override

@@ -5,11 +5,13 @@ import application.entity.users.Student;
 import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 @JsonPropertyOrder({"id", "name", "email", "address", "roles"})
 public class UserDto { // Dto da classe User
 
@@ -51,39 +53,4 @@ public class UserDto { // Dto da classe User
 
     public void removeRoleDto(Long id) { rolesDto.remove(id);} // Remove uma Role
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<RoleDto> getRolesDto() {
-        return rolesDto;
-    }
-
-    public AddressDto getAddressDto() {
-        return addressDto;
-    }
-
-    public void setAddressDto(AddressDto addressDto) {
-        this.addressDto = addressDto;
-    }
 }

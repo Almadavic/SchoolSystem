@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;
@@ -20,11 +21,12 @@ public class Role implements GrantedAuthority { // A classe que representam os p
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
     @JsonIgnore
     @ManyToMany(mappedBy="roles")
     private List<User> users = new ArrayList<>(); // Um perfil tem uma lista de Usuários associados a ele.
 
-    private String name;
 
     public Role() {
 
@@ -36,7 +38,6 @@ public class Role implements GrantedAuthority { // A classe que representam os p
 
 
     public Long getId() {
-
         return id;
     }
 
@@ -52,6 +53,11 @@ public class Role implements GrantedAuthority { // A classe que representam os p
     @Override
     public String getAuthority() {
         return name;
+    }
+
+
+    public List<User> getUsers() {
+        return users;
     }
 
 }

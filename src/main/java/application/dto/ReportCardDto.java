@@ -4,7 +4,9 @@ import application.entity.ReportCard;
 import application.entity.Situation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Getter;
 
+@Getter
 @JsonPropertyOrder({"grade1", "grade2", "grade3", "averageGrade", "situation"})
 public class ReportCardDto { // Dto da classe ReportCard
 
@@ -36,36 +38,4 @@ public class ReportCardDto { // Dto da classe ReportCard
         return decimal;
     }
 
-    public Double getGrade1() {
-        return grade1;
-    }
-
-    public void setGrade1(Double grade1) {
-        this.grade1 = grade1;
-    }
-
-    public Double getGrade2() {
-        return grade2;
-    }
-
-    public void setGrade2(Double grade2) {
-        this.grade2 = grade2;
-    }
-
-    public Double getGrade3() {
-        return grade3;
-    }
-
-    public void setGrade3(Double grade3) {
-        this.grade3 = grade3;
-    }
-
-
-    public Situation getSituation() {
-        return situation;
-    }
-
-    public void setSituation(Situation situation) {
-        this.situation = situation;
-    }
 }

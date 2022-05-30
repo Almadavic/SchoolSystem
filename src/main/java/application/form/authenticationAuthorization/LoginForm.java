@@ -1,11 +1,13 @@
 package application.form.authenticationAuthorization;
 
+import lombok.Getter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.validation.constraints.NotBlank;
 
 
 // Form é praticamente a mesma coisa que DTO porém os Form são das requisições que chegam, e o DTOs são as respostas que voltam!
+@Getter
 public class LoginForm { // Form que representa o Login do usuário, email e senha!
 
 	@NotBlank
@@ -14,21 +16,6 @@ public class LoginForm { // Form que representa o Login do usuário, email e sen
 	@NotBlank
 	private String password;
 
-	public String getEmail() {
-		return email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
 
 	public UsernamePasswordAuthenticationToken toConvert() {
 		return new UsernamePasswordAuthenticationToken(email, password);

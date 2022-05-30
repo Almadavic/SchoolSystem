@@ -10,5 +10,4 @@ public interface ExtendsUserRepository  {
 
     List<? extends User> findAllWhereClassRoomIsNull();
 
-    Optional<User> findByEmail(String name);
 }

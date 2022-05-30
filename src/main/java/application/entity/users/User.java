@@ -2,6 +2,8 @@ package application.entity.users;
 
 import application.entity.Address;
 import application.entity.Role;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;

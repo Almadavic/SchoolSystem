@@ -2,11 +2,13 @@ package application.entity;
 
 import application.entity.users.Principal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "tb_responsabilities")
 public class Responsibility {
@@ -28,24 +30,15 @@ public class Responsibility {
           this.name=name;
       }
 
-      public Long getId() {
-            return id;
-      }
 
       public void setId(Long id) {
             this.id = id;
       }
 
-      public String getName() {
-            return name;
-      }
 
       public void setName(String name) {
             this.name = name;
       }
 
-      public List<Principal> getPrincipals() {
-            return principals;
-      }
 
 }
