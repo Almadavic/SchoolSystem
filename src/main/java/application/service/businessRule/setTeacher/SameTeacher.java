@@ -7,7 +7,6 @@ import application.service.exception.classRoomService.SameTeacherException;
 
 public class SameTeacher implements SetTeacherCheck {
     @Override
-
     public void validation(Teacher teacher, Teacher classTeacher) {
         if(classTeacher!=null) {
             if (classTeacher.getId() == teacher.getId()) {

@@ -6,6 +6,7 @@ import application.entity.users.Student;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@NoArgsConstructor
 @JsonPropertyOrder({"idClass", "letter", "classShift", "teacher", "numberStudents", "students", "averageClassGrade"})
 public class ClassRoomDto {    // DTO da classe ClassRoom
 
@@ -33,10 +35,6 @@ public class ClassRoomDto {    // DTO da classe ClassRoom
     private  List<StudentDto> studentsDto = new ArrayList<>();
     @JsonProperty("averageClassGrade")
     private Double averageClassGrade;
-
-    public ClassRoomDto() {
-
-    }
 
     public ClassRoomDto(ClassRoom classRoom) {      // Transformando uma ClassRoom em ClassRoomDto
         this.idClass = classRoom.getId();

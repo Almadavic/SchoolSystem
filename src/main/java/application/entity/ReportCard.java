@@ -2,6 +2,7 @@ package application.entity;
 
 
 import application.entity.users.Student;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,8 +18,8 @@ public class ReportCard implements Serializable {  // Classe do Banco - > Report
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Long id;
     private Double grade1;
     private Double grade2;

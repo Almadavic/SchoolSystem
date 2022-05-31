@@ -6,12 +6,14 @@ import application.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@NoArgsConstructor
 @JsonPropertyOrder({"id", "name", "email", "address", "roles"})
 public class UserDto { // Dto da classe User
 
@@ -30,11 +32,6 @@ public class UserDto { // Dto da classe User
     private List<RoleDto> rolesDto = new ArrayList<>();
 
 
-    public UserDto() {
-
-    }
-
-
     public UserDto(User user) { // Método que transforma um User em UserDto
         this.email = user.getEmail();
         this.name = user.getName();
@@ -46,11 +43,5 @@ public class UserDto { // Dto da classe User
     private List<RoleDto> convertList(List<Role> roles) {                    // Método converte uma lista de Role para RolesDto
         return roles.stream().map(RoleDto::new).collect(Collectors.toList());
     }
-
-    public void addRoleDto(RoleDto roleDto) {
-        rolesDto.add(roleDto);
-    } // Adiciona uma Role
-
-    public void removeRoleDto(Long id) { rolesDto.remove(id);} // Remove uma Role
 
 }

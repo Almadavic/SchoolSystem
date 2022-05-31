@@ -2,43 +2,34 @@ package application.entity;
 
 import application.entity.users.Principal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_responsabilities")
 public class Responsibility {
 
-      @Id
-      @GeneratedValue
+      @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+      @Setter(AccessLevel.NONE)
       private Long id;
       private String name;
 
       @JsonIgnore
       @ManyToMany(mappedBy = "responsibilities")
+      @Setter(AccessLevel.NONE)
       private List<Principal> principals = new ArrayList<>();
-
-      public Responsibility() {
-
-      }
 
       public Responsibility(String name) {
           this.name=name;
       }
-
-
-      public void setId(Long id) {
-            this.id = id;
-      }
-
-
-      public void setName(String name) {
-            this.name = name;
-      }
-
 
 }

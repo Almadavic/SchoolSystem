@@ -7,6 +7,7 @@ import application.service.exception.general.InvalidParamException;
 import application.service.exception.general.NoPermissionException;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.exception.studentAreaService.SamePasswordException;
+import application.service.exception.studentAreaService.ShortPasswordException;
 import application.service.exception.usersService.EmailAlreadyRegisteredException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -112,6 +113,14 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
     }
 
 
+    @ExceptionHandler(ShortPasswordException.class) // Quando a senha é muito pequena para ser alterada !
+    public ResponseEntity<StandardError> shortPassword(ShortPasswordException e, HttpServletRequest request) {
+        String error = "Short password";
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
     @ExceptionHandler(ThereIsntTeacherInThisClassException.class) // Quando a classe não tem nenhum professor!
     public ResponseEntity<StandardError> thereIsntTeacherInThisClass(ThereIsntTeacherInThisClassException e, HttpServletRequest request) {
         String error = "No teachers here";
@@ -151,6 +160,7 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
+
 
 
     // AVISO ---- ARRUMAR OS ERROS QUANDO SÃO LANÇADOS NO THROW, ARRUMAR A MENSAGEM PQ DO JEITO QUE ESTÁ, ESTÁ MUITO ESTRANHO

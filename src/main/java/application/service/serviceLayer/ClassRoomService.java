@@ -175,7 +175,7 @@ public class ClassRoomService implements GenericMethodService {
         Long idStudent = removeStudentForm.getIdStudent();
         Student student = returnStudent(classRoom,idStudent, false);
         student.setClassRoom(null);
-        classRoom.getStudents().removeIf(s -> s.getId().equals(student.getId()));
+        classRoom.removeStudent(student);
         classRoom = classRepository.save(classRoom);
 
         return new ClassRoomDto(classRoom);

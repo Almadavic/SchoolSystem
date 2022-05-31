@@ -5,8 +5,10 @@ import application.entity.Situation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @JsonPropertyOrder({"grade1", "grade2", "grade3", "averageGrade", "situation"})
 public class ReportCardDto { // Dto da classe ReportCard
 
@@ -19,10 +21,6 @@ public class ReportCardDto { // Dto da classe ReportCard
     private Double grade3;
     @JsonProperty("situation")
     private Situation situation;
-
-    public ReportCardDto() {
-
-    }
 
     public ReportCardDto(ReportCard reportCard) {    // Transformando um ReportCard em ReportCardDto
         this.grade1 = reportCard.getGrade1();

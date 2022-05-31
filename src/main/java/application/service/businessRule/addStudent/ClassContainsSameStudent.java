@@ -3,12 +3,14 @@ package application.service.businessRule.addStudent;
 
 import application.entity.ClassRoom;
 import application.entity.users.Student;
+import application.service.exception.classRoomService.ClassContainsSameStudentException;
 
-public class ClassContainsSameStudent implements AddStudentCheck {
+public class ClassContainsSameStudent implements AddStudentCheck{
     @Override
     public void validation(Student student, ClassRoom classRoom) { // O aluno não pode já estar na própria sala
-     //  throw  classRoom.getStudents().stream().filter(studentClass -> student.equals(studentClass))                    // NÃO FUNCIONAL!! ARUMAR UM JEITO !
-       // .map(ResourceNotFoundException::new).iterator().next();
+      if (classRoom.getStudents().stream().anyMatch(studentClass -> studentClass.equals(student))) {
+       throw new ClassContainsSameStudentException("This student already is in this classroom");
+      }
     }
 
 }

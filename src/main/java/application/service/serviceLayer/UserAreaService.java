@@ -9,12 +9,18 @@ import application.entity.users.Teacher;
 import application.entity.users.User;
 import application.form.NewPasswordForm;
 import application.repository.UserRepository;
+import application.service.businessRule.ChangePassword.ChangePasswordCheck;
+import application.service.businessRule.ChangePassword.SamePassword;
+import application.service.businessRule.ChangePassword.ShortPassword;
 import application.service.exception.studentAreaService.SamePasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class UserAreaService {
@@ -33,27 +39,22 @@ public class UserAreaService {
           }
     }
 
-    public String changePassword(Principal user, NewPasswordForm newPasswordForm) { // Posso fazer uma lista de SOLID AQUI DENTRO!, checkPassword sendo uma das regras de negocio, e implementar mais!
+    public String changePassword(Principal user, NewPasswordForm newPasswordForm) { // Posso fazer uma lista de SOLID AQUI DENTRO!, checkPassword sendo uma das regras de negocio, e implementar mais!Li
+
+        List<ChangePasswordCheck> validations = Arrays.asList(new SamePassword(),new ShortPassword());
 
         User userDataBase = returnUser(user);
         String newPassword = newPasswordForm.getNewPassword();
         String oldPassword = userDataBase.getPassword();
-        String newPasswordEncoder = new BCryptPasswordEncoder().encode(newPassword);
-        System.out.println("------------------------------------VELHA : " + oldPassword);
-        System.out.println("-----------------------------------NOVA : " + newPasswordEncoder);
-        checkPasswords(newPasswordEncoder, oldPassword); // MÉTODO de verificar se senha é igual, ainda NÃO FUNCIONA!
-        userDataBase.setPassword(newPasswordEncoder);
+
+        validations.forEach(v -> v.validation(newPassword,oldPassword));
+
+        String newPasswordEncoded = new BCryptPasswordEncoder().encode(newPassword);
+
+        userDataBase.setPassword(newPasswordEncoded);
         userRepository.save(userDataBase);
 
         return "SUCCESS! You just changed your password!";
-    }
-
-
-    private void checkPasswords(String oldPassword, String newPassword) {     // MÉTODO de verificar se senha é igual, ainda NÃO FUNCIONA! //
-
-        if (oldPassword.equals(newPassword)) {
-            throw new SamePasswordException("Your new password can't be equal the last one");
-        }
     }
 
 

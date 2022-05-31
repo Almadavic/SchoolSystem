@@ -2,7 +2,10 @@ package application.entity;
 
 import application.entity.users.Student;
 import application.entity.users.Teacher;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -10,7 +13,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter                    // Não tem setter para não quebrar o encapsulamento e ter setter de List
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_classes")
 public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoom | Entidade Principal | Representa as Salas de Aula do Sistema |
@@ -18,8 +23,8 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Long id;
     private Character letter;
     @Enumerated(EnumType.STRING)
@@ -30,11 +35,8 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
 
     
     @OneToMany(mappedBy = "classRoom")
+    @Setter(AccessLevel.NONE)
     public List<Student> students = new ArrayList<>(); // Uma classe tem uma lista de alunos
-
-    public ClassRoom() {
-
-    }
 
     public ClassRoom(Character letter, ClassShift classShift) {
         this.letter = Character.toUpperCase(letter);
@@ -45,8 +47,8 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
         students.add(student);
     }
 
-    public void removeStudent(int id) {     // Remove um estudante
-        students.remove(id);
+    public void removeStudent(Student student) {     // Remove um estudante
+        students.remove(student);
     }
 
     public double getAverageClass() {          // Método que retorna a média total dos alunos da Classe !
@@ -57,18 +59,5 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
         double average = sum/students.size();
         return average;
     }
-
-    public void setLetter(Character letter) {
-        this.letter = letter;
-    }
-
-    public void setClassShift(ClassShift classShift) {
-        this.classShift = classShift;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
 
 }
