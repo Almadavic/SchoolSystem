@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -49,6 +50,19 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter { // Cl
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+				.antMatchers("/auth").permitAll()
+				.antMatchers(HttpMethod.GET,"/classes").hasRole("PRINCIPAL")
+				.antMatchers(HttpMethod.GET,"/classes/{id}").hasRole("PRINCIPAL")
+				.antMatchers(HttpMethod.GET,"/classes/{id}/students").hasAnyRole("PRINCIPAL","TEACHER")
+				.antMatchers(HttpMethod.GET,"/classes/{id}/students/{id}").hasAnyRole("PRINCIPAL","TEACHER")
+				.antMatchers(HttpMethod.GET,"/classes/{id}/teacher").hasAnyRole("PRINCIPAL","TEACHER")
+				.antMatchers(HttpMethod.PUT,"/classes/{idClass}/students/{idStudent}/updategrades").hasRole("TEACHER")
+				.antMatchers(HttpMethod.POST,"/classes/createclassroom").hasRole("PRINCIPAL")
+				.antMatchers(HttpMethod.PUT,"/classes/{id}/setteacher").hasRole("PRINCIPAL")
+				.antMatchers(HttpMethod.PUT,"/classes/{id}/addstudent").hasRole("PRINCIPAL")
+				.antMatchers(HttpMethod.PUT,"/classes/{id}/removestudent").hasRole("PRINCIPAL")
+				.antMatchers(HttpMethod.PUT,"/classes/{id}/removeteacher").hasRole("PRINCIPAL")
+				.antMatchers(HttpMethod.DELETE,"/classes/{id}/removeclass").hasRole("PRINCIPAL")    // TERMINOU TODAS DO CONTROLLER ClassRoomController
 				.antMatchers("/userarea/**").authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

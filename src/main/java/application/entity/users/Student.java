@@ -2,7 +2,6 @@ package application.entity.users;
 
 import application.entity.ClassRoom;
 import application.entity.ReportCard;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +15,7 @@ public class Student extends User { // Classe do Banco -> Student | Filha de Use
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
     private ReportCard reportCard;         // Um Estudante tem um boletim.
 
-    @JsonIgnore
+
     @ManyToOne
     private ClassRoom classRoom; // Uma Classe tem muitos estudantes.
 

@@ -38,8 +38,8 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
 
     @ExceptionHandler(NoPermissionException.class)        // Sem permissão para fazer alguma operação dentro do sistema.
     public ResponseEntity<StandardError> noPermission(NoPermissionException e, HttpServletRequest request) {
-        String error = "No permission error";
-        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        String error = "Forbidden";
+        HttpStatus status = HttpStatus.FORBIDDEN;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
@@ -157,6 +157,14 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
     public ResponseEntity<StandardError> emailAlreadyRegistered(EmailAlreadyRegisteredException e, HttpServletRequest request) {
         String error = "Email already exists";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(TeacherDoesntHaveAnyClass.class) // Quando tenta buscar a sala do professor porém o professor não tem nenhuma sala !
+    public ResponseEntity<StandardError> teacherDoesntHaveAnyClass(TeacherDoesntHaveAnyClass e, HttpServletRequest request) {
+        String error = "This teacher doesn't have any class";
+        HttpStatus status = HttpStatus.NOT_FOUND;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }

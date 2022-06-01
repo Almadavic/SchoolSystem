@@ -1,7 +1,6 @@
 package application.entity;
 
 import application.entity.users.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +27,6 @@ public class Address implements Serializable { // Classe do Banco - > Address | 
     private String state;
     private String country;
 
-    @JsonIgnore
     @OneToOne
     @MapsId
     private User user; // Um endereço tem 1 usuário associado

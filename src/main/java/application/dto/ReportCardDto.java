@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@JsonPropertyOrder({"grade1", "grade2", "grade3", "averageGrade", "situation"})
+@JsonPropertyOrder(value = {"grade1", "grade2", "grade3", "averageGrade", "situation"})
 public class ReportCardDto { // Dto da classe ReportCard
 
 
-    @JsonProperty("grade1")
+    @JsonProperty(value = "grade1")
     private Double grade1;
-    @JsonProperty("grade2")
+    @JsonProperty(value = "grade2")
     private Double grade2;
-    @JsonProperty("grade3")
+    @JsonProperty(value = "grade3")
     private Double grade3;
-    @JsonProperty("situation")
+    @JsonProperty(value = "situation")
     private Situation situation;
 
     public ReportCardDto(ReportCard reportCard) {    // Transformando um ReportCard em ReportCardDto

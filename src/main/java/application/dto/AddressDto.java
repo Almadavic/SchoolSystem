@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
-@JsonPropertyOrder({"city","state","country"}) // Ordenação de atributos
+@JsonPropertyOrder(value = {"city","state","country"}) // Ordenação de atributos
 public class AddressDto {  // DTO da classe Address
     @JsonProperty(value="city") // nome do atributo, para ordenar na linha 9
     private String city;

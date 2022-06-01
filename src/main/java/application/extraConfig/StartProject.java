@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 
+import java.time.Instant;
 import java.util.Arrays;
 
 
@@ -48,6 +49,12 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
         Student u4 = new Student("Marcos Almeida", "marcos@gmail.com", senhaEncode, null);
         Principal principal = new Principal("Barbara Borges", "barbara@gmail.com", senhaEncode);
 
+        Registration registration1 = new Registration(Instant.parse("2019-06-20T19:53:07Z"),u1);
+        Registration registration2 = new Registration(Instant.parse("2019-07-21T03:42:10Z"),u2);
+        Registration registration3 = new Registration(Instant.parse("2019-07-22T15:21:22Z"),u3);
+        Registration registration4 = new Registration(Instant.parse("2019-06-20T19:53:07Z"),u4);
+        Registration registration5 = new Registration(Instant.parse("2019-07-21T03:42:10Z"),principal);
+
         Address a1 = new Address("Brasil", "Minas Gerais", "Belo Horizonte", u1);
         Address a2 = new Address("EUA", "Georgia", "Atlanta", u2);
         Address a3 = new Address("EUA", "Florida", "Tampa", u3);
@@ -65,7 +72,11 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
         principal.addResponsibility(r3);
         principal.addResponsibility(r4);
 
-
+        u1.setRegistration(registration1);
+        u2.setRegistration(registration2);
+        u3.setRegistration(registration3);
+        u4.setRegistration(registration4);
+        principal.setRegistration(registration5);
         u1.setAddress(a1);
         u2.setAddress(a2);
         u3.setAddress(a3);
@@ -79,7 +90,9 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
 
         Teacher teacher1 = new Teacher("Raphael", "raphael@gmail.com", senhaEncode, cr1);
         Address a5 = new Address("EUA", "Florida", "Tampa", teacher1);
+        Registration registration6 = new Registration(Instant.parse("2019-07-21T03:42:10Z"),teacher1);
         teacher1.setAddress(a5);
+        teacher1.setRegistration(registration6);
 
         userRepository.save(teacher1);
 
@@ -106,8 +119,10 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
 
         Teacher teacher2 = new Teacher("Euni", "euni@gmail.com", senhaEncode);
         Address a6 = new Address("Brasil", "Bahia", "Salvador", teacher2);
+        Registration registration7 = new Registration(Instant.parse("2019-07-21T03:42:10Z"),teacher2);
         teacher2.addRole(role2);
         teacher2.setAddress(a6);
+        teacher2.setRegistration(registration7);
         userRepository.save(teacher2);
 
 

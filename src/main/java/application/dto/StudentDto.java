@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "name", "email", "classRoomId", "reportCard", "address", "roles"})
+@JsonPropertyOrder(value = {"id", "name", "email", "classRoomId", "reportCard", "address", "roles", "registration"})
 public class StudentDto extends UserDto implements Comparable<StudentDto>{ // Dto da classe Student
 
     @JsonProperty(value = "reportCard")

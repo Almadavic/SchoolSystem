@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @JsonPropertyOrder(value = {"name"})
 public class ResponsibilityDto {
 
-    @JsonProperty("name")
+    @JsonProperty(value = "name")
     private String name;
 
     public ResponsibilityDto(Responsibility responsibility) {

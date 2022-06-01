@@ -12,13 +12,11 @@ import application.repository.UserRepository;
 import application.service.businessRule.ChangePassword.ChangePasswordCheck;
 import application.service.businessRule.ChangePassword.SamePassword;
 import application.service.businessRule.ChangePassword.ShortPassword;
-import application.service.exception.studentAreaService.SamePasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +39,7 @@ public class UserAreaService {
 
     public String changePassword(Principal user, NewPasswordForm newPasswordForm) { // Posso fazer uma lista de SOLID AQUI DENTRO!, checkPassword sendo uma das regras de negocio, e implementar mais!Li
 
-        List<ChangePasswordCheck> validations = Arrays.asList(new SamePassword(),new ShortPassword());
+        List<ChangePasswordCheck> validations = Arrays.asList(new SamePassword(), new ShortPassword());
 
         User userDataBase = returnUser(user);
         String newPassword = newPasswordForm.getNewPassword();
@@ -59,7 +57,7 @@ public class UserAreaService {
 
 
     private User returnUser(Principal user) {                                 // Método que retorna um usuário
-        User userDataBase = userRepository.findByEmail(user.getName()).get(); // Não retorna um Optinal pois não tem como estar vazio!
+        User userDataBase = userRepository.findByEmail(user.getName()).get(); // Não retorna um Optional pois não tem como estar vazio!
         return userDataBase;
     }
 

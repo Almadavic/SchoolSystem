@@ -12,9 +12,9 @@ public class TeacherAllowed implements UpdateCheck {
         newGrades = null;     //  Nullos porquê não tem função nessa classe.
 
         String userLoggedName = user.getName();
-        String teacherName = classRoom.getTeacher().getEmail();
+        String teacherClassName = classRoom.getTeacher().getEmail();
 
-        if (!teacherName.equals(userLoggedName)) {
+        if (!teacherClassName.equals(userLoggedName)) {
             throw new NoPermissionException("Permission required to access this! Just the class's Teacher can access this!");
         }
 

@@ -23,7 +23,6 @@ public class Responsibility {
       private Long id;
       private String name;
 
-      @JsonIgnore
       @ManyToMany(mappedBy = "responsibilities")
       @Setter(AccessLevel.NONE)
       private List<Principal> principals = new ArrayList<>();

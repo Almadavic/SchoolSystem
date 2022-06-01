@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@JsonPropertyOrder({"id","name","email","classRoomId","address","roles"})
+@JsonPropertyOrder(value = {"id","name","email","classRoomId","address", "roles", "registration"})
 public class TeacherDto extends UserDto { // Dto de Teacher
 
     @JsonProperty(value = "classRoomId")

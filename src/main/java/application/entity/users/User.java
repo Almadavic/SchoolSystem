@@ -1,6 +1,7 @@
 package application.entity.users;
 
 import application.entity.Address;
+import application.entity.Registration;
 import application.entity.Role;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,6 +36,10 @@ public abstract class User implements UserDetails, Serializable { // Classe  do 
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Address address;                // Um usuário tem 1 endereço.
+
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Registration registration;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tb_users_roles",

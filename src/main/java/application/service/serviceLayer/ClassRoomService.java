@@ -4,6 +4,7 @@ package application.service.serviceLayer;
 import application.dto.ClassRoomDto;
 import application.entity.ClassShift;
 import application.entity.Situation;
+import application.entity.users.User;
 import application.form.*;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
@@ -13,6 +14,7 @@ import application.entity.users.Teacher;
 import application.repository.ClassRoomRepository;
 import application.repository.StudentRepository;
 import application.repository.TeacherRepository;
+import application.repository.UserRepository;
 import application.service.businessRule.addStudent.AddStudentCheck;
 import application.service.businessRule.addStudent.ClassContainsSameStudent;
 import application.service.businessRule.addStudent.FullList;
@@ -24,8 +26,10 @@ import application.service.businessRule.updateGrades.GradeLimit;
 import application.service.businessRule.updateGrades.TeacherAllowed;
 import application.service.businessRule.updateGrades.UpdateCheck;
 import application.service.exception.classRoomService.StudentDoesntExistInThisClassException;
+import application.service.exception.classRoomService.TeacherDoesntHaveAnyClass;
 import application.service.exception.classRoomService.ThereIsntTeacherInThisClassException;
 import application.service.exception.general.DatabaseException;
+import application.service.exception.general.NoPermissionException;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.GenericMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +56,9 @@ public class ClassRoomService implements GenericMethodService {
     @Autowired
     private TeacherRepository teacherRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public Page<ClassRoomDto> findAll(Pageable pagination) {
         Page<ClassRoom> classes = classRepository.findAll(pagination);
         Page<ClassRoomDto> classesRoomDtos = classes.map(ClassRoomDto::new);
@@ -65,22 +72,25 @@ public class ClassRoomService implements GenericMethodService {
         return classRoomDto;
     }
 
-    public Page<StudentDto> findStudentsByClass(Long idClass, Pageable pagination) {
-        returnClass(idClass); // Coloquei aqui para ver se roda a exception , para ver se a classe existe!
+    public Page<StudentDto> findStudentsByClass(Long idClass, Pageable pagination,Principal user) {
+        ClassRoom classRoom = returnClass(idClass);
+        teacherAllowed(classRoom, user);
         Page<Student> students = studentRepository.findListStudentsByClassRoomId(idClass, pagination); // Cache não está funcionando aqui
         Page<StudentDto> studentDtos = students.map(StudentDto::new);
         return studentDtos;
     }
 
 
-    public StudentDto findStudentById(Long idClass, Long idStudent) {
+    public StudentDto findStudentById(Long idClass, Long idStudent, Principal user) {
         ClassRoom classRoom = returnClass(idClass);
+        teacherAllowed(classRoom, user);
         Student student = returnStudent(classRoom,idStudent,false);
         return new StudentDto(student);
     }
 
-    public TeacherDto findTeacher(Long idClass) {
-        returnClass(idClass); // Coloquei aqui para ver se roda a exception , para ver se a classe existe!
+   public TeacherDto findTeacher(Long idClass, Principal user) {
+       ClassRoom classRoom =  returnClass(idClass); // Coloquei aqui para ver se roda a exception , para ver se a classe existe!
+        teacherAllowed(classRoom,user);
         Optional<Teacher> teacher = teacherRepository.findByClassRoomId(idClass);
         return new TeacherDto(teacher.orElseThrow(()->  new ThereIsntTeacherInThisClassException("This class doesn't have any teacher")));
     }
@@ -200,6 +210,11 @@ public class ClassRoomService implements GenericMethodService {
            throw new DatabaseException("You can't delete a class that has teachers and students, remove them first!");
        }
         return "Class : "+idClass+" removed!";
+    }
+
+    private void teacherAllowed(ClassRoom classRoom , Principal user) {
+        TeacherAllowed validation = new TeacherAllowed();
+          validation.validation(null,classRoom,user);
     }
 
 

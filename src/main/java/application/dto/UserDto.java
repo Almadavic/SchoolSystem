@@ -1,5 +1,6 @@
 package application.dto;
 
+import application.entity.Registration;
 import application.entity.Role;
 import application.entity.users.Student;
 import application.entity.users.User;
@@ -14,22 +15,25 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "name", "email", "address", "roles"})
+@JsonPropertyOrder(value = {"id", "name", "email", "address", "roles", "registration"})
 public class UserDto { // Dto da classe User
 
-    @JsonProperty("id")
+    @JsonProperty(value = "id")
     private Long id;
-    @JsonProperty("name")
+    @JsonProperty(value = "name")
     private String name;
 
-    @JsonProperty("email")
+    @JsonProperty(value = "email")
     private String email;
 
-    @JsonProperty("address")
+    @JsonProperty(value = "address")
     private AddressDto addressDto;
 
-    @JsonProperty("roles")
+    @JsonProperty(value = "roles")
     private List<RoleDto> rolesDto = new ArrayList<>();
+
+    @JsonProperty(value = "registration")
+    private RegistrationDto registrationDto;
 
 
     public UserDto(User user) { // Método que transforma um User em UserDto
@@ -37,6 +41,7 @@ public class UserDto { // Dto da classe User
         this.name = user.getName();
         this.id = user.getId();
         this.addressDto = new AddressDto(user.getAddress());
+        this.registrationDto = new RegistrationDto(user.getRegistration());
         this.rolesDto = convertList(user.getAuthorities());
     }
 

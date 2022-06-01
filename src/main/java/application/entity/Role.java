@@ -30,7 +30,6 @@ public class Role implements GrantedAuthority { // A classe que representam os p
 
     private String name;
 
-    @JsonIgnore
     @ManyToMany(mappedBy="roles")
     @Setter(AccessLevel.NONE)
     private List<User> users = new ArrayList<>(); // Um perfil tem uma lista de Usuários associados a ele.

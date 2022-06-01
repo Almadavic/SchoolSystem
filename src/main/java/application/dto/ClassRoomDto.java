@@ -16,24 +16,24 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-@JsonPropertyOrder({"idClass", "letter", "classShift", "teacher", "numberStudents", "students", "averageClassGrade"})
+@JsonPropertyOrder(value = {"idClass", "letter", "classShift", "teacher", "numberStudents", "students", "averageClassGrade"})
 public class ClassRoomDto {    // DTO da classe ClassRoom
 
-    @JsonProperty("idClass")
+    @JsonProperty(value = "idClass")
     private Long idClass;
-    @JsonProperty("letter")
+    @JsonProperty(value = "letter")
     private Character letter;
 
-    @JsonProperty("classShift")
+    @JsonProperty(value = "classShift")
     private ClassShift classShift;
-    @JsonProperty("teacher")
+    @JsonProperty(value = "teacher")
     private TeacherDto teacherDto;
 
-    @JsonProperty("numberStudents")
+    @JsonProperty(value = "numberStudents")
     private Integer numberStudents;
-    @JsonProperty("students")
+    @JsonProperty(value = "students")
     private  List<StudentDto> studentsDto = new ArrayList<>();
-    @JsonProperty("averageClassGrade")
+    @JsonProperty(value = "averageClassGrade")
     private Double averageClassGrade;
 
     public ClassRoomDto(ClassRoom classRoom) {      // Transformando uma ClassRoom em ClassRoomDto

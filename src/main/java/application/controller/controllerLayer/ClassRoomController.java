@@ -2,6 +2,7 @@ package application.controller.controllerLayer;
 
 import application.controller.controllerLayer.interfacee.GenericMethodController;
 import application.dto.ClassRoomDto;
+import application.entity.ClassRoom;
 import application.form.*;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
@@ -48,27 +49,29 @@ public class ClassRoomController implements GenericMethodController {          /
 
     @GetMapping(value = "/{idClass}/students")
     // Método HTTP (GET) , Método me retorna uma lista de alunos associados á uma classe dado o id dessa classe.
-    public ResponseEntity<Page<StudentDto>> findStudentsByClass(@PathVariable Long idClass, @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
+    public ResponseEntity<Page<StudentDto>> findStudentsByClass(@PathVariable Long idClass,
+                                                                @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination,
+                                                                 Principal user) {
 
-        Page<StudentDto> studentsDtos = classService.findStudentsByClass(idClass, pagination);               // Arrumar o cache aqui ! Cache não está funcionando!
+        Page<StudentDto> studentsDtos = classService.findStudentsByClass(idClass, pagination,user);               // Arrumar o cache aqui ! Cache não está funcionando!
 
         return ResponseEntity.ok().body(studentsDtos);
     }
 
     @GetMapping(value = "/{idClass}/students/{idStudent}")
     // Método HTTP (GET) , Método me retorna um aluno de uma certa classe, passando o id da classe e do aluno específico.
-    public ResponseEntity<StudentDto> findStudentById(@PathVariable Long idClass, @PathVariable Long idStudent) {
+    public ResponseEntity<StudentDto> findStudentById(@PathVariable Long idClass, @PathVariable Long idStudent, Principal user) {
 
-        StudentDto studentDto = classService.findStudentById(idClass, idStudent);
+        StudentDto studentDto = classService.findStudentById(idClass, idStudent, user);
 
         return ResponseEntity.ok().body(studentDto);
     }
 
     @GetMapping(value = "{idClass}/teacher")
     // Método HTTP (GET) , Método me retorna o professor associado á classe dado o id da classe.
-    public ResponseEntity<TeacherDto> findTeacher(@PathVariable Long idClass) {
+    public ResponseEntity<TeacherDto> findTeacher(@PathVariable Long idClass, Principal user) {
 
-        TeacherDto teacherDto = classService.findTeacher(idClass);
+        TeacherDto teacherDto = classService.findTeacher(idClass,user);
 
         return ResponseEntity.ok().body(teacherDto);
     }
@@ -138,5 +141,6 @@ public class ClassRoomController implements GenericMethodController {          /
 
         return ResponseEntity.ok().body(message);
     }
+
 
 }

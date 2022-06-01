@@ -2,6 +2,7 @@ package application.service.serviceLayer;
 
 import application.dto.StudentDto;
 
+import application.entity.Registration;
 import application.entity.Role;
 import application.entity.users.Student;
 import application.form.RegisterUserForm;
@@ -18,6 +19,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -57,6 +59,10 @@ public class StudentService  implements ExtendsUserService {
         convertFromFormToUser(student, userForm);
         Role role = roleRepository.findByName("ROLE_STUDENT").get();
         student.addRole(role);
+
+        Registration registration = new Registration(Instant.now(),student);
+        student.setRegistration(registration);
+
         student = userRepository.save(student);
         return new StudentDto(student);
     }

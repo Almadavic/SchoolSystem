@@ -1,6 +1,7 @@
 package application.service.serviceLayer;
 
 import application.dto.TeacherDto;
+import application.entity.Registration;
 import application.entity.Role;
 import application.entity.users.Teacher;
 import application.form.RegisterUserForm;
@@ -15,6 +16,7 @@ import application.service.serviceLayer.interfacee.ExtendsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -61,11 +63,13 @@ public class TeacherService implements ExtendsUserService {
         convertFromFormToUser(teacher, userForm);
         Role role = roleRepository.findByName("ROLE_TEACHER").get();
         teacher.addRole(role);
+
+        Registration registration = new Registration(Instant.now(),teacher);
+        teacher.setRegistration(registration);
+
         teacher = teacherRepository.save(teacher);
         return new TeacherDto(teacher);
     }
-
-
 
     @Override
     public  List<TeacherDto> verifyParameters(String noClass) {
