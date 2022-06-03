@@ -34,7 +34,7 @@ public class AuthenticationController {         // Controller para fazer a auten
 
         try {
             Authentication authentication = authManager.authenticate(loginData); // autenticar usuário com base nos dados informados por ele
-            String token = tokenService.gererateToken(authentication);      // geração do token .
+            String token = tokenService.generateToken(authentication);      // geração do token .
             return ResponseEntity.ok(new TokenDto(token, "Bearer"));  // Devolvendo o token pro cliente e o seu tipo.
         } catch (AuthenticationException e) {
             throw new DatabaseException("E-mail and / or password is wrong!");       // Causará um erro caso os dados passados pelo usuário estejam errados.

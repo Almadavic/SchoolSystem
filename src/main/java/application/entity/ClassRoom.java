@@ -12,6 +12,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -52,12 +53,9 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
     }
 
     public double getAverageClass() {          // Método que retorna a média total dos alunos da Classe !
-        double sum = 0.0;
-        for (Student student : students) {
-            sum = sum + student.getReportCard().getAverageStudent();      // Pode ser trocado para steam!!!
-        }
-        double average = sum/students.size();
-        return average;
+        Double sumStudentsAverage = students.stream().map(rc -> rc.getReportCard()).mapToDouble(ReportCard::getAverageStudent).sum();
+        double averageClass = sumStudentsAverage/students.size();
+        return averageClass;
     }
 
 }

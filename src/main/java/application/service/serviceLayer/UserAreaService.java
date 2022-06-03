@@ -37,7 +37,7 @@ public class UserAreaService {
           }
     }
 
-    public String changePassword(Principal user, NewPasswordForm newPasswordForm) { // Posso fazer uma lista de SOLID AQUI DENTRO!, checkPassword sendo uma das regras de negocio, e implementar mais!Li
+    public String changePassword(Principal user, NewPasswordForm newPasswordForm) {
 
         List<ChangePasswordCheck> validations = Arrays.asList(new SamePassword(), new ShortPassword());
 

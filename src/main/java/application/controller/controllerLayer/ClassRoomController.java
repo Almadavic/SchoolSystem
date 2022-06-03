@@ -1,14 +1,13 @@
 package application.controller.controllerLayer;
 
-import application.controller.controllerLayer.interfacee.GenericMethodController;
 import application.dto.ClassRoomDto;
-import application.entity.ClassRoom;
 import application.form.*;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
 import application.service.serviceLayer.ClassRoomService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,7 +22,7 @@ import java.security.Principal;
 
 @RestController                              // Identificando  que é um rest-controller
 @RequestMapping(value = "/classes")       // Recurso para "encontrar" esse controller
-public class ClassRoomController implements GenericMethodController {          // Controller relacionado á ações dentro de uma sistema de Sala de Aluno (Apenas relacionado ás salas de aula)
+public class ClassRoomController {          // Controller relacionado á ações dentro de uma sistema de Sala de Aluno (Apenas relacionado ás salas de aula)
 
     @Autowired  // Injeção de dependencia automatica - > ClassRoomService
     private ClassRoomService classService;   //
@@ -37,12 +36,11 @@ public class ClassRoomController implements GenericMethodController {          /
         return ResponseEntity.ok().body(classes);
     }
 
-    @Override
     @GetMapping(value = "/{id}")
     // Método HTTP (GET) , Método me retorna uma classe da plataforma dado o Id da classe.
-    public ResponseEntity<ClassRoomDto> findById(@PathVariable Long id) {
+    public ResponseEntity<ClassRoomDto> findById(@PathVariable Long id, Principal user) {
 
-        ClassRoomDto classRoomDto = classService.findById(id);
+        ClassRoomDto classRoomDto = classService.findById(id,user);
 
         return ResponseEntity.ok().body(classRoomDto);
     }

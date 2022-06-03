@@ -119,4 +119,9 @@ public abstract class User implements UserDetails, Serializable { // Classe  do 
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Name : "+getName()+", Email : "+email;
+    }
+
 }

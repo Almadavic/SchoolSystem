@@ -8,6 +8,8 @@ import application.service.exception.general.InvalidParamException;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.AllUserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,6 +33,7 @@ public class UserService implements UserDetailsService, AllUserTypeService {
 
 
     @Override
+    @Cacheable(value = "usersList")
     public List<UserDto> findAll(String rolesName) {
         List<UserDto> usersDto = verifyParameters(rolesName);
         return usersDto;
@@ -42,6 +45,7 @@ public class UserService implements UserDetailsService, AllUserTypeService {
         return new UserDto(user);
     }
 
+    @CacheEvict(value = {"usersList","teachersList","studentsList","classesRoomlist","studentsListByClassRoom"}, allEntries = true)
     public String remove(Long id) { // Esse método serve tanto para teacher como estudante. //
 
         User user = returnUser(id);

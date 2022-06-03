@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public interface AllUserTypeController extends GenericMethodController{
+public interface AllUserTypeController<T> {
     ResponseEntity<List<? extends UserDto>> findAll(String param); // Interface onde todos os usuários vão importar esse método!
+
+    T findById(Long id);
 
 }

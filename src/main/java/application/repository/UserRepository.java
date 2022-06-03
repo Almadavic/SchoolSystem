@@ -14,8 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long> { // Repositor
 
     List<User> findByRolesName(String rolesName);
 
-    @Override
-    @Cacheable(value = "usersList")
-    List<User> findAll();
 
 }

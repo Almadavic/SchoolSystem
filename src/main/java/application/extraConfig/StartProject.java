@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 
 @Configuration
-@Profile(value = {"test", "dev"})
+@Profile(value = {"test", "dev","prod"})
 public class StartProject implements CommandLineRunner { // Essa classe é uma clase separada de configuração!
 
 

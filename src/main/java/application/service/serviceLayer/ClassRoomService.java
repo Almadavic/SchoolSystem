@@ -4,7 +4,6 @@ package application.service.serviceLayer;
 import application.dto.ClassRoomDto;
 import application.entity.ClassShift;
 import application.entity.Situation;
-import application.entity.users.User;
 import application.form.*;
 import application.dto.StudentDto;
 import application.dto.TeacherDto;
@@ -26,14 +25,12 @@ import application.service.businessRule.updateGrades.GradeLimit;
 import application.service.businessRule.updateGrades.TeacherAllowed;
 import application.service.businessRule.updateGrades.UpdateCheck;
 import application.service.exception.classRoomService.StudentDoesntExistInThisClassException;
-import application.service.exception.classRoomService.TeacherDoesntHaveAnyClass;
 import application.service.exception.classRoomService.ThereIsntTeacherInThisClassException;
 import application.service.exception.general.DatabaseException;
-import application.service.exception.general.NoPermissionException;
 import application.service.exception.general.ResourceNotFoundException;
-import application.service.serviceLayer.interfacee.GenericMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,7 +42,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ClassRoomService implements GenericMethodService {
+public class ClassRoomService  {
 
     @Autowired
     private ClassRoomRepository classRepository;
@@ -59,19 +56,21 @@ public class ClassRoomService implements GenericMethodService {
     @Autowired
     private UserRepository userRepository;
 
+    @Cacheable(value = "classesRoomList")           // Aplicando Cache
     public Page<ClassRoomDto> findAll(Pageable pagination) {
         Page<ClassRoom> classes = classRepository.findAll(pagination);
         Page<ClassRoomDto> classesRoomDtos = classes.map(ClassRoomDto::new);
         return classesRoomDtos;
     }
 
-    @Override
-    public ClassRoomDto findById(Long id) {
+    public ClassRoomDto findById(Long id,Principal user) {
         ClassRoom classRoom = returnClass(id);
+        teacherAllowed(classRoom,user);
         ClassRoomDto classRoomDto = new ClassRoomDto(classRoom);
         return classRoomDto;
     }
 
+    @Cacheable(value = "studentsListByClassRoom")
     public Page<StudentDto> findStudentsByClass(Long idClass, Pageable pagination,Principal user) {
         ClassRoom classRoom = returnClass(idClass);
         teacherAllowed(classRoom, user);
@@ -89,13 +88,13 @@ public class ClassRoomService implements GenericMethodService {
     }
 
    public TeacherDto findTeacher(Long idClass, Principal user) {
-       ClassRoom classRoom =  returnClass(idClass); // Coloquei aqui para ver se roda a exception , para ver se a classe existe!
+        ClassRoom classRoom =  returnClass(idClass);
         teacherAllowed(classRoom,user);
         Optional<Teacher> teacher = teacherRepository.findByClassRoomId(idClass);
         return new TeacherDto(teacher.orElseThrow(()->  new ThereIsntTeacherInThisClassException("This class doesn't have any teacher")));
     }
 
-    @CacheEvict(value = {"classesRoomList", "studentsListByClassRoom"}, allEntries = true)
+    @CacheEvict(value = {"classesRoomList", "studentsListByClassRoom","studentsList"}, allEntries = true)
     public StudentDto updateGrades(Long idClass, Long idStudent, Principal user, NewGradesForm newGrades) {
         List<UpdateCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed());
 
@@ -106,7 +105,7 @@ public class ClassRoomService implements GenericMethodService {
 
         updateGrades(student, newGrades);
         approve(student);
-        student = studentRepository.save(student);
+        student = userRepository.save(student);
         return new StudentDto(student);
     }
 
@@ -140,7 +139,7 @@ public class ClassRoomService implements GenericMethodService {
         Teacher teacher = returnTeacher(idTeacher);
         Teacher classTeacher = classRoom.getTeacher();
         if (classRoom.getTeacher() != null) {
-            validations.forEach(v -> v.validation(teacher, classTeacher));
+            validations.forEach(v -> v.validation(teacher, classTeacher));           // MÉTODO NÃO FUNCIONAL!
         } else {
             validations.forEach(v -> v.validation(teacher, null));
         }
@@ -148,10 +147,7 @@ public class ClassRoomService implements GenericMethodService {
            classRoom.getTeacher().setClassRoom(null);
         }
 
-        teacher.setClassRoom(classRoom);  // DESC DO MÉTODO : EU SÓ POSSO COLOCAR UM PROFESSOR QUE NÃO TENHA NENHUMA SALA
-        teacherRepository.save(teacher); // E NÃO SEJA O MESMO PROFESSOR DESSA!
-        classRoom.setTeacher(teacher);                     // MÉTODO PARECE ESTAR 100% Funcional, NÃO ALTERAR A LÓGICA!!!!! APENAS ARRUMAR A ARQUITETURA DO CÓDIGO.
-        classRepository.save(classRoom);
+       updateClassTeacher(teacher,classRoom); // ATUALIZA SALVANDO NO BANCO AS NOVAS INFORMAÇÕES !
 
         return new ClassRoomDto(classRoom);
     }
@@ -191,6 +187,7 @@ public class ClassRoomService implements GenericMethodService {
         return new ClassRoomDto(classRoom);
     }
 
+    @CacheEvict(value = {"teachersList","classesRoomList"})
     public ClassRoomDto removeTeacher(Long idClass) {
 
         ClassRoom classRoom = returnClass(idClass);
@@ -201,6 +198,7 @@ public class ClassRoomService implements GenericMethodService {
         return new ClassRoomDto(classRoom);
     }
 
+    @CacheEvict(value = {"classesRoomList"})
     public String removeClass(Long idClass) {      // Só é possivel remover uma classe caso ela não tenha estudante nem professores!
 
         ClassRoom classRoom = returnClass(idClass);
@@ -260,11 +258,15 @@ public class ClassRoomService implements GenericMethodService {
 
     }
 
-    private void setAndSaveAttributes(Teacher classTeacher, ClassRoom classRoom) {
-        classTeacher.setClassRoom(classRoom);
-        teacherRepository.save(classTeacher);
-        classRoom.setTeacher(classTeacher);
-        classRepository.save(classRoom);
+    private ClassRoom updateClassTeacher(Teacher teacher, ClassRoom classRoom) {
+
+        teacher.setClassRoom(classRoom);
+        teacherRepository.save(teacher);
+         classRoom.setTeacher(teacher);
+        classRoom = classRepository.save(classRoom);
+
+
+        return classRoom;
     }
 
 

@@ -37,6 +37,7 @@ public class UserController implements AllUserTypeController { // Controller par
         return ResponseEntity.ok().body(userDto);
     }
     @DeleteMapping(value = "/{id}/remove")
+    // Método onde remove um usuário
     public ResponseEntity<String> remove(@PathVariable Long id) {
 
         String message = userService.remove(id);

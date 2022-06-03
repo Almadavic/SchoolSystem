@@ -14,6 +14,8 @@ import application.service.exception.general.InvalidParamException;
 import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.ExtendsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -35,6 +37,7 @@ public class TeacherService implements ExtendsUserService {
     private TeacherRepository teacherRepository;
 
     @Override
+    @Cacheable(value = "teachersList")
     public List<TeacherDto> findAll(String noClass) {
         List<TeacherDto> teachersDtos =  verifyParameters(noClass);
         return teachersDtos;
@@ -54,6 +57,7 @@ public class TeacherService implements ExtendsUserService {
 
 
     @Override
+    @CacheEvict(value = {"teachersList","usersList"},allEntries = true)
     public TeacherDto save(RegisterUserForm userForm) {
         List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered());
 

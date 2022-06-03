@@ -27,6 +27,7 @@ public class UserAreaController { // Onde os professores e alunos tem acesso, fi
     }
 
     @PutMapping(value = "/changepassword")
+    // Método para alteração de senha.
     public ResponseEntity<String> changePassword(Principal user,@RequestBody @Valid NewPasswordForm newPasswordForm) {
 
         String message = userAreaService.changePassword(user,newPasswordForm);

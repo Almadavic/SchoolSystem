@@ -15,13 +15,7 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends ExtendsUserRepository,JpaRepository<Student,Long> { // Repositorio de alunos
 
-
-    @Cacheable(value = "studentsListByClassRoom")
     Page<Student> findListStudentsByClassRoomId(Long id, Pageable pagination);
-
-    @Override
-    @Cacheable(value = "studentsList")
-    List<Student> findAll();
 
     @Override
     @Query(value = "select * from tb_students  " +

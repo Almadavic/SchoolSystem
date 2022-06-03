@@ -16,6 +16,7 @@ import application.service.exception.general.ResourceNotFoundException;
 import application.service.serviceLayer.interfacee.ExtendsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 
@@ -39,6 +40,7 @@ public class StudentService  implements ExtendsUserService {
     private StudentRepository studentRepository;
 
     @Override
+    @Cacheable(value = "studentsList")
     public List<StudentDto> findAll(String noClass) {
         List<StudentDto> studentDtos = verifyParameters(noClass);
         return studentDtos;
@@ -51,7 +53,7 @@ public class StudentService  implements ExtendsUserService {
     }
 
     @Override
-    @CacheEvict(value = "studentsList")
+    @CacheEvict(value = {"studentsList","usersList"},allEntries = true)
     public StudentDto save(RegisterUserForm userForm) {
         List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered());
         validations.forEach(v -> v.validation(userForm, userRepository));
