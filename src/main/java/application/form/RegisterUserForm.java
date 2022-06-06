@@ -4,6 +4,7 @@ package application.form;
 import lombok.Getter;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 @Getter
 public class RegisterUserForm { // Form que recebe informações do estudante que será cadastrado!
@@ -11,6 +12,7 @@ public class RegisterUserForm { // Form que recebe informações do estudante qu
     @NotBlank
     private String name;
     @NotBlank
+    @Email
     private String email;
     @NotBlank
     private String password;

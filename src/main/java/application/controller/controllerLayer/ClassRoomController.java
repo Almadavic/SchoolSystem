@@ -51,7 +51,7 @@ public class ClassRoomController {          // Controller relacionado á ações
                                                                 @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination,
                                                                  Principal user) {
 
-        Page<StudentDto> studentsDtos = classService.findStudentsByClass(idClass, pagination,user);               // Arrumar o cache aqui ! Cache não está funcionando!
+        Page<StudentDto> studentsDtos = classService.findStudentsByClass(idClass, pagination,user);
 
         return ResponseEntity.ok().body(studentsDtos);
     }

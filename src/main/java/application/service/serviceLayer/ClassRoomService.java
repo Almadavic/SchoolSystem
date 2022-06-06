@@ -74,7 +74,7 @@ public class ClassRoomService  {
     public Page<StudentDto> findStudentsByClass(Long idClass, Pageable pagination,Principal user) {
         ClassRoom classRoom = returnClass(idClass);
         teacherAllowed(classRoom, user);
-        Page<Student> students = studentRepository.findListStudentsByClassRoomId(idClass, pagination); // Cache não está funcionando aqui
+        Page<Student> students = studentRepository.findListStudentsByClassRoomId(idClass, pagination);
         Page<StudentDto> studentDtos = students.map(StudentDto::new);
         return studentDtos;
     }
@@ -225,7 +225,7 @@ public class ClassRoomService  {
         // pois se for, tem q chamar uma exception especifica e tirar outra.
         Optional<Student> studentOptionalDataBase = studentRepository.findById(idStudent); // Pesquisar se o aluno existe no BANCO, se n existir, erro na linha 220!
         if (!addMethod) {  // SE NÃO FOR O MÉTODO DE ADICIONAR
-            Student studentOptionalClass = studentRepository.findStudentById(classRoom.getId(),idStudent)// Pesquisa se o aluno existe nessa CLASSE!
+            Student studentOptionalClass = studentRepository.findStudentByClassId(classRoom.getId(),idStudent)// Pesquisa se o aluno existe nessa CLASSE!
                     .orElseThrow(()-> new StudentDoesntExistInThisClassException("This student isn't in this classroom")); // Se não existir, ERRO!
         }
         return studentOptionalDataBase.orElseThrow(()->new ResourceNotFoundException("Id : " + idStudent + ", This student wasn't found on DataBase"));

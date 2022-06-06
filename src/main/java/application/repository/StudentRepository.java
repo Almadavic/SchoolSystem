@@ -30,6 +30,6 @@ public interface StudentRepository extends ExtendsUserRepository,JpaRepository<S
     "inner join tb_address on tb_users.id = tb_address.user_id "+
     "inner join tb_users_roles on tb_users_roles.user_id = tb_users_roles.role_id "+
     "where tb_students.class_room_id = :idClass AND tb_students.id = :idStudent",nativeQuery = true)
-    Optional<Student> findStudentById(Long idClass, Long idStudent);
+    Optional<Student> findStudentByClassId(Long idClass, Long idStudent);
 
 }
