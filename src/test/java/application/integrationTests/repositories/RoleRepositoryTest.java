@@ -1,17 +1,20 @@
-package application.repositories;
+package application.integrationTests.repositories;
 
 import application.entities.Role;
-import application.repositories.interfaces.GeneralExtendsRepositoryTest;
+import application.integrationTests.repositories.interfaces.GeneralExtendsRepositoryTest;
+import application.repositories.RoleRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 
 import java.util.NoSuchElementException;
 
 
 
 @SpringBootTest
+@Profile(value = "test")
 public class RoleRepositoryTest implements GeneralExtendsRepositoryTest {
 
     @Autowired

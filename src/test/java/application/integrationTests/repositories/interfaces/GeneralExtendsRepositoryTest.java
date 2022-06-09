@@ -1,4 +1,4 @@
-package application.repositories.interfaces;
+package application.integrationTests.repositories.interfaces;
 
 public interface GeneralExtendsRepositoryTest{
 

@@ -23,9 +23,12 @@ public class Principal extends User { // Classe do Banco - > Principal| Filha de
     public void addResponsibility(Responsibility responsibility) {
         responsibilities.add(responsibility);
     }
-
     public Principal(String nome, String email, String password) {
         super(nome, email, password);
+    }
+    @Override
+    public String toString() {
+        return "Name : "+getName()+", Email : "+getEmail();
     }
 
 }

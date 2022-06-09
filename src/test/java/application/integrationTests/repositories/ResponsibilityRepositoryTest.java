@@ -1,15 +1,17 @@
-package application.repositories;
+package application.integrationTests.repositories;
 
 import application.entities.Responsibility;
-import application.repositories.interfaces.GeneralExtendsRepositoryTest;
+import application.repositories.ResponsibilityRepository;
+import application.integrationTests.repositories.interfaces.GeneralExtendsRepositoryTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
+import org.springframework.context.annotation.Profile;
 
 
 @SpringBootTest
+@Profile(value = "test")
 public class ResponsibilityRepositoryTest implements GeneralExtendsRepositoryTest {
 
     @Autowired

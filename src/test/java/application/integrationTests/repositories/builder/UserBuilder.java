@@ -1,8 +1,7 @@
-package application.repositories.builder;
+package application.integrationTests.repositories.builder;
 
 import application.entities.ClassRoom;
 import lombok.Getter;
-import org.h2.engine.User;
 
 
 @Getter

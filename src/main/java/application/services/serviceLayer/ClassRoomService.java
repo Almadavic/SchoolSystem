@@ -139,15 +139,12 @@ public class ClassRoomService {
         Long idTeacher = setTeacherForm.getIdTeacher();
         Teacher teacher = returnTeacher(idTeacher);
         Teacher classTeacher = classRoom.getTeacher();
-        if (classRoom.getTeacher() != null) {
-            validations.forEach(v -> v.validation(teacher, classTeacher));           // MÉTODO NÃO FUNCIONAL!
+        if (classTeacher != null) {
+            validations.forEach(v -> v.validation(teacher, classTeacher));
+            classTeacher.setClassRoom(null);
         } else {
             validations.forEach(v -> v.validation(teacher, null));
         }
-        if (classRoom.getTeacher() != null) {
-            classRoom.getTeacher().setClassRoom(null);
-        }
-
         updateClassTeacher(teacher, classRoom); // ATUALIZA SALVANDO NO BANCO AS NOVAS INFORMAÇÕES !
 
         return new ClassRoomDto(classRoom);

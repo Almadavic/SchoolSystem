@@ -1,13 +1,15 @@
-package application.repositories;
+package application.integrationTests.repositories;
 
 
 import application.entities.users.Student;
-import application.repositories.builder.StudentBuilder;
-import application.repositories.interfaces.ExtendsUserRepositoryTest;
+import application.integrationTests.repositories.builder.StudentBuilder;
+import application.integrationTests.repositories.interfaces.ExtendsUserRepositoryTest;
+import application.repositories.StudentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import java.util.NoSuchElementException;
 
 
 @SpringBootTest
+@Profile(value = "test")
 public class StudentRepositoryTest implements ExtendsUserRepositoryTest {
 
     @Autowired

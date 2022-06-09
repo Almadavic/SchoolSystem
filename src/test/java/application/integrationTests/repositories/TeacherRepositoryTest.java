@@ -1,18 +1,22 @@
-package application.repositories;
+package application.integrationTests.repositories;
 
 import application.entities.ClassRoom;
 import application.entities.users.Teacher;
-import application.repositories.builder.TeacherBuilder;
-import application.repositories.interfaces.ExtendsUserRepositoryTest;
+import application.integrationTests.repositories.builder.TeacherBuilder;
+import application.repositories.ClassRoomRepository;
+import application.repositories.TeacherRepository;
+import application.integrationTests.repositories.interfaces.ExtendsUserRepositoryTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @SpringBootTest
+@Profile(value = "test")
 public class TeacherRepositoryTest implements ExtendsUserRepositoryTest {
 
     @Autowired
