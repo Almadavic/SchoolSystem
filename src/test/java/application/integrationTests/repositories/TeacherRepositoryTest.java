@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 
 @SpringBootTest
 @Profile(value = "test")
-public class TeacherRepositoryTest implements ExtendsUserRepositoryTest {
+public class TeacherRepositoryTest implements ExtendsUserRepositoryTest { // TESTE DE INTEGRAÇÃO DO
 
     @Autowired
     private TeacherRepository teacherRepository;

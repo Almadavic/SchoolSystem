@@ -11,12 +11,12 @@ import org.junit.jupiter.api.TestInstance;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ClassRoomTest {
+public class ClassRoomTest { // TESTE DE UNIDADE da entidade ClassRoom.
 
     private ClassRoom classRoom;
 
     @BeforeAll
-    public void instantiateClassRoom() {
+    public void instantiateClassRoom() { // Instancia uma classe antes dos testes começarem.
 
         classRoom = new ClassRoom('B', ClassShift.AFTERNOON);
         addStudentPopulation();
@@ -25,7 +25,7 @@ public class ClassRoomTest {
 
     @Test
 
-    public void addStudent() {
+    public void addStudent() { // Adiciona um estudante na classe.
 
         Student s3 = new Student("Guilherme", "guilherme@hotmail.com", "121456", null);
         ReportCard r3 = new ReportCard();
@@ -34,30 +34,30 @@ public class ClassRoomTest {
         r3.setGrade3(4.0);
         s3.setReportCard(r3);
 
-        Assertions.assertEquals(1, classRoom.getStudents().size());
+        Assertions.assertEquals(1, classRoom.getStudents().size()); // Quantos alunos tinham na classe antes de adicionar.
         classRoom.addStudent(s3);
-        Assertions.assertEquals(2, classRoom.getStudents().size());
+        Assertions.assertEquals(2, classRoom.getStudents().size()); // Quantos alunos tinham na classe depois de adicionar.
     }
 
 
     @Test
-    public void removeStudent() {
+    public void removeStudent() { // Remove um estudante na classe.
 
         Student student = classRoom.getStudents().get(1);
         classRoom.removeStudent(student);
-        Assertions.assertEquals(1, classRoom.getStudents().size());
+        Assertions.assertEquals(1, classRoom.getStudents().size()); // Confere quantos alunos tem na classe, depois da remoção.
     }
 
 
     @Test
-    public void averageClass() {
+    public void averageClass() { // Método testa a média dos alunos da sala.
 
         double averageClass = classRoom.getAverageClass();
-        Assertions.assertEquals(5, averageClass);
+        Assertions.assertEquals(5, averageClass); // Verifica qual a média.
     }
 
 
-    private void addStudentPopulation() {
+    private void addStudentPopulation() { // Antes de começar o teste, esses valores são inseridos.
         Student s1 = new Student("Maria", "maria@hotmail.com", "121456", null);
         ReportCard r1 = new ReportCard();
         r1.setGrade1(5.0);

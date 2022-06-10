@@ -5,7 +5,7 @@ import application.entities.users.Teacher;
 import application.services.exceptions.classRoomService.SameTeacherException;
 
 
-public class SameTeacher implements SetTeacherCheck {
+public class SameTeacher implements SetTeacherCheck { // O professor não pode ser igual ao que já era
     @Override
     public void validation(Teacher teacher, Teacher classTeacher) {
         if(classTeacher!=null) {

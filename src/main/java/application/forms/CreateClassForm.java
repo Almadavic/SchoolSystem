@@ -10,5 +10,4 @@ public class CreateClassForm { // Form que recebe o turno da classe para criar u
     @NotBlank
     private String classShift;
 
-
 }

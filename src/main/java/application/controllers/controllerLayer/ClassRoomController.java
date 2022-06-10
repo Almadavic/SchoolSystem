@@ -30,9 +30,9 @@ public class ClassRoomController {          // Controller relacionado á ações
     // Método HTTP (GET)  , Método que me retorna uma paginação de todas as classes da plataforma, tendo algumas conf padrões para essa paginação.
     public ResponseEntity<Page<ClassRoomDto>> findAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
-        Page<ClassRoomDto> classes = classService.findAll(pagination);
+        Page<ClassRoomDto> classesDto = classService.findAll(pagination);
 
-        return ResponseEntity.ok().body(classes);
+        return ResponseEntity.ok().body(classesDto);
     }
 
     @GetMapping(value = "/{id}")
@@ -50,9 +50,9 @@ public class ClassRoomController {          // Controller relacionado á ações
                                                                 @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination,
                                                                  Principal user) {
 
-        Page<StudentDto> studentsDtos = classService.findStudentsByClass(idClass, pagination,user);
+        Page<StudentDto> studentsDto = classService.findStudentsByClass(idClass, pagination,user);
 
-        return ResponseEntity.ok().body(studentsDtos);
+        return ResponseEntity.ok().body(studentsDto);
     }
 
     @GetMapping(value = "/{idClass}/students/{idStudent}")

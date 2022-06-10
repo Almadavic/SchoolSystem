@@ -20,5 +20,5 @@ public interface TeacherRepository extends ExtendsUserRepository,JpaRepository<T
             "inner join tb_address on tb_users.id = tb_address.user_id " +
             "inner join tb_users_roles on tb_users_roles.user_id = tb_users_roles.role_id " +
             "where tb_teachers.class_room_id is null",nativeQuery = true)
-    List<Teacher> findAllWhereClassRoomIsNull();
+    List<Teacher> findAllWhereClassRoomIsNull();       // Retorna uma lista de professores que não tem classe.
 }

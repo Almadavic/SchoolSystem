@@ -5,7 +5,7 @@ import lombok.Getter;
 
 
 @Getter
-public abstract class UserBuilder<T> {
+public abstract class UserBuilder<T> { // Classe Parent ! Cria um usuário. || Cadeia de métodos.
 
     private String name;
     private String email;
@@ -33,6 +33,6 @@ public abstract class UserBuilder<T> {
         return this;
     }
 
-    public abstract T create();
+    public abstract T create(); // Método abstract, as classes que herdam vão ter que implementar.
 
 }

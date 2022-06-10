@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonPropertyOrder(value = {"name"})
 public class RoleDto { // Dto da classe Role
-
     @JsonProperty(value = "name")
     private String name;
 

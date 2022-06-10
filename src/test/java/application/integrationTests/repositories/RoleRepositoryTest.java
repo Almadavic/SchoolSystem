@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 
 @SpringBootTest
 @Profile(value = "test")
-public class RoleRepositoryTest implements GeneralExtendsRepositoryTest {
+public class RoleRepositoryTest implements GeneralExtendsRepositoryTest { // TESTE DE INTEGRAÇÃO DO
 
     @Autowired
     private RoleRepository roleRepository;

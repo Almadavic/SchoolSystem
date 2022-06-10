@@ -3,27 +3,31 @@ package application.extraConfigs;
 public class ApplicationDetails {
 
     public static String text() {
-        StringBuilder bd = new StringBuilder();
-        bd.append("\n");
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append(forFormatting());
+        sb.append("\n");
+        sb.append("SCHOOL SYSTEM APPLICATION    ---    VICTOR ALMADA\n");
+        sb.append(forFormatting());
+        sb.append("\n");
+        sb.append("*Java Version - 17 \n");
+        sb.append("*Spring Boot Version -  2.6.7  \n");                     // COLOCAR QUANTAS LINHAS DE CÓDIGO E DEPENDENCIAS!
+        sb.append("*Dependencies : \n");
+        sb.append("*Number of lines : \n");
+        sb.append("*Number of Classes / Files : \n");
+        sb.append("\n");
+        sb.append("\n");
+        sb.append("\n");
+        sb.append(forFormatting());
+        sb.append("\n");
+        return sb.toString();
+    }
+
+    private static String forFormatting() {
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 70; i++) {
-            bd.append("=");
+            sb.append("=");
         }
-        bd.append("\n");
-        bd.append("SCHOOL SYSTEM APPLICATION    ---    VICTOR ALMADA\n");
-        for (int i = 0; i < 70; i++) {
-            bd.append("=");
-        }
-        bd.append("\n");
-        bd.append("*Java Version - 17 \n");
-        bd.append("*Spring Boot Version -  2.6.7  \n");
-        bd.append("*Dependencies : \n");
-        bd.append("\n");
-        bd.append("\n");
-        System.out.println("\n");
-        for (int i = 0; i < 70; i++) {
-            bd.append("=");
-        }
-        bd.append("\n");
-        return bd.toString();
+        return sb.toString();
     }
 }

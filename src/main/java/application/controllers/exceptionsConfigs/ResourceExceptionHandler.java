@@ -44,7 +44,7 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
     }
 
     @ExceptionHandler(ClassContainsSameStudentException.class)
-    // Quando tenta adicionar um usuário em uma classe em que ele já está adicionado.
+    // Quando tenta adicionar um aluno em uma classe em que ele já está adicionado.
     public ResponseEntity<StandardError> classContainsSameStudent(ClassContainsSameStudentException e, HttpServletRequest request) {
         String error = "Student already exists";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
@@ -95,7 +95,7 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
     }
 
     @ExceptionHandler(StudentDoesntExistInThisClassException.class) // Quando tenta buscar um usuário que não existe na sala!
-    public ResponseEntity<StandardError> studentDoesntExistInThisRoom(StudentDoesntExistInThisClassException e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> studentDoesntExistInThisClassRoom(StudentDoesntExistInThisClassException e, HttpServletRequest request) {
         String error = "Student wasn't found here!";
         HttpStatus status = HttpStatus.NOT_FOUND;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -121,8 +121,8 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
     }
 
     @ExceptionHandler(ThereIsntTeacherInThisClassException.class) // Quando a classe não tem nenhum professor!
-    public ResponseEntity<StandardError> thereIsntTeacherInThisClass(ThereIsntTeacherInThisClassException e, HttpServletRequest request) {
-        String error = "No teachers here";
+    public ResponseEntity<StandardError> thereIsNotTeacherInThisClass(ThereIsntTeacherInThisClassException e, HttpServletRequest request) {
+        String error = "No teacher here";
         HttpStatus status = HttpStatus.NOT_FOUND;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
@@ -136,23 +136,23 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(SameTeacherException.class) // Quando o mesmo professor é setado na mesma classa!
+    @ExceptionHandler(SameTeacherException.class) // Quando o mesmo professor é setado na mesma classa que já está!
     public ResponseEntity<StandardError> sameTeacher(SameTeacherException e, HttpServletRequest request) {
         String error = "This teacher is already here.";
-        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
     @ExceptionHandler(FullListException.class) // Quando a lista de alunos está cheia!
     public ResponseEntity<StandardError> fullList(FullListException e, HttpServletRequest request) {
-        String error = "The list of students is full";
+        String error = "The list is full";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(EmailAlreadyRegisteredException.class) // Quando tenta cadastrar um usuário com o mesmmo email !
+    @ExceptionHandler(EmailAlreadyRegisteredException.class) // Quando tenta cadastrar um usuário com o mesmmo email!
     public ResponseEntity<StandardError> emailAlreadyRegistered(EmailAlreadyRegisteredException e, HttpServletRequest request) {
         String error = "Email already exists";
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
@@ -160,16 +160,12 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(TeacherDoesntHaveAnyClass.class) // Quando tenta buscar a sala do professor porém o professor não tem nenhuma sala !
+    @ExceptionHandler(TeacherDoesntHaveAnyClass.class) // Quando tenta buscar a sala do professor porém o professor não tem nenhuma sala!
     public ResponseEntity<StandardError> teacherDoesntHaveAnyClass(TeacherDoesntHaveAnyClass e, HttpServletRequest request) {
-        String error = "This teacher doesn't have any class";
+        String error = "Teacher doesn't have class";
         HttpStatus status = HttpStatus.NOT_FOUND;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
-
-
-
-    // AVISO ---- ARRUMAR OS ERROS QUANDO SÃO LANÇADOS NO THROW, ARRUMAR A MENSAGEM PQ DO JEITO QUE ESTÁ, ESTÁ MUITO ESTRANHO
 
 }

@@ -25,7 +25,7 @@ public class UserAreaService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserDto myData(Principal user) {
+    public UserDto myData(Principal user) { // Método que os usuários conseguem ver informações da sua própria conta.
 
           User userEntity =  returnUser(user);
           if(userEntity instanceof Teacher) {
@@ -39,26 +39,26 @@ public class UserAreaService {
           }
     }
 
-    public String changePassword(Principal user, NewPasswordForm newPasswordForm) {
+    public String changePassword(Principal user, NewPasswordForm newPasswordForm) { // Método em que o usuário consegue trocar sua senha.
 
-        List<ChangePasswordCheck> validations = Arrays.asList(new SamePassword(), new ShortPassword());
+        List<ChangePasswordCheck> validations = Arrays.asList(new SamePassword(), new ShortPassword()); // Validações para a nova senha.
 
         User userDataBase = returnUser(user);
         String newPassword = newPasswordForm.getNewPassword();
         String oldPassword = userDataBase.getPassword();
 
-        validations.forEach(v -> v.validation(newPassword,oldPassword));
+        validations.forEach(v -> v.validation(newPassword,oldPassword)); // VALIDANDO !!
 
         String newPasswordEncoded = new BCryptPasswordEncoder().encode(newPassword);
 
         userDataBase.setPassword(newPasswordEncoded);
         userRepository.save(userDataBase);
 
-        return "SUCCESS! You just changed your password!";
+        return "SUCCESS! You just changed your password!"; // Caso a senha seja alterada com sucesso, irá aparecer isso para o usuário.
     }
 
 
-    private User returnUser(Principal user) {                                 // Método que retorna um usuário
+    private User returnUser(Principal user) {                                 // Método que retorna um usuário do banco.
         User userDataBase = userRepository.findByEmail(user.getName()).get(); // Não retorna um Optional pois não tem como estar vazio!
         return userDataBase;
     }

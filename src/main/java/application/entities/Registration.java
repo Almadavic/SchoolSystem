@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.time.Instant;
 
 @Getter
@@ -17,6 +18,9 @@ import java.time.Instant;
 @Entity
 @Table(name = "tb_registrations")
 public class Registration {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)

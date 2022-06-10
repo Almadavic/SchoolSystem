@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class MainPageController { // Controller apenas para fazer a primeira página da aplicação ser o swagger : (host/)
+public class MainPageController { // Controller apenas para fazer a página principal (HOME) da aplicação ser o swagger : (host/)
 
     @RequestMapping("/")
     public String index() {

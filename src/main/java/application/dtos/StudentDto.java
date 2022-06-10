@@ -28,7 +28,7 @@ public class StudentDto extends UserDto implements Comparable<StudentDto>{ // Dt
     }
 
     @Override
-    public int compareTo(StudentDto studentDto) {
+    public int compareTo(StudentDto studentDto) {         // Método para comparar um estudante com outro baseado no nome, ou seja, ordem alfabética.
         return getName().compareTo(studentDto.getName());
     }
 }

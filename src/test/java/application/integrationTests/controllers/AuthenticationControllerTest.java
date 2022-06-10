@@ -16,14 +16,14 @@ import java.net.URI;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Profile(value = "test")
-class AuthenticationControllerTest {
+class AuthenticationControllerTest { // TESTE DE INTEGRAÇÃO que testa a autenticação do usuário.
 
     @Autowired
     private MockMvc mockMvc;
 
 
     @Test
-    public void incorrectData() throws Exception {
+    public void incorrectData() throws Exception { // Testa quando são passados dados incorretos.
 
         URI uri = new URI("/auth");
 
@@ -38,13 +38,13 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    public void correctData() throws Exception {
+    public void correctData() throws Exception { // Testa quando são passados dados corretos.
 
         URI uri = new URI("/auth");
 
         String json = "{\"email\":\"almadavic@live.com\",\"senha\":\"123456\"}";
 
-        mockMvc.perform(MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders                // TESTE NÃO FUNCIONA, TALVEZ TENHA QUE TIRAR.
                         .post(uri)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))

@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 @Profile(value = {"prod", "test"})
-public class SecurityConfigurations extends WebSecurityConfigurerAdapter { // Classe de segurança a nivel de prod e test
+public class SecurityConfigurations extends WebSecurityConfigurerAdapter { // Classe de segurança a nivel de prod e test com segurança!
 
 		//////
 	@Autowired
@@ -86,10 +86,10 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter { // Cl
 				.antMatchers(HttpMethod.GET,"/users/{id}").hasRole("PRINCIPAL")
 				.antMatchers(HttpMethod.DELETE,"/users/{id}/remove").hasRole("PRINCIPAL")
 
-		.and().csrf().disable()
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and().addFilterBefore(new AuthenticationJWTFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
-	}
+		.and().csrf().disable() // DESABILITA SEGURANÇA CONTRA INVASÃO, DESATIVAMOS ISSO POIS NÃO VAI AFETAR A APLICAÇÃO (A APLICAÇÃO É STATELESS)
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // DIZ QUE A APLICAÇÃO NÃO TEM ESTADO, NÃO GUARDA INFORMAÇÕES DE LOGIN!
+		.and().addFilterBefore(new AuthenticationJWTFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class); // Adiciona um FILTRO, Antes
+	}                                                                                                                                  // de chegar nessa classe.
 	
 	
 	//Configuracoes de recursos estaticos(js, css, imagens, etc.)

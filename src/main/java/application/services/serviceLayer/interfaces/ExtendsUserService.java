@@ -1,7 +1,6 @@
 package application.services.serviceLayer.interfaces;
 
 
-
 import application.dtos.UserDto;
 import application.entities.Address;
 import application.entities.users.User;
@@ -10,7 +9,7 @@ import application.forms.RegisterUserForm;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
-public interface ExtendsUserService extends AllUserTypeService { // Apenas as classes que extendes UserDto vaõ implementar essa interface!
+public interface ExtendsUserService extends AllUserTypeService { // Interface onde StudentRepository e TeacherRepository vão implementar
 
     UserDto save(RegisterUserForm userForm);
 

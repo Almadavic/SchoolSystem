@@ -18,7 +18,7 @@ public class AuthenticationJWTFilter extends OncePerRequestFilter { // Filtro de
     private TokenService tokenService;
     private UserRepository userRepository;
 
-    public AuthenticationJWTFilter(TokenService tokenService, UserRepository userRepository) {
+    public AuthenticationJWTFilter(TokenService tokenService, UserRepository userRepository) { // Em filtros, não podemos fazer injeção de dependência automática.
         this.tokenService = tokenService;
         this.userRepository = userRepository;
     }

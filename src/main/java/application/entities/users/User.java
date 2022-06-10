@@ -39,7 +39,7 @@ public abstract class User implements UserDetails, Serializable { // Classe  do 
 
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Registration registration;
+    private Registration registration;     // Um usuário tem 1 cadastro associado quando foi cadastrado.
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tb_users_roles",

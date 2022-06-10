@@ -1,10 +1,8 @@
 package application.services.serviceLayer;
 
-import application.dtos.authenticationAuthorization.TokenDto;
 import application.forms.authenticationAuthorization.LoginForm;
 import application.services.exceptions.general.DatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,7 +25,7 @@ public class AuthenticationService {
             String token = tokenService.generateToken(authentication);      // geração do token .
             return token;
         } catch (AuthenticationException e) {
-            throw new DatabaseException("E-mail and / or password is wrong!");       // Causará um erro caso os dados passados pelo usuário estejam errados.
+            throw new DatabaseException("E-mail and / or password is / are wrong!");       // Causará um erro caso os dados passados pelo usuário estejam errados.
         }
     }
 }

@@ -12,13 +12,13 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/userarea")
-public class UserAreaController { // Onde os professores e alunos tem acesso, fiz só 1 controle pois todos tem as mesmas informações
+public class UserAreaController { // Onde os professores, diretores e alunos tem acesso, fiz só 1 controle pois todos tem as mesmas informações.
 
     @Autowired
     private UserAreaService userAreaService;
 
     @GetMapping(value = "/mydata")
-    // Método para acessar as informações do proprio aluno logado.
+    // Método para acessar as informações do próprio usuário logado.
     public ResponseEntity<? extends UserDto> myData(Principal user) {
 
         UserDto userDto =  userAreaService.myData(user);
@@ -27,7 +27,7 @@ public class UserAreaController { // Onde os professores e alunos tem acesso, fi
     }
 
     @PutMapping(value = "/changepassword")
-    // Método para alteração de senha.
+    // Método para alterar de senha.
     public ResponseEntity<String> changePassword(Principal user,@RequestBody @Valid NewPasswordForm newPasswordForm) {
 
         String message = userAreaService.changePassword(user,newPasswordForm);

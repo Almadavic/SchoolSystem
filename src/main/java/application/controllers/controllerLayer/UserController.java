@@ -21,7 +21,6 @@ public class UserController implements AllUserTypeController { // Controller par
     //Método retorna todos os usuários do sistema, ou eu posso filtrar a busca (PELA ROLE),ex : todos os usuarios que tenham a role professor..
     public ResponseEntity<List<? extends UserDto>> findAll(@RequestParam(required=false)String rolesName){
 
-
         List<UserDto> usersDto = userService.findAll(rolesName);
 
         return ResponseEntity.ok().body(usersDto);
@@ -29,7 +28,7 @@ public class UserController implements AllUserTypeController { // Controller par
 
     @Override
     @GetMapping ("/{id}")
-    // Método que me retorna um User especifico do sistema, não importa a role!
+    // Método que me retorna um User específico do sistema, não importa a role!
     public ResponseEntity<UserDto> findById(@PathVariable Long id) {
 
         UserDto userDto = userService.findById(id);

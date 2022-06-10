@@ -1,6 +1,5 @@
 package application.services.serviceLayer;
 
-
 import application.dtos.ClassRoomDto;
 import application.entities.enums.ClassShift;
 import application.entities.enums.Situation;
@@ -58,13 +57,13 @@ public class ClassRoomService {
     private UserRepository userRepository;
 
     @Cacheable(value = "classesRoomList")           // Aplicando Cache
-    public Page<ClassRoomDto> findAll(Pageable pagination) {
+    public Page<ClassRoomDto> findAll(Pageable pagination) {    // Encontra todas as classes do sistema.
         Page<ClassRoom> classes = classRepository.findAll(pagination);
         Page<ClassRoomDto> classesRoomDtos = classes.map(ClassRoomDto::new);
         return classesRoomDtos;
     }
 
-    public ClassRoomDto findById(Long id, Principal user) {
+    public ClassRoomDto findById(Long id, Principal user) { // Encontra uma sala por Id
         ClassRoom classRoom = returnClass(id);
         teacherAllowed(classRoom, user);
         ClassRoomDto classRoomDto = new ClassRoomDto(classRoom);
@@ -72,7 +71,7 @@ public class ClassRoomService {
     }
 
     @Cacheable(value = "studentsListByClassRoom")
-    public Page<StudentDto> findStudentsByClass(Long idClass, Pageable pagination, Principal user) {
+    public Page<StudentDto> findStudentsByClass(Long idClass, Pageable pagination, Principal user) { // Encontra uma lista de estudantes relacionado a uma classe.
         ClassRoom classRoom = returnClass(idClass);
         teacherAllowed(classRoom, user);
         Page<Student> students = studentRepository.findListStudentsByClassRoomId(idClass, pagination);
@@ -81,14 +80,14 @@ public class ClassRoomService {
     }
 
 
-    public StudentDto findStudentById(Long idClass, Long idStudent, Principal user) {
+    public StudentDto findStudentById(Long idClass, Long idStudent, Principal user) { // Encontra o estudante específico de uma classe específica
         ClassRoom classRoom = returnClass(idClass);
         teacherAllowed(classRoom, user);
         Student student = returnStudent(classRoom, idStudent, false);
         return new StudentDto(student);
     }
 
-    public TeacherDto findTeacher(Long idClass, Principal user) {
+    public TeacherDto findTeacher(Long idClass, Principal user) { // Encontra o professor relacionado a classe.
         ClassRoom classRoom = returnClass(idClass);
         teacherAllowed(classRoom, user);
         Optional<Teacher> teacher = teacherRepository.findByClassRoomId(idClass);
@@ -96,13 +95,13 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = {"classesRoomList", "studentsListByClassRoom", "studentsList"}, allEntries = true)
-    public StudentDto updateGrades(Long idClass, Long idStudent, Principal user, NewGradesForm newGrades) {
-        List<UpdateCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed());
+    public StudentDto updateGrades(Long idClass, Long idStudent, Principal user, NewGradesForm newGrades) { // Atualiza as notas de um aluno!
+        List<UpdateCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed()); // Validações para atualizar uma nota.
 
         ClassRoom classRoom = returnClass(idClass);
         Student student = returnStudent(classRoom, idStudent, false);
 
-        validations.forEach(v -> v.validation(newGrades, classRoom, user));
+        validations.forEach(v -> v.validation(newGrades, classRoom, user)); // VALIDANDO!
 
         updateGrades(student, newGrades);
         approve(student);
@@ -111,7 +110,7 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = "classesRoomList", allEntries = true)
-    public ClassRoomDto createClassRoom(CreateClassForm createClassForm) {
+    public ClassRoomDto createClassRoom(CreateClassForm createClassForm) { // Cria uma sala no banco, AUTOMATIZADA! Só precisa informar o turno!
         List<ClassRoom> classRooms = classRepository.findAll();
 
         char lastClassLetter = classRooms.get(classRooms.size() - 1).getLetter();
@@ -120,7 +119,7 @@ public class ClassRoomService {
         char letterNewClass = '.';
 
         for (int i = 0; i < vector.length; i++) {
-            if (lastClassLetter == vector[i]) {
+            if (lastClassLetter == vector[i]) {                    // PRECISA CRIAR UMA VALIDAÇÃO PARA CRIAR UM LIMITE DE SALAS, SÓ PODE TER ATÉ A LETRA S!
                 letterNewClass = vector[i + 1];
             }
         }
@@ -132,18 +131,18 @@ public class ClassRoomService {
 
 
     @CacheEvict(value = {"classesRoomList", "teachersList"}, allEntries = true)
-    public ClassRoomDto setTeacher(Long idClass, SetTeacherForm setTeacherForm) {
-        List<SetTeacherCheck> validations = Arrays.asList(new SameTeacher(), new TeacherHasAnotherClass());
+    public ClassRoomDto setTeacher(Long idClass, SetTeacherForm setTeacherForm) { // Seta um professor em uma classe.
+        List<SetTeacherCheck> validations = Arrays.asList(new SameTeacher(), new TeacherHasAnotherClass()); // Validações para setar um professor em uma classe.
 
         ClassRoom classRoom = returnClass(idClass);
         Long idTeacher = setTeacherForm.getIdTeacher();
         Teacher teacher = returnTeacher(idTeacher);
         Teacher classTeacher = classRoom.getTeacher();
         if (classTeacher != null) {
-            validations.forEach(v -> v.validation(teacher, classTeacher));
+            validations.forEach(v -> v.validation(teacher, classTeacher)); // VALIDANDO!
             classTeacher.setClassRoom(null);
         } else {
-            validations.forEach(v -> v.validation(teacher, null));
+            validations.forEach(v -> v.validation(teacher, null)); // VALIDANDO!
         }
         updateClassTeacher(teacher, classRoom); // ATUALIZA SALVANDO NO BANCO AS NOVAS INFORMAÇÕES !
 
@@ -152,8 +151,8 @@ public class ClassRoomService {
 
 
     @CacheEvict(value = {"classesRoomList", "studentsList", "studentsListByClassRoom"}, allEntries = true)
-    public ClassRoomDto addStudent(Long idClass, AddRemoveStudentForm addStudentForm) {
-        List<AddStudentCheck> validations = Arrays.asList(new FullList(), new ClassContainsSameStudent(), new StudentHasAnotherClass());
+    public ClassRoomDto addStudent(Long idClass, AddRemoveStudentForm addStudentForm) {  // Adiciona um estudante na lista de estudantes da classe.
+        List<AddStudentCheck> validations = Arrays.asList(new FullList(), new ClassContainsSameStudent(), new StudentHasAnotherClass()); // Validação para adicionar um aluno em uma classe.
 
         ClassRoom classRoom = returnClass(idClass);
         Long idStudent = addStudentForm.getIdStudent();
@@ -161,7 +160,7 @@ public class ClassRoomService {
 
 
         ClassRoom finalClassRoom = classRoom;
-        validations.forEach(v -> v.validation(student, finalClassRoom));
+        validations.forEach(v -> v.validation(student, finalClassRoom)); // VALIDANDO!
 
         student.setClassRoom(classRoom);
 
@@ -173,7 +172,7 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = {"classesRoomList", "studentsList", "studentsListByClassRoom"}, allEntries = true)
-    public ClassRoomDto removeStudent(Long idClass, AddRemoveStudentForm removeStudentForm) {
+    public ClassRoomDto removeStudent(Long idClass, AddRemoveStudentForm removeStudentForm) { // Remove um estudante da lista de estudante da classe.
 
         ClassRoom classRoom = returnClass(idClass);
         Long idStudent = removeStudentForm.getIdStudent();
@@ -186,7 +185,7 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = {"teachersList", "classesRoomList"})
-    public ClassRoomDto removeTeacher(Long idClass) {
+    public ClassRoomDto removeTeacher(Long idClass) { // Remove o professor de uma classe!
 
         ClassRoom classRoom = returnClass(idClass);
         classRoom.getTeacher().setClassRoom(null);
@@ -197,18 +196,18 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = {"classesRoomList"})
-    public String removeClass(Long idClass) {      // Só é possivel remover uma classe caso ela não tenha estudante nem professores!
+    public String removeClass(Long idClass) {     // Remove uma Class do Sistema!
 
         ClassRoom classRoom = returnClass(idClass);
         try {
-            classRepository.delete(classRoom);
-        } catch (DataIntegrityViolationException e) {
+            classRepository.delete(classRoom);  // Só é possivel remover uma classe caso ela não tenha estudantes nem professor, se tiver, vai dar erro, e vai lançar a
+        } catch (DataIntegrityViolationException e) {                             // exception da linha 205.
             throw new DatabaseException("You can't delete a class that has teachers and students, remove them first!");
         }
         return "Class : " + idClass + " removed!";
     }
 
-    private void teacherAllowed(ClassRoom classRoom, Principal user) {
+    private void teacherAllowed(ClassRoom classRoom, Principal user) { //  Verifica se o teacher está permitido a fazer algo.
         User userEntity = userRepository.findByEmail(user.getName()).get();
         if(userEntity instanceof Teacher) {
             TeacherAllowed validation = new TeacherAllowed();
@@ -216,8 +215,7 @@ public class ClassRoomService {
         }
     }
 
-
-    private ClassRoom returnClass(Long idClass) {
+    private ClassRoom returnClass(Long idClass) { // Método que retorna uma Classe do banco.
         Optional<ClassRoom> classRoom = classRepository.findById(idClass);
         return classRoom.orElseThrow(() -> new ResourceNotFoundException("Id : " + idClass + ", This class wasn't found on DataBase"));
     }
@@ -232,18 +230,18 @@ public class ClassRoomService {
         return studentOptionalDataBase.orElseThrow(() -> new ResourceNotFoundException("Id : " + idStudent + ", This student wasn't found on DataBase"));
     }
 
-    private Teacher returnTeacher(Long idTeacher) {
+    private Teacher returnTeacher(Long idTeacher) { // Método que retorna um Professor do banco.
         Optional<Teacher> teacher = teacherRepository.findById(idTeacher);
         return teacher.orElseThrow(() -> new ResourceNotFoundException("Id : " + idTeacher + ", This teacher wasn't found on DataBase"));
     }
 
-    private void approve(Student student) {
+    private void approve(Student student) {               // Aprova um estudante, troca o status para = APROVADO !
         if (student.getReportCard().getAverageStudent() >= 6) {
             student.getReportCard().setSituation(Situation.APPROVED);
         }
     }
 
-    private void updateGrades(Student student, NewGradesForm newGrades) {
+    private void updateGrades(Student student, NewGradesForm newGrades) { // Verifica se o form (requisição) não tem valores nulos, se não tiver, vai atualizar a nota.
 
         if (newGrades.getGrade1() != null) {
             student.getReportCard().setGrade1(newGrades.getGrade1());
@@ -259,19 +257,18 @@ public class ClassRoomService {
 
     }
 
-    private ClassRoom updateClassTeacher(Teacher teacher, ClassRoom classRoom) {
+    private ClassRoom updateClassTeacher(Teacher teacher, ClassRoom classRoom) { // Atualiza o professor de uma classe.
 
         teacher.setClassRoom(classRoom);
         userRepository.save(teacher);
         classRoom.setTeacher(teacher);
         classRoom = classRepository.save(classRoom);
 
-
         return classRoom;
     }
 
 
-    private Character[] letteringVector() {
+    private Character[] letteringVector() { // Método com as possíveis letras de Classes, Quando uma sala é criada, ela recebe a próxima letra!
         Character[] letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'};
         return letters;
     }

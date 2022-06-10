@@ -34,13 +34,13 @@ public class UserService implements UserDetailsService, AllUserTypeService {
 
     @Override
     @Cacheable(value = "usersList")
-    public List<UserDto> findAll(String rolesName) {
+    public List<UserDto> findAll(String rolesName) {  // Encontra todos os usuários do sistema (QUALQUER USUÁRIO).
         List<UserDto> usersDto = verifyParameters(rolesName);
         return usersDto;
     }
 
     @Override
-    public UserDto findById(Long id) {
+    public UserDto findById(Long id) {  // Encontra um usuário do sistema por Id (QUALQUER USUÁRIO).
         User user = returnUser(id);
         return new UserDto(user);
     }
@@ -49,20 +49,20 @@ public class UserService implements UserDetailsService, AllUserTypeService {
     public String remove(Long id) { // Esse método serve tanto para teacher como estudante. //
 
         User user = returnUser(id);
-        String userInfo = user.toString();
+        String userInfo = user.toString();     // TEM QUE BLOQUEAR A SEGUINTE AÇÃO -> REMOVER UM PRINCIPAL(DIRETOR) DO SISTEMA.
         verifyInstance(user);
         userRepository.delete(user);
 
         return "User  : " + userInfo + " removed with success!";
     }
     @Override
-    public User returnUser(Long id) {
+    public User returnUser(Long id) { // Método que retorna um usuário do sistema.
         Optional<User> user = userRepository.findById(id);
         return user.orElseThrow(()->new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
     }
 
     @Override
-    public List<UserDto> verifyParameters(String rolesName) {
+    public List<UserDto> verifyParameters(String rolesName) { // Método que verifica os parametros passados na URL.
         String rolesNameOriginal = rolesName;
         List<User> users;
         if (rolesName != null) {
@@ -79,11 +79,11 @@ public class UserService implements UserDetailsService, AllUserTypeService {
         return usersDto;
     }
 
-    public List<UserDto> convertToDto(List<User> users) {          // Se possível, colocar esse método na interface! Para todos que herdam usuário terem.
+    public List<UserDto> convertToDto(List<User> users) {     // Método que converte uma lista de Users para UsersDto.
         return users.stream().map(UserDto::new).collect(Collectors.toList());
     }
 
-    private void verifyInstance(User user) { // Tive que fazer só para professor por causa da relação no banco de dados!
+    private void verifyInstance(User user) { // Tive que fazer só para a classe professor por causa da relação no banco de dados!
         if (user instanceof Teacher) {
             Teacher teacher = (Teacher) user;
             if (teacher.getClassRoom() != null) {

@@ -10,12 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
     @EnableWebSecurity
     @Configuration
     @Profile("dev")
-    public class DevSecurityConfigurations extends WebSecurityConfigurerAdapter { // Classe de segurança nivel de dev!
+    public class DevSecurityConfigurations extends WebSecurityConfigurerAdapter { // Classe de segurança nivel de dev, sem autorização e nem nada!
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()
-                    .antMatchers("/**").permitAll()
+                    .antMatchers("/**").permitAll() // Estou permitindo todos os acessos no sistema.
                     .and().csrf().disable();
         }
     }

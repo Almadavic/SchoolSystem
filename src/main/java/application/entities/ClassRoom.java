@@ -29,7 +29,7 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
     private Long id;
     private Character letter;
     @Enumerated(EnumType.STRING)
-    private ClassShift classShift;
+    private ClassShift classShift;  // Uma classe tem um turno.
 
     @OneToOne(mappedBy = "classRoom", cascade = CascadeType.ALL)
     private Teacher teacher;       // Uma classe tem 1 teacher
@@ -50,7 +50,7 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
 
     public void removeStudent(Student student) {     // Remove um estudante
         students.remove(student);
-    }
+    } // Remove um estudante
 
     public double getAverageClass() {          // Método que retorna a média total dos alunos da Classe !
         Double sumStudentsAverage = students.stream().map(rc -> rc.getReportCard()).mapToDouble(ReportCard::getAverageStudent).sum();

@@ -23,13 +23,12 @@ public class TeacherController implements ExtendsUserController { // Controller 
 
     @Override
     @GetMapping
-    // Método que retorna todos os professores do sistema.
+    // Método que retorna todos os professores do sistema, ou eu posso filtrar a busca (PROFESSORES QUE NÃO TEM CLASSE ASSOCIADA).
     public ResponseEntity<List<? extends UserDto>> findAll(@RequestParam(required = false)String noClass) {
 
+        List<TeacherDto> teachersDto = teacherService.findAll(noClass);
 
-        List<TeacherDto> teacherDto = teacherService.findAll(noClass);
-
-        return ResponseEntity.ok().body(teacherDto);
+        return ResponseEntity.ok().body(teachersDto);
     }
 
 

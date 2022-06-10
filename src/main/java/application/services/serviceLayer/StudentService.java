@@ -41,20 +41,20 @@ public class StudentService  implements ExtendsUserService {
 
     @Override
     @Cacheable(value = "studentsList")
-    public List<StudentDto> findAll(String noClass) {
+    public List<StudentDto> findAll(String noClass) { // Encontra todos os estudantes do sistema.
         List<StudentDto> studentDtos = verifyParameters(noClass);
         return studentDtos;
     }
 
     @Override
-    public StudentDto findById(Long id) {
+    public StudentDto findById(Long id) { // Encontra um estudante do sistema por Id.
         Student student = returnUser(id);
         return new StudentDto(student);
     }
 
     @Override
     @CacheEvict(value = {"studentsList","usersList"},allEntries = true)
-    public StudentDto save(RegisterUserForm userForm) {
+    public StudentDto save(RegisterUserForm userForm) {       // Salva um estudante no banco.
         List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered());
         validations.forEach(v -> v.validation(userForm, userRepository));
         Student student = new Student();
@@ -70,13 +70,13 @@ public class StudentService  implements ExtendsUserService {
     }
 
     @Override
-    public Student returnUser(Long id) {
+    public Student returnUser(Long id) { // Método que retorna um estudante do banco.
         Optional<Student> student = studentRepository.findById(id);
         return student.orElseThrow(()->new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
     }
 
     @Override
-    public List<StudentDto> verifyParameters(String noClass) {
+    public List<StudentDto> verifyParameters(String noClass) { // Método que verifica os parametros passados na URL.
         List<Student> students = null;
         if (noClass != null) {
             if (noClass.toUpperCase().equals("TRUE")) {
@@ -93,7 +93,7 @@ public class StudentService  implements ExtendsUserService {
         return studentDtos;
     }
 
-    private List<StudentDto> convertToDto(List<Student> students) {
+    private List<StudentDto> convertToDto(List<Student> students) {  // Método que converte uma lista de Students para StudentsDto.
         return students.stream().map(StudentDto::new).collect(Collectors.toList());
     }
 

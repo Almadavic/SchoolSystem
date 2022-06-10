@@ -42,7 +42,7 @@ public class ClassRoomDto {    // DTO da classe ClassRoom
         this.studentsDto = convertList(classRoom.getStudents());
         Collections.sort(studentsDto);
         this.numberStudents = studentsDto.size();
-        this.averageClassGrade = classRoom.getAverageClass();
+        this.averageClassGrade = convertToDecimal(classRoom.getAverageClass());
         if (classRoom.getTeacher() != null) {
             this.teacherDto = new TeacherDto(classRoom.getTeacher());
         }
@@ -52,5 +52,8 @@ public class ClassRoomDto {    // DTO da classe ClassRoom
         return students.stream().map(StudentDto::new).collect(Collectors.toList());
     }
 
-
+    private Double convertToDecimal(double average) { // Método que deixa a nota  em decimal formatada!
+        double decimal = Math.round(average * 10.0) / 10.0;
+        return decimal;
+    }
 }

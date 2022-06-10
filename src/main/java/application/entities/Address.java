@@ -29,7 +29,7 @@ public class Address implements Serializable { // Classe do Banco - > Address | 
 
     @OneToOne
     @MapsId
-    private User user; // Um endereço tem 1 usuário associado
+    private User user; // Um endereço tem 1 usuário associado.
 
     public Address(String city, String state, String country, User user) {
         this.city = city;

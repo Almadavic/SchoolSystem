@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 @Configuration
 @Profile(value = {"test", "dev"})
-public class StartProject implements CommandLineRunner { // Essa classe é uma clase separada de configuração!
+public class StartProject implements CommandLineRunner { // Essa classe é uma clase separada de configuração, Ela serve para popular o banco de dados!
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
@@ -33,16 +33,16 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
         // , esse método vai ser chamado, e também oq tem dentro.
         System.out.println(ApplicationDetails.text());                                // Preste atenção como as associações são feitas no método!
 
-        String senhaEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
+        String passwordEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
 
         ClassRoom cr1 = new ClassRoom('A', ClassShift.MORNING);
 
 
-        Student u1 = new Student("Joao Lacerta", "joao@gmail.com", senhaEncode, cr1);
-        Student u2 = new Student("Victor Almada", "almadavic@live.com", senhaEncode, cr1);
-        Student u3 = new Student("Renato Tavares", "renato@hotmail.com", senhaEncode, cr1);
-        Student u4 = new Student("Marcos Almeida", "marcos@gmail.com", senhaEncode, null);
-        Principal principal = new Principal("Barbara Borges", "barbara@gmail.com", senhaEncode);
+        Student u1 = new Student("Joao Lacerta", "joao@gmail.com", passwordEncode, cr1);
+        Student u2 = new Student("Victor Almada", "almadavic@live.com", passwordEncode, cr1);
+        Student u3 = new Student("Renato Tavares", "renato@hotmail.com", passwordEncode, cr1);
+        Student u4 = new Student("Marcos Almeida", "marcos@gmail.com", passwordEncode, null);
+        Principal principal = new Principal("Barbara Borges", "barbara@gmail.com", passwordEncode);
 
         Registration registration1 = new Registration(Instant.parse("2019-06-20T19:53:07Z"),u1);
         Registration registration2 = new Registration(Instant.parse("2019-07-21T03:42:10Z"),u2);
@@ -83,7 +83,7 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
         classRoomRepository.save(cr1);
         userRepository.saveAll(Arrays.asList(u1, u2, u3, u4,principal));
 
-        Teacher teacher1 = new Teacher("Raphael", "raphael@gmail.com", senhaEncode, cr1);
+        Teacher teacher1 = new Teacher("Raphael", "raphael@gmail.com", passwordEncode, cr1);
         Address a5 = new Address("EUA", "Florida", "Tampa", teacher1);
         Registration registration6 = new Registration(Instant.parse("2019-07-21T03:42:10Z"),teacher1);
         teacher1.setAddress(a5);
@@ -114,7 +114,7 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
         classRoomRepository.saveAll(Arrays.asList(cr1,cr2));
 
 
-        Teacher teacher2 = new Teacher("Euni", "euni@gmail.com", senhaEncode);
+        Teacher teacher2 = new Teacher("Euni", "euni@gmail.com", passwordEncode);
         Address a6 = new Address("Brasil", "Bahia", "Salvador", teacher2);
         Registration registration7 = new Registration(Instant.parse("2019-07-21T03:42:10Z"),teacher2);
         teacher2.addRole(role2);

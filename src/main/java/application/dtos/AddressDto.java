@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
+@Getter         // GET dos atributos
+@NoArgsConstructor // Gera o construtor padrão (SEM ARGUMENTOS)
 @JsonPropertyOrder(value = {"city","state","country"}) // Ordenação de atributos
 public class AddressDto {  // DTO da classe Address
     @JsonProperty(value="city") // nome do atributo, para ordenar na linha 9

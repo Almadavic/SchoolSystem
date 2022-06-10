@@ -38,27 +38,20 @@ public class TeacherService implements ExtendsUserService {
 
     @Override
     @Cacheable(value = "teachersList")
-    public List<TeacherDto> findAll(String noClass) {
+    public List<TeacherDto> findAll(String noClass) { // Encontra todos os professores do sistema.
         List<TeacherDto> teachersDtos =  verifyParameters(noClass);
         return teachersDtos;
     }
 
     @Override
-    public TeacherDto findById(Long id) {
+    public TeacherDto findById(Long id) {  // Encontra um professor do sistema por Id.
         Teacher teacher = returnUser(id);
         return new TeacherDto(teacher);
     }
 
     @Override
-    public Teacher returnUser(Long id) {
-        Optional<Teacher> teacher = teacherRepository.findById(id);
-        return teacher.orElseThrow(()->new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
-    }
-
-
-    @Override
     @CacheEvict(value = {"teachersList","usersList"},allEntries = true)
-    public TeacherDto save(RegisterUserForm userForm) {
+    public TeacherDto save(RegisterUserForm userForm) {         // Salva um professor no banco.
         List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered());
 
         validations.forEach(v->v.validation(userForm,userRepository));
@@ -75,8 +68,16 @@ public class TeacherService implements ExtendsUserService {
         return new TeacherDto(teacher);
     }
 
+
     @Override
-    public  List<TeacherDto> verifyParameters(String noClass) {
+    public Teacher returnUser(Long id) {   // Método que retorna um professor do banco.
+        Optional<Teacher> teacher = teacherRepository.findById(id);
+        return teacher.orElseThrow(()->new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
+    }
+
+
+    @Override
+    public  List<TeacherDto> verifyParameters(String noClass) { // Método que verifica os parametros passados na URL.
 
         List<Teacher> teachers = null;
         if (noClass != null) {
@@ -94,7 +95,7 @@ public class TeacherService implements ExtendsUserService {
         return teachersDtos;
     }
 
-    private List<TeacherDto> convertToDto(List<Teacher> teachers) {
+    private List<TeacherDto> convertToDto(List<Teacher> teachers) { // Método que converte uma lista de Teachers para TeachersDto.
         return teachers.stream().map(TeacherDto::new).collect(Collectors.toList());
     }
 

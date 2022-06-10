@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-public class SwaggerConfigurations {
+public class SwaggerConfigurations { // Configurações do SWAGGER !
 
 	@Bean
 	public GroupedOpenApi publicApi() {
@@ -24,7 +24,7 @@ public class SwaggerConfigurations {
 	}
 
 	@Bean
-	public OpenAPI forumAluraOpenAPI() {
+	public OpenAPI ApiAlmada() {
 		return new OpenAPI()
 				.info(new Info().title("SchoolSystem API")
 						.description("Projeto de Documentacao de API do Almada")

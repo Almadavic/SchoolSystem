@@ -12,15 +12,15 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_principals")
-public class Principal extends User { // Classe do Banco - > Principal| Filha de User | Representa os diretores no banco
+public class Principal extends User { // Classe do Banco - > Principal| Filha de User | Representa os diretores do sistema.
 
     @ManyToMany()
     @JoinTable(name = "tb_principals_responsibilities",
             joinColumns = @JoinColumn(name = "principal_id"),
             inverseJoinColumns = @JoinColumn(name = "responsibility_id"))
-    private List<Responsibility> responsibilities = new ArrayList<>();
+    private List<Responsibility> responsibilities = new ArrayList<>();         // Muitos diretores tem muitas responsabilidades.
 
-    public void addResponsibility(Responsibility responsibility) {
+    public void addResponsibility(Responsibility responsibility) { // Adicionar uma responsabilidade ao diretor.
         responsibilities.add(responsibility);
     }
     public Principal(String nome, String email, String password) {

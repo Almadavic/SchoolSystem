@@ -30,5 +30,4 @@ public class PrincipalDto extends UserDto{
         return responsibilities.stream().map(ResponsibilityDto::new).collect(Collectors.toList());
     }
 
-
 }

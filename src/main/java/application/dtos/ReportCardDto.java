@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonPropertyOrder(value = {"grade1", "grade2", "grade3", "averageGrade", "situation"})
 public class ReportCardDto { // Dto da classe ReportCard
-
-
     @JsonProperty(value = "grade1")
     private Double grade1;
     @JsonProperty(value = "grade2")
@@ -22,17 +20,19 @@ public class ReportCardDto { // Dto da classe ReportCard
     @JsonProperty(value = "situation")
     private Situation situation;
 
+    @JsonProperty("averageGrade")
+    private Double averageStudentGrade;
+
     public ReportCardDto(ReportCard reportCard) {    // Transformando um ReportCard em ReportCardDto
         this.grade1 = reportCard.getGrade1();
         this.grade2 = reportCard.getGrade2();
         this.grade3 = reportCard.getGrade3();
         this.situation = reportCard.getSituation();
+        this.averageStudentGrade = convertToDecimal(reportCard.getAverageStudent());
     }
 
-    @JsonProperty("averageGrade")
-    private Double getAverageGrade() {
-        double average = (grade1 + grade2 + grade3) / 3;     // Método que retorna a média de notas do boletim de um aluno!
-        double decimal = Math.round(average * 10.0) / 10.0; // Feito isso para ficar em decimal!
+    private Double convertToDecimal(double average) { // Método que deixa a nota  em decimal formatada!
+        double decimal = Math.round(average * 10.0) / 10.0;
         return decimal;
     }
 

@@ -3,11 +3,9 @@ package application.integrationTests.repositories;
 
 import application.entities.ClassRoom;
 import application.entities.enums.ClassShift;
-import application.entities.users.Student;
 import application.entities.users.Teacher;
 import application.integrationTests.repositories.interfaces.GeneralExtendsRepositoryTest;
 import application.repositories.ClassRoomRepository;
-import application.repositories.StudentRepository;
 import application.repositories.TeacherRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,16 +16,13 @@ import org.springframework.context.annotation.Profile;
 
 @SpringBootTest
 @Profile(value = "test")
-public class ClassRoomRepositoryTest implements GeneralExtendsRepositoryTest {
+public class ClassRoomRepositoryTest implements GeneralExtendsRepositoryTest { // TESTE DE INTEGRAÇÃO DO
 
     @Autowired
     private ClassRoomRepository classRepository;
 
     @Autowired
     private TeacherRepository teacherRepository; // Necessário para testar o update!
-
-    @Autowired
-    private StudentRepository studentRepository; // Necessário para testar o update!
 
     @Test
     public void save() {

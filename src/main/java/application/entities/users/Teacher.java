@@ -13,10 +13,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_teachers")
-public class Teacher extends User { // Classe do Banco - > Teacher
+public class Teacher extends User { // Classe do Banco - > Teacher | Filha de User | Representam os Professores do sistema.
 
     @OneToOne()
-    private ClassRoom classRoom; // 1 Classe tem 1 professsor | Filha de User | Representam os Professores do sistema.
+    private ClassRoom classRoom; // 1 Classe tem 1 professsor!
 
 
     public Teacher(String nome, String email, String senha) {

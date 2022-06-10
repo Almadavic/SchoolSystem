@@ -7,7 +7,6 @@ import java.time.Instant;
 
 public class StandardError implements Serializable {         // Classe de formatação de exception ! Será retornado o erro de uma forma mais agradável pro cliente.
     private static final long serialVersionUID = 1L;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT") // O tempo aparecer formatado pro cliente.
     private Instant timestamp;
     private Integer status;
