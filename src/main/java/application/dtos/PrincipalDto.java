@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @JsonPropertyOrder(value = {"id", "name", "email", "classRoomId", "address", "roles", "responsibilities"})
-public class PrincipalDto extends UserDto {
+public class PrincipalDto extends UserDto { //DTO da classe Principal
 
     @JsonProperty(value = "responsibilities")
     private List<ResponsibilityDto> responsibilitiesDto = new ArrayList<>();

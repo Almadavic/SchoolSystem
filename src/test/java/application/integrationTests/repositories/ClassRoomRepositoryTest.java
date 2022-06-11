@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Profile;
 
 @SpringBootTest
 @Profile(value = "test")
-public class ClassRoomRepositoryTest implements GeneralExtendsRepositoryTest { // TESTE DE INTEGRAÇÃO DO
+public class ClassRoomRepositoryTest implements GeneralExtendsRepositoryTest { // TESTE DE INTEGRAÇÃO
 
     @Autowired
     private ClassRoomRepository classRepository;

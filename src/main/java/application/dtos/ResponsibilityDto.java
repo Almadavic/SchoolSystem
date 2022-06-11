@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @JsonPropertyOrder(value = {"name"})
-public class ResponsibilityDto {
+public class ResponsibilityDto { //DTO da classe Responsibility
 
     @JsonProperty(value = "name")
     private String name;

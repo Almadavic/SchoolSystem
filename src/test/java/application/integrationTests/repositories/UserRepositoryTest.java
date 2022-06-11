@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 
 @SpringBootTest
 @Profile(value = "test")
-public class UserRepositoryTest { // TESTE DE INTEGRAÇÃO DO
+public class UserRepositoryTest { // TESTE DE INTEGRAÇÃO
 
     @Autowired
     private UserRepository userRepository;

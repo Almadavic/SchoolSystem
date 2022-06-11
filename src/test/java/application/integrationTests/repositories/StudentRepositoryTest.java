@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 
 @SpringBootTest
 @Profile(value = "test")
-public class StudentRepositoryTest implements ExtendsUserRepositoryTest { // TESTE DE INTEGRAÇÃO DO
+public class StudentRepositoryTest implements ExtendsUserRepositoryTest { // TESTE DE INTEGRAÇÃO
 
     @Autowired
     private StudentRepository studentRepository;

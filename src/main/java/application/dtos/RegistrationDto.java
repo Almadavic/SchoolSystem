@@ -11,7 +11,7 @@ import java.time.Instant;
 @Getter
 @NoArgsConstructor
 @JsonPropertyOrder(value = {"registrationMoment"})
-public class RegistrationDto {
+public class RegistrationDto { //DTO da classe Registration
     @JsonProperty(value = "registrationMoment")
     private Instant registrationMoment;
 

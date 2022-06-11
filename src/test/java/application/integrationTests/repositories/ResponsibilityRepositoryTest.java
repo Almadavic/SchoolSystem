@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 
 @SpringBootTest
 @Profile(value = "test")
-public class ResponsibilityRepositoryTest implements GeneralExtendsRepositoryTest { // TESTE DE INTEGRAÇÃO DO
+public class ResponsibilityRepositoryTest implements GeneralExtendsRepositoryTest { // TESTE DE INTEGRAÇÃO
 
     @Autowired
     private ResponsibilityRepository responsibilityRepository;

@@ -112,7 +112,6 @@ public class ClassRoomService {
     @CacheEvict(value = "classesRoomList", allEntries = true)
     public ClassRoomDto createClassRoom(CreateClassForm createClassForm) { // Método cria uma nova sala na plataforma, com a info Letter automatizada.
 
-
         List<CreateClassCheck> validations = Arrays.asList(new MaximumOfClassRooms()); // Validações para criar uma sala no sistema.
 
         List<ClassRoom> classRooms = classRepository.findAll();
