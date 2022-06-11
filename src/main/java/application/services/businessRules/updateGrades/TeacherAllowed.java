@@ -6,7 +6,7 @@ import application.services.exceptions.general.NoPermissionException;
 
 import java.security.Principal;
 
-public class TeacherAllowed implements UpdateCheck {
+public class TeacherAllowed implements UpdateGradesCheck {
     @Override
     public void validation(NewGradesForm newGrades, ClassRoom classRoom, Principal user) { // O professor que for alterar a nota do aluno tem q ser o mesmo professor da classe.
         newGrades = null;     //  Nullos porquê não tem função nessa classe.

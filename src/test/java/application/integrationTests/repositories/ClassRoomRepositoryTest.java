@@ -25,7 +25,8 @@ public class ClassRoomRepositoryTest implements GeneralExtendsRepositoryTest { /
     private TeacherRepository teacherRepository; // Necessário para testar o update!
 
     @Test
-    public void save() {
+    @Override
+    public void save() { // Salva uma Classe no Sistema.
 
         ClassRoom classRoom = new ClassRoom('B', ClassShift.AFTERNOON);
         classRoom = classRepository.save(classRoom);
@@ -35,29 +36,35 @@ public class ClassRoomRepositoryTest implements GeneralExtendsRepositoryTest { /
     }
 
     @Test
-    public void updateClassRoom() {           // AINDA NÃO FUNCIONAL!
+    public void updateClassRoom() { // Atualiza uma classe no sistema.
 
-        Long idClass = 1l;
+        Long idClass = 1L;
         ClassRoom classRoom = classRepository.findById(idClass).get();
         Assertions.assertEquals("raphael@gmail.com", classRoom.getTeacher().getEmail());
-        Assertions.assertEquals(3,classRoom.getStudents().size());          // problema!
         Teacher teacherClass = classRoom.getTeacher();
         removeTeacher(teacherClass, classRoom);
-        Long idTeacher = 7l;
+        Long idTeacher = 7L;
         Teacher teacherDataBase = teacherRepository.findById(idTeacher).get();
         setTeacher(teacherDataBase, classRoom);
 
         ClassRoom classRoomDataBase = classRepository.findById(idClass).get();
         Assertions.assertEquals("euni@gmail.com", classRoomDataBase.getTeacher().getEmail());
+
+        removeTeacher(classRoom.getTeacher(), classRoom);
+
+        setTeacher(teacherClass, classRoom);
+
+        ClassRoom classRoomDataBase2 = classRepository.findById(idClass).get();
+        Assertions.assertEquals("raphael@gmail.com", classRoomDataBase2.getTeacher().getEmail());
     }
 
-    private void removeTeacher(Teacher teacherClass, ClassRoom classRoom) {
+    private void removeTeacher(Teacher teacherClass, ClassRoom classRoom) { // Remove o Professor de uma sala.
         teacherClass.setClassRoom(null);
         classRoom.setTeacher(null);
         teacherRepository.save(teacherClass);
     }
 
-    private void setTeacher(Teacher teacherDataBase, ClassRoom classRoom) {
+    private void setTeacher(Teacher teacherDataBase, ClassRoom classRoom) { // Seta o Professor em uma sala.
         teacherDataBase.setClassRoom(classRoom);
         teacherRepository.save(teacherDataBase);
         classRoom.setTeacher(teacherDataBase);

@@ -19,7 +19,8 @@ public class ReportCard implements Serializable {  // Classe do Banco - > Report
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Long id;
     private Double grade1;
@@ -36,16 +37,15 @@ public class ReportCard implements Serializable {  // Classe do Banco - > Report
 
 
     public ReportCard() {
-        setInitialInformations();
+        setInitialInformation();
     }
 
 
     public double getAverageStudent() {
-        double average = (grade1 + grade2 + grade3) / 3;
-        return average;
+        return (grade1 + grade2 + grade3) / 3;
     }
 
-    private void setInitialInformations() {
+    private void setInitialInformation() {
         this.grade1 = 0.0;
         this.grade2 = 0.0;
         this.grade3 = 0.0;

@@ -2,7 +2,7 @@ package application.services.exceptions.classRoomService;
 
 import java.io.Serial;
 
-public class SameTeacherException extends RuntimeException{
+public class SameTeacherException extends RuntimeException {
 
     @Serial
     private static final long serialVersionUID = 1L;

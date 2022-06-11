@@ -13,23 +13,23 @@ public abstract class UserBuilder<T> { // Classe Parent ! Cria um usuário. || C
 
     private ClassRoom classRoom;
 
-    public  UserBuilder setNome(String name) {
-        this.name=name;
+    public UserBuilder setNome(String name) {
+        this.name = name;
         return this;
     }
 
-    public  UserBuilder setEmail(String email) {
-        this.email=email;
+    public UserBuilder setEmail(String email) {
+        this.email = email;
         return this;
     }
 
-    public  UserBuilder setPassword(String password) {
-        this.password=password;
+    public UserBuilder setPassword(String password) {
+        this.password = password;
         return this;
     }
 
-    public  UserBuilder setClassRoom(ClassRoom classRoom) {
-        this.classRoom= classRoom;
+    public UserBuilder setClassRoom(ClassRoom classRoom) {
+        this.classRoom = classRoom;
         return this;
     }
 

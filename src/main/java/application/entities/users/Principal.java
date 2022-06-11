@@ -18,17 +18,19 @@ public class Principal extends User { // Classe do Banco - > Principal| Filha de
     @JoinTable(name = "tb_principals_responsibilities",
             joinColumns = @JoinColumn(name = "principal_id"),
             inverseJoinColumns = @JoinColumn(name = "responsibility_id"))
-    private List<Responsibility> responsibilities = new ArrayList<>();         // Muitos diretores tem muitas responsabilidades.
+    private final List<Responsibility> responsibilities = new ArrayList<>();         // Muitos diretores tem muitas responsabilidades.
 
     public void addResponsibility(Responsibility responsibility) { // Adicionar uma responsabilidade ao diretor.
         responsibilities.add(responsibility);
     }
+
     public Principal(String nome, String email, String password) {
         super(nome, email, password);
     }
+
     @Override
     public String toString() {
-        return "Name : "+getName()+", Email : "+getEmail();
+        return "Name : " + getName() + ", Email : " + getEmail();
     }
 
 }

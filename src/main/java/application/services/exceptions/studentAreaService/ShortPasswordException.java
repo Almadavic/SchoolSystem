@@ -2,7 +2,7 @@ package application.services.exceptions.studentAreaService;
 
 import java.io.Serial;
 
-public class ShortPasswordException extends RuntimeException{
+public class ShortPasswordException extends RuntimeException {
 
     @Serial
     private static final long serialVersionUID = 1L;

@@ -18,14 +18,14 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/students")
 public class StudentController implements ExtendsUserController {  // Controller para o diretor, apenas quem tem essa role,consegue
-                                            // ver informações de todos os alunos do sistema para fazer algum tipo de controle!
+    // ver informações de todos os alunos do sistema para fazer algum tipo de controle!
 
     @Autowired
     private StudentService studentService;
 
     @Override
     @GetMapping
-    // Método q retorna todos os alunos do sistema registrados, ou eu posso filtrar a busca (ALUNOS QUE NÃO TEM CLASSE ASSOCIADA).
+    // Método que retorna todos os alunos do sistema registrados, ou eu posso filtrar a busca (ALUNOS QUE NÃO TEM CLASSE ASSOCIADA).
     public ResponseEntity<List<? extends UserDto>> findAll(@RequestParam(required = false) String noClass) {
 
         List<StudentDto> studentsDto = studentService.findAll(noClass);
@@ -35,18 +35,18 @@ public class StudentController implements ExtendsUserController {  // Controller
 
     @Override
     @GetMapping(value = "/{id}")
-   // Método retorna um aluno em específico do sistema.
-   public ResponseEntity<StudentDto> findById(@PathVariable Long id) {
+    // Método retorna um aluno em específico do sistema.
+    public ResponseEntity<StudentDto> findById(@PathVariable Long id) {
 
         StudentDto studentDto = studentService.findById(id);
 
-       return ResponseEntity.ok().body(studentDto);
+        return ResponseEntity.ok().body(studentDto);
     }
 
     @Override
     @PostMapping(value = "/register")
-    // Cria (cadastra) um novo Estudante no banco de dados!
-    public ResponseEntity<? extends UserDto> save(@RequestBody @Valid  RegisterUserForm userForm, UriComponentsBuilder uriBuilder) {
+    // Método cria (cadastra) um novo estudante no banco de dados.
+    public ResponseEntity<? extends UserDto> save(@RequestBody @Valid RegisterUserForm userForm, UriComponentsBuilder uriBuilder) {
 
         StudentDto studentDto = studentService.save(userForm);
 

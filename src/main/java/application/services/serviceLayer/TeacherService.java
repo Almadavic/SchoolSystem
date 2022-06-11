@@ -8,8 +8,8 @@ import application.forms.RegisterUserForm;
 import application.repositories.RoleRepository;
 import application.repositories.TeacherRepository;
 import application.repositories.UserRepository;
-import application.services.businessRules.RegisterUser.EmailAlreadyRegistered;
-import application.services.businessRules.RegisterUser.RegisterUserCheck;
+import application.services.businessRules.registerUser.EmailAlreadyRegistered;
+import application.services.businessRules.registerUser.RegisterUserCheck;
 import application.services.exceptions.general.InvalidParamException;
 import application.services.exceptions.general.ResourceNotFoundException;
 import application.services.serviceLayer.interfaces.ExtendsUserService;
@@ -38,30 +38,31 @@ public class TeacherService implements ExtendsUserService {
 
     @Override
     @Cacheable(value = "teachersList")
-    public List<TeacherDto> findAll(String noClass) { // Encontra todos os professores do sistema.
-        List<TeacherDto> teachersDtos =  verifyParameters(noClass);
-        return teachersDtos;
+    public List<TeacherDto> findAll(String noClass) { // Método que retorna todos os professores do sistema, ou eu posso filtrar a busca (PROFESSORES QUE NÃO TEM CLASSE ASSOCIADA).
+        return verifyParameters(noClass);
     }
 
     @Override
-    public TeacherDto findById(Long id) {  // Encontra um professor do sistema por Id.
+    public TeacherDto findById(Long id) {  // Método que retorna um teacher em específico,passando o  id.
+
         Teacher teacher = returnUser(id);
         return new TeacherDto(teacher);
     }
 
     @Override
-    @CacheEvict(value = {"teachersList","usersList"},allEntries = true)
-    public TeacherDto save(RegisterUserForm userForm) {         // Salva um professor no banco.
-        List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered());
+    @CacheEvict(value = {"teachersList", "usersList"}, allEntries = true)
+    public TeacherDto save(RegisterUserForm userForm) {         // Método cria um novo Teacher (cadastra) no banco de dados.
 
-        validations.forEach(v->v.validation(userForm,userRepository));
+        List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered()); // Validação para ver se o email já está cadastrado.
+
+        validations.forEach(v -> v.validation(userForm, userRepository)); // VALIDANDO !!
 
         Teacher teacher = new Teacher();
         convertFromFormToUser(teacher, userForm);
         Role role = roleRepository.findByName("ROLE_TEACHER").get();
         teacher.addRole(role);
 
-        Registration registration = new Registration(Instant.now(),teacher);
+        Registration registration = new Registration(Instant.now(), teacher);
         teacher.setRegistration(registration);
 
         teacher = teacherRepository.save(teacher);
@@ -72,18 +73,18 @@ public class TeacherService implements ExtendsUserService {
     @Override
     public Teacher returnUser(Long id) {   // Método que retorna um professor do banco.
         Optional<Teacher> teacher = teacherRepository.findById(id);
-        return teacher.orElseThrow(()->new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
+        return teacher.orElseThrow(() -> new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
     }
 
 
     @Override
-    public  List<TeacherDto> verifyParameters(String noClass) { // Método que verifica os parametros passados na URL.
+    public List<TeacherDto> verifyParameters(String noClass) { // Método que verifica os parametros passados na URL.
 
-        List<Teacher> teachers = null;
+        List<Teacher> teachers;
         if (noClass != null) {
-            if (noClass.toUpperCase().equals("TRUE")) {
-              teachers = teacherRepository.findAllWhereClassRoomIsNull();
-            } else if (noClass.toUpperCase().equals("FALSE")) {
+            if (noClass.equalsIgnoreCase("TRUE")) {
+                teachers = teacherRepository.findAllWhereClassRoomIsNull();
+            } else if (noClass.equalsIgnoreCase("FALSE")) {
                 teachers = teacherRepository.findAll();
             } else {
                 throw new InvalidParamException("This parameter : {" + noClass + "} is invalid");
@@ -91,8 +92,7 @@ public class TeacherService implements ExtendsUserService {
         } else {
             teachers = teacherRepository.findAll();
         }
-        List<TeacherDto> teachersDtos = convertToDto(teachers);
-        return teachersDtos;
+        return convertToDto(teachers);
     }
 
     private List<TeacherDto> convertToDto(List<Teacher> teachers) { // Método que converte uma lista de Teachers para TeachersDto.

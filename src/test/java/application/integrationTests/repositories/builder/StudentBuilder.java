@@ -6,6 +6,6 @@ public class StudentBuilder extends UserBuilder { // Classe (FILHA) StudentBuild
 
     @Override
     public Student create() { // Cria um estudante.
-        return new Student(getName(),getEmail(),getPassword(),getClassRoom());
+        return new Student(getName(), getEmail(), getPassword(), getClassRoom());
     }
 }

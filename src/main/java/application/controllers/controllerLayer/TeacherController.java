@@ -24,13 +24,12 @@ public class TeacherController implements ExtendsUserController { // Controller 
     @Override
     @GetMapping
     // Método que retorna todos os professores do sistema, ou eu posso filtrar a busca (PROFESSORES QUE NÃO TEM CLASSE ASSOCIADA).
-    public ResponseEntity<List<? extends UserDto>> findAll(@RequestParam(required = false)String noClass) {
+    public ResponseEntity<List<? extends UserDto>> findAll(@RequestParam(required = false) String noClass) {
 
         List<TeacherDto> teachersDto = teacherService.findAll(noClass);
 
         return ResponseEntity.ok().body(teachersDto);
     }
-
 
 
     @Override
@@ -45,7 +44,7 @@ public class TeacherController implements ExtendsUserController { // Controller 
 
     @Override
     @PostMapping(value = "/register")
-    // Cria um novo Teacher (cadastra) no banco de dados!
+    // Método cria um novo Teacher (cadastra) no banco de dados.
     public ResponseEntity<? extends UserDto> save(@RequestBody @Valid RegisterUserForm userForm, UriComponentsBuilder uriBuilder) {
 
         TeacherDto teacherDto = teacherService.save(userForm);

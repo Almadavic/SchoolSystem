@@ -7,9 +7,9 @@ public class TeacherHasAnotherClass implements SetTeacherCheck { // Se o profess
 
     @Override
     public void validation(Teacher teacher, Teacher classTeacher) {
-        classTeacher=null; // null
+        classTeacher = null; // null
 
-        if(teacher.getClassRoom()!=null) {
+        if (teacher.getClassRoom() != null) {
             throw new TeacherHasAnotherClassException("The teacher already belongs an another class.");
         }
     }

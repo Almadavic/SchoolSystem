@@ -9,8 +9,8 @@ import application.forms.RegisterUserForm;
 import application.repositories.RoleRepository;
 import application.repositories.StudentRepository;
 import application.repositories.UserRepository;
-import application.services.businessRules.RegisterUser.EmailAlreadyRegistered;
-import application.services.businessRules.RegisterUser.RegisterUserCheck;
+import application.services.businessRules.registerUser.EmailAlreadyRegistered;
+import application.services.businessRules.registerUser.RegisterUserCheck;
 import application.services.exceptions.general.InvalidParamException;
 import application.services.exceptions.general.ResourceNotFoundException;
 import application.services.serviceLayer.interfaces.ExtendsUserService;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class StudentService  implements ExtendsUserService {
+public class StudentService implements ExtendsUserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -41,28 +41,30 @@ public class StudentService  implements ExtendsUserService {
 
     @Override
     @Cacheable(value = "studentsList")
-    public List<StudentDto> findAll(String noClass) { // Encontra todos os estudantes do sistema.
-        List<StudentDto> studentDtos = verifyParameters(noClass);
-        return studentDtos;
+    public List<StudentDto> findAll(String noClass) { // Método que retorna todos os alunos do sistema registrados, ou eu posso filtrar a busca (ALUNOS QUE NÃO TEM CLASSE ASSOCIADA).
+        return verifyParameters(noClass);
     }
 
     @Override
-    public StudentDto findById(Long id) { // Encontra um estudante do sistema por Id.
+    public StudentDto findById(Long id) { // Método retorna um aluno em específico do sistema.
         Student student = returnUser(id);
         return new StudentDto(student);
     }
 
     @Override
-    @CacheEvict(value = {"studentsList","usersList"},allEntries = true)
-    public StudentDto save(RegisterUserForm userForm) {       // Salva um estudante no banco.
-        List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered());
-        validations.forEach(v -> v.validation(userForm, userRepository));
+    @CacheEvict(value = {"studentsList", "usersList"}, allEntries = true)
+    public StudentDto save(RegisterUserForm userForm) {       // Método cria (cadastra) um novo Estudante no banco de dados.
+
+        List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered()); // Validação para ver se o email já está cadastrado.
+
+        validations.forEach(v -> v.validation(userForm, userRepository)); // VALIDANDO!!
+
         Student student = new Student();
         convertFromFormToUser(student, userForm);
         Role role = roleRepository.findByName("ROLE_STUDENT").get();
         student.addRole(role);
 
-        Registration registration = new Registration(Instant.now(),student);
+        Registration registration = new Registration(Instant.now(), student);
         student.setRegistration(registration);
 
         student = studentRepository.save(student);
@@ -72,16 +74,16 @@ public class StudentService  implements ExtendsUserService {
     @Override
     public Student returnUser(Long id) { // Método que retorna um estudante do banco.
         Optional<Student> student = studentRepository.findById(id);
-        return student.orElseThrow(()->new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
+        return student.orElseThrow(() -> new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
     }
 
     @Override
     public List<StudentDto> verifyParameters(String noClass) { // Método que verifica os parametros passados na URL.
-        List<Student> students = null;
+        List<Student> students;
         if (noClass != null) {
-            if (noClass.toUpperCase().equals("TRUE")) {
+            if (noClass.equalsIgnoreCase("TRUE")) {
                 students = studentRepository.findAllWhereClassRoomIsNull();
-            } else if (noClass.toUpperCase().equals("FALSE")) {
+            } else if (noClass.equalsIgnoreCase("FALSE")) {
                 students = studentRepository.findAll();
             } else {
                 throw new InvalidParamException("This parameter : {" + noClass + "} is invalid.");
@@ -89,8 +91,7 @@ public class StudentService  implements ExtendsUserService {
         } else {
             students = studentRepository.findAll();
         }
-        List<StudentDto> studentDtos = convertToDto(students);
-        return studentDtos;
+        return convertToDto(students);
     }
 
     private List<StudentDto> convertToDto(List<Student> students) {  // Método que converte uma lista de Students para StudentsDto.

@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,22 +17,23 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_responsabilities")
-public class Responsibility {
+public class Responsibility implements Serializable {
 
-      @Serial
-      private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-      @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-      @Setter(AccessLevel.NONE)
-      private Long id;
-      private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
+    private Long id;
+    private String name;
 
-      @ManyToMany(mappedBy = "responsibilities")
-      @Setter(AccessLevel.NONE)
-      private List<Principal> principals = new ArrayList<>();
+    @ManyToMany(mappedBy = "responsibilities")
+    @Setter(AccessLevel.NONE)
+    private List<Principal> principals = new ArrayList<>();
 
-      public Responsibility(String name) {
-          this.name=name;
-      }
+    public Responsibility(String name) {
+        this.name = name;
+    }
 
 }

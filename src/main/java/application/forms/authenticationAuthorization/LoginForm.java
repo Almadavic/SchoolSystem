@@ -10,15 +10,15 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class LoginForm { // Form que representa o Login do usuário, email e senha!
 
-	@NotBlank
-	private String email;
+    @NotBlank
+    private String email;
 
-	@NotBlank
-	private String password;
+    @NotBlank
+    private String password;
 
 
-	public UsernamePasswordAuthenticationToken toConvert() {
-		return new UsernamePasswordAuthenticationToken(email, password);
-	}
+    public UsernamePasswordAuthenticationToken toConvert() {
+        return new UsernamePasswordAuthenticationToken(email, password);
+    }
 
 }

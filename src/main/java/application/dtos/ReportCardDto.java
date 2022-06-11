@@ -32,8 +32,7 @@ public class ReportCardDto { // Dto da classe ReportCard
     }
 
     private Double convertToDecimal(double average) { // Método que deixa a nota  em decimal formatada!
-        double decimal = Math.round(average * 10.0) / 10.0;
-        return decimal;
+        return Math.round(average * 10.0) / 10.0;
     }
 
 }

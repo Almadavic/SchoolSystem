@@ -24,7 +24,8 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Long id;
     private Character letter;
@@ -34,7 +35,7 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
     @OneToOne(mappedBy = "classRoom", cascade = CascadeType.ALL)
     private Teacher teacher;       // Uma classe tem 1 teacher
 
-    
+
     @OneToMany(mappedBy = "classRoom")
     @Setter(AccessLevel.NONE)
     public List<Student> students = new ArrayList<>(); // Uma classe tem uma lista de alunos
@@ -53,9 +54,8 @@ public class ClassRoom implements Serializable { // Classe do Banco - > ClassRoo
     } // Remove um estudante
 
     public double getAverageClass() {          // Método que retorna a média total dos alunos da Classe !
-        Double sumStudentsAverage = students.stream().map(rc -> rc.getReportCard()).mapToDouble(ReportCard::getAverageStudent).sum();
-        double averageClass = sumStudentsAverage/students.size();
-        return averageClass;
+        double sumStudentsAverage = students.stream().map(rc -> rc.getReportCard()).mapToDouble(ReportCard::getAverageStudent).sum();
+        return sumStudentsAverage / students.size();
     }
 
 }

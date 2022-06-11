@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serial;
+import java.io.Serializable;
 import java.time.Instant;
 
 @Getter
@@ -17,12 +18,13 @@ import java.time.Instant;
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_registrations")
-public class Registration {
+public class Registration implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Long id;
 
@@ -38,7 +40,7 @@ public class Registration {
 
 
     public Registration(Instant registrationMoment, User user) {
-        this.registrationMoment=registrationMoment;
-        this.user=user;
+        this.registrationMoment = registrationMoment;
+        this.user = user;
     }
 }

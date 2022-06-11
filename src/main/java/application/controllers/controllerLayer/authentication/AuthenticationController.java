@@ -28,7 +28,7 @@ public class AuthenticationController {         // Controller para fazer a auten
     @PostMapping
     public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginForm form) {  // Método para fazer o login e se autenticar no sistema.
 
-        String token = authService.authenticate(form,authManager); // Hash do Token que será retornado para o Client.
+        String token = authService.authenticate(form, authManager); // Hash do Token que será retornado para o Client.
 
         return ResponseEntity.ok(new TokenDto(token, "Bearer"));
     }

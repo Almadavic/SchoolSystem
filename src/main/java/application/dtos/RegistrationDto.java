@@ -16,7 +16,7 @@ public class RegistrationDto {
     private Instant registrationMoment;
 
     public RegistrationDto(Registration registration) {
-        this.registrationMoment=registration.getRegistrationMoment();
+        this.registrationMoment = registration.getRegistrationMoment();
     }
 
 }

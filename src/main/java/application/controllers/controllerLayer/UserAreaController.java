@@ -21,16 +21,16 @@ public class UserAreaController { // Onde os professores, diretores e alunos tem
     // Método para acessar as informações do próprio usuário logado.
     public ResponseEntity<? extends UserDto> myData(Principal user) {
 
-        UserDto userDto =  userAreaService.myData(user);
+        UserDto userDto = userAreaService.myData(user);
 
-        return ResponseEntity.ok().body( userDto);
+        return ResponseEntity.ok().body(userDto);
     }
 
     @PutMapping(value = "/changepassword")
     // Método para alterar de senha.
-    public ResponseEntity<String> changePassword(Principal user,@RequestBody @Valid NewPasswordForm newPasswordForm) {
+    public ResponseEntity<String> changePassword(Principal user, @RequestBody @Valid NewPasswordForm newPasswordForm) {
 
-        String message = userAreaService.changePassword(user,newPasswordForm);
+        String message = userAreaService.changePassword(user, newPasswordForm);
 
         return ResponseEntity.ok().body(message);
     }

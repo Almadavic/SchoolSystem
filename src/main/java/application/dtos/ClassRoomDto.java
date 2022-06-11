@@ -31,7 +31,7 @@ public class ClassRoomDto {    // DTO da classe ClassRoom
     @JsonProperty(value = "numberStudents")
     private Integer numberStudents;
     @JsonProperty(value = "students")
-    private  List<StudentDto> studentsDto = new ArrayList<>();
+    private List<StudentDto> studentsDto = new ArrayList<>();
     @JsonProperty(value = "averageClassGrade")
     private Double averageClassGrade;
 
@@ -53,7 +53,6 @@ public class ClassRoomDto {    // DTO da classe ClassRoom
     }
 
     private Double convertToDecimal(double average) { // Método que deixa a nota  em decimal formatada!
-        double decimal = Math.round(average * 10.0) / 10.0;
-        return decimal;
+        return Math.round(average * 10.0) / 10.0;
     }
 }

@@ -4,10 +4,9 @@ import application.dtos.UserDto;
 import application.entities.users.User;
 
 
-
 import java.util.List;
 
-public interface AllUserTypeService<T>  { // Interface onde UserService, TeacherService e StudentService vão implementar!!
+public interface AllUserTypeService<T> { // Interface onde UserService, TeacherService e StudentService vão implementar!!
 
     List<UserDto> findAll(String parameter);
 

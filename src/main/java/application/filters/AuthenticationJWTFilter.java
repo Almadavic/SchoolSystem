@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AuthenticationJWTFilter extends OncePerRequestFilter { // Filtro de autenticação! antes da API chamar a classe de segurança, ela vai chamar essa aqui antes.
-                                                                      //(NAS REQUISIÇÕES), NÃO QUANDO SOBE A APLICAÇÃO.
-    private TokenService tokenService;
-    private UserRepository userRepository;
+    //(NAS REQUISIÇÕES), NÃO QUANDO SOBE A APLICAÇÃO.
+    private final TokenService tokenService;
+    private final UserRepository userRepository;
 
     public AuthenticationJWTFilter(TokenService tokenService, UserRepository userRepository) { // Em filtros, não podemos fazer injeção de dependência automática.
         this.tokenService = tokenService;
@@ -47,6 +47,6 @@ public class AuthenticationJWTFilter extends OncePerRequestFilter { // Filtro de
             return null;
         }
 
-        return token.substring(7, token.length());
+        return token.substring(7);
     }
 }

@@ -18,12 +18,14 @@ import application.services.businessRules.addStudent.AddStudentCheck;
 import application.services.businessRules.addStudent.ClassContainsSameStudent;
 import application.services.businessRules.addStudent.FullList;
 import application.services.businessRules.addStudent.StudentHasAnotherClass;
+import application.services.businessRules.createClass.CreateClassCheck;
+import application.services.businessRules.createClass.MaximumOfClassRooms;
 import application.services.businessRules.setTeacher.SameTeacher;
 import application.services.businessRules.setTeacher.SetTeacherCheck;
 import application.services.businessRules.setTeacher.TeacherHasAnotherClass;
 import application.services.businessRules.updateGrades.GradeLimit;
 import application.services.businessRules.updateGrades.TeacherAllowed;
-import application.services.businessRules.updateGrades.UpdateCheck;
+import application.services.businessRules.updateGrades.UpdateGradesCheck;
 import application.services.exceptions.classRoomService.StudentDoesntExistInThisClassException;
 import application.services.exceptions.classRoomService.ThereIsntTeacherInThisClassException;
 import application.services.exceptions.general.DatabaseException;
@@ -57,46 +59,44 @@ public class ClassRoomService {
     private UserRepository userRepository;
 
     @Cacheable(value = "classesRoomList")           // Aplicando Cache
-    public Page<ClassRoomDto> findAll(Pageable pagination) {    // Encontra todas as classes do sistema.
-        Page<ClassRoom> classes = classRepository.findAll(pagination);
-        Page<ClassRoomDto> classesRoomDtos = classes.map(ClassRoomDto::new);
-        return classesRoomDtos;
+    public Page<ClassRoomDto> findAll(Pageable pagination) {    // Método que me retorna uma paginação de todas as classes da plataforma, tendo algumas conf padrões para essa paginação.
+        Page<ClassRoom> classRooms = classRepository.findAll(pagination);
+        return classRooms.map(ClassRoomDto::new);
     }
 
-    public ClassRoomDto findById(Long id, Principal user) { // Encontra uma sala por Id
+    public ClassRoomDto findById(Long id, Principal user) { // Método me retorna uma classe da plataforma dado o Id da classe.
         ClassRoom classRoom = returnClass(id);
         teacherAllowed(classRoom, user);
-        ClassRoomDto classRoomDto = new ClassRoomDto(classRoom);
-        return classRoomDto;
+        return new ClassRoomDto(classRoom);
     }
 
     @Cacheable(value = "studentsListByClassRoom")
-    public Page<StudentDto> findStudentsByClass(Long idClass, Pageable pagination, Principal user) { // Encontra uma lista de estudantes relacionado a uma classe.
+    public Page<StudentDto> findStudentsByClass(Long idClass, Pageable pagination, Principal user) { // Método me retorna uma lista de alunos associados á uma classe dado o id dessa classe.
         ClassRoom classRoom = returnClass(idClass);
         teacherAllowed(classRoom, user);
         Page<Student> students = studentRepository.findListStudentsByClassRoomId(idClass, pagination);
-        Page<StudentDto> studentDtos = students.map(StudentDto::new);
-        return studentDtos;
+        return students.map(StudentDto::new);
     }
 
 
-    public StudentDto findStudentById(Long idClass, Long idStudent, Principal user) { // Encontra o estudante específico de uma classe específica
+    public StudentDto findStudentById(Long idClass, Long idStudent, Principal user) { // Método me retorna um aluno de uma certa classe, passando o id da classe e do aluno específico.
         ClassRoom classRoom = returnClass(idClass);
         teacherAllowed(classRoom, user);
         Student student = returnStudent(classRoom, idStudent, false);
         return new StudentDto(student);
     }
 
-    public TeacherDto findTeacher(Long idClass, Principal user) { // Encontra o professor relacionado a classe.
+    public TeacherDto findTeacher(Long idClass, Principal user) { // Método me retorna o professor associado á classe dado o id da classe.
         ClassRoom classRoom = returnClass(idClass);
         teacherAllowed(classRoom, user);
-        Optional<Teacher> teacher = teacherRepository.findByClassRoomId(idClass);
+        Optional<Teacher> teacher = teacherRepository.findTeacherByClassRoomId(idClass);
         return new TeacherDto(teacher.orElseThrow(() -> new ThereIsntTeacherInThisClassException("This class doesn't have any teacher")));
     }
 
     @CacheEvict(value = {"classesRoomList", "studentsListByClassRoom", "studentsList"}, allEntries = true)
-    public StudentDto updateGrades(Long idClass, Long idStudent, Principal user, NewGradesForm newGrades) { // Atualiza as notas de um aluno!
-        List<UpdateCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed()); // Validações para atualizar uma nota.
+    public StudentDto updateGrades(Long idClass, Long idStudent, Principal user, NewGradesForm newGrades) { // Método atualiza as notas de um aluno de uma respectiva sala, passando o id do aluno e da classe.
+
+        List<UpdateGradesCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed()); // Validações para atualizar uma nota.
 
         ClassRoom classRoom = returnClass(idClass);
         Student student = returnStudent(classRoom, idStudent, false);
@@ -110,8 +110,14 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = "classesRoomList", allEntries = true)
-    public ClassRoomDto createClassRoom(CreateClassForm createClassForm) { // Cria uma sala no banco, AUTOMATIZADA! Só precisa informar o turno!
+    public ClassRoomDto createClassRoom(CreateClassForm createClassForm) { // Método cria uma nova sala na plataforma, com a info Letter automatizada.
+
+
+        List<CreateClassCheck> validations = Arrays.asList(new MaximumOfClassRooms()); // Validações para criar uma sala no sistema.
+
         List<ClassRoom> classRooms = classRepository.findAll();
+
+        validations.forEach(v -> v.validation(classRooms)); // VALIDANDO!
 
         char lastClassLetter = classRooms.get(classRooms.size() - 1).getLetter();
 
@@ -119,7 +125,7 @@ public class ClassRoomService {
         char letterNewClass = '.';
 
         for (int i = 0; i < vector.length; i++) {
-            if (lastClassLetter == vector[i]) {                    // PRECISA CRIAR UMA VALIDAÇÃO PARA CRIAR UM LIMITE DE SALAS, SÓ PODE TER ATÉ A LETRA S!
+            if (lastClassLetter == vector[i]) {
                 letterNewClass = vector[i + 1];
             }
         }
@@ -131,7 +137,7 @@ public class ClassRoomService {
 
 
     @CacheEvict(value = {"classesRoomList", "teachersList"}, allEntries = true)
-    public ClassRoomDto setTeacher(Long idClass, SetTeacherForm setTeacherForm) { // Seta um professor em uma classe.
+    public ClassRoomDto setTeacher(Long idClass, SetTeacherForm setTeacherForm) { // Método seta o professor em uma classe.
         List<SetTeacherCheck> validations = Arrays.asList(new SameTeacher(), new TeacherHasAnotherClass()); // Validações para setar um professor em uma classe.
 
         ClassRoom classRoom = returnClass(idClass);
@@ -151,7 +157,7 @@ public class ClassRoomService {
 
 
     @CacheEvict(value = {"classesRoomList", "studentsList", "studentsListByClassRoom"}, allEntries = true)
-    public ClassRoomDto addStudent(Long idClass, AddRemoveStudentForm addStudentForm) {  // Adiciona um estudante na lista de estudantes da classe.
+    public ClassRoomDto addStudent(Long idClass, AddRemoveStudentForm addStudentForm) {  // Método adiciona um aluno na classe.
         List<AddStudentCheck> validations = Arrays.asList(new FullList(), new ClassContainsSameStudent(), new StudentHasAnotherClass()); // Validação para adicionar um aluno em uma classe.
 
         ClassRoom classRoom = returnClass(idClass);
@@ -172,7 +178,7 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = {"classesRoomList", "studentsList", "studentsListByClassRoom"}, allEntries = true)
-    public ClassRoomDto removeStudent(Long idClass, AddRemoveStudentForm removeStudentForm) { // Remove um estudante da lista de estudante da classe.
+    public ClassRoomDto removeStudent(Long idClass, AddRemoveStudentForm removeStudentForm) { // Método remove um aluno da classe.
 
         ClassRoom classRoom = returnClass(idClass);
         Long idStudent = removeStudentForm.getIdStudent();
@@ -185,7 +191,7 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = {"teachersList", "classesRoomList"})
-    public ClassRoomDto removeTeacher(Long idClass) { // Remove o professor de uma classe!
+    public ClassRoomDto removeTeacher(Long idClass) { // Método remove o professor da sala.
 
         ClassRoom classRoom = returnClass(idClass);
         classRoom.getTeacher().setClassRoom(null);
@@ -196,7 +202,7 @@ public class ClassRoomService {
     }
 
     @CacheEvict(value = {"classesRoomList"})
-    public String removeClass(Long idClass) {     // Remove uma Class do Sistema!
+    public String removeClass(Long idClass) {     //  Método apaga uma classe do sistema.
 
         ClassRoom classRoom = returnClass(idClass);
         try {
@@ -209,7 +215,7 @@ public class ClassRoomService {
 
     private void teacherAllowed(ClassRoom classRoom, Principal user) { //  Verifica se o teacher está permitido a fazer algo.
         User userEntity = userRepository.findByEmail(user.getName()).get();
-        if(userEntity instanceof Teacher) {
+        if (userEntity instanceof Teacher) {
             TeacherAllowed validation = new TeacherAllowed();
             validation.validation(null, classRoom, user);
         }
@@ -224,7 +230,7 @@ public class ClassRoomService {
         // pois se for, tem q chamar uma exception especifica e tirar outra.
         Optional<Student> studentOptionalDataBase = studentRepository.findById(idStudent); // Pesquisar se o aluno existe no BANCO, se n existir, erro na linha 220!
         if (!addMethod) {  // SE NÃO FOR O MÉTODO DE ADICIONAR
-            Student studentOptionalClass = studentRepository.findStudentByClassId(classRoom.getId(), idStudent)// Pesquisa se o aluno existe nessa CLASSE!
+            studentRepository.findStudentByClassId(classRoom.getId(), idStudent)// Pesquisa se o aluno existe nessa CLASSE!
                     .orElseThrow(() -> new StudentDoesntExistInThisClassException("This student isn't in this classroom")); // Se não existir, ERRO!
         }
         return studentOptionalDataBase.orElseThrow(() -> new ResourceNotFoundException("Id : " + idStudent + ", This student wasn't found on DataBase"));
@@ -257,20 +263,17 @@ public class ClassRoomService {
 
     }
 
-    private ClassRoom updateClassTeacher(Teacher teacher, ClassRoom classRoom) { // Atualiza o professor de uma classe.
+    private void updateClassTeacher(Teacher teacher, ClassRoom classRoom) { // Atualiza o professor de uma classe.
 
         teacher.setClassRoom(classRoom);
         userRepository.save(teacher);
         classRoom.setTeacher(teacher);
-        classRoom = classRepository.save(classRoom);
-
-        return classRoom;
+        classRepository.save(classRoom);
     }
 
 
     private Character[] letteringVector() { // Método com as possíveis letras de Classes, Quando uma sala é criada, ela recebe a próxima letra!
-        Character[] letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'};
-        return letters;
+        return new Character[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'};
     }
 
 }

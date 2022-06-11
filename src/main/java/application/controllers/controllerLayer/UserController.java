@@ -18,8 +18,8 @@ public class UserController implements AllUserTypeController { // Controller par
 
     @Override
     @GetMapping
-    //Método retorna todos os usuários do sistema, ou eu posso filtrar a busca (PELA ROLE),ex : todos os usuarios que tenham a role professor..
-    public ResponseEntity<List<? extends UserDto>> findAll(@RequestParam(required=false)String rolesName){
+    //Método retorna todos os usuários do sistema, ou eu posso filtrar a busca (PELA ROLE),ex : todos os usuarios que tenham a role professor.
+    public ResponseEntity<List<? extends UserDto>> findAll(@RequestParam(required = false) String rolesName) {
 
         List<UserDto> usersDto = userService.findAll(rolesName);
 
@@ -27,16 +27,17 @@ public class UserController implements AllUserTypeController { // Controller par
     }
 
     @Override
-    @GetMapping ("/{id}")
-    // Método que me retorna um User específico do sistema, não importa a role!
+    @GetMapping("/{id}")
+    // Método que me retorna um User específico do sistema, não importa a role.
     public ResponseEntity<UserDto> findById(@PathVariable Long id) {
 
         UserDto userDto = userService.findById(id);
 
         return ResponseEntity.ok().body(userDto);
     }
+
     @DeleteMapping(value = "/{id}/remove")
-    // Método onde remove um usuário
+    // Método remove um usuário.
     public ResponseEntity<String> remove(@PathVariable Long id) {
 
         String message = userService.remove(id);

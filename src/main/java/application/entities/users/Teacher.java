@@ -32,7 +32,7 @@ public class Teacher extends User { // Classe do Banco - > Teacher | Filha de Us
 
     @Override
     public String toString() {
-        return "Teacher : "+getEmail()+", Id : "+getId();
+        return "Teacher : " + getEmail() + ", Id : " + getId();
     }
 
 }

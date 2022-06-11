@@ -26,16 +26,16 @@ public class StudentRepositoryTest implements ExtendsUserRepositoryTest { // TES
     private StudentRepository studentRepository;
 
     @Test
-    public void findStudentsByClassId() {
+    public void findStudentsByClassId() { // Encontra os estudantes de uma classe.
         //----- Teste da Sala 1 ---- \\
-        Long idClass1 = 1l;
+        Long idClass1 = 1L;
         Pageable pagination = PageRequest.of(0, 10);
         Page<Student> students1 = studentRepository.findListStudentsByClassRoomId(idClass1, pagination);
         Assertions.assertEquals(3, students1.getContent().size());
 
 
         //----- Teste da Sala 2 ---- \\
-        Long idClass2 = 2l;
+        Long idClass2 = 2L;
         Page<Student> students2 = studentRepository.findListStudentsByClassRoomId(idClass2, pagination);
         Assertions.assertEquals(0, students2.getContent().size());
 
@@ -47,31 +47,31 @@ public class StudentRepositoryTest implements ExtendsUserRepositoryTest { // TES
 
 
     @Test
-    public void studentExistsInClass() {
+    public void studentExistsInClass() { // Testa se um estudante existe em determinado sala.
 
-        Long idClass = 1l;
-        Long idStudent = 2l;
+        Long idClass = 1L;
+        Long idStudent = 2L;
         Student student = studentRepository.findStudentByClassId(idClass, idStudent).get();
         Assertions.assertDoesNotThrow(() -> NoSuchElementException.class);
         Assertions.assertEquals("almadavic@live.com", student.getEmail());
     }
 
     @Test
-    public void studentDoesntExistsInClass() {
+    public void studentDoesntExistsInClass() { // Testa se um estudante NÃO existe em determinado sala.
 
-        Long idClass = 1l;
-        Long idStudent = 4l;
+        Long idClass = 1L;
+        Long idStudent = 4L;
         Assertions.assertThrows(NoSuchElementException.class, () -> studentRepository.findStudentByClassId(idClass, idStudent).get());
     }
 
     @Test
     @Override
-    public void listUsersWhoDontHaveClass() {
+    public void listUsersWhoDontHaveClass() { // Testa se lista de estudantes, todos os estudantes que não estão em nenhuma sala.
 
         List<Student> students = studentRepository.findAllWhereClassRoomIsNull();
         boolean hasClass = false;
-        if (students.stream().anyMatch(student -> student.getClassRoom()!=null)) {
-           hasClass = true;
+        if (students.stream().anyMatch(student -> student.getClassRoom() != null)) {
+            hasClass = true;
         }
         Assertions.assertFalse(hasClass);
         Assertions.assertEquals(1, students.size());
@@ -79,14 +79,9 @@ public class StudentRepositoryTest implements ExtendsUserRepositoryTest { // TES
 
     @Test
     @Override
-    public void save() {
+    public void save() { // Salva um aluno no sistema.
 
-       Student student = (Student) new StudentBuilder()
-                .setNome("Paulo")
-                .setEmail("paulo@gmail.com")
-                .setPassword("123456")
-                .setClassRoom(null)
-                .create();
+        Student student = (Student) new StudentBuilder().setNome("Paulo").setEmail("paulo@gmail.com").setPassword("123456").setClassRoom(null).create();
         student = studentRepository.save(student);
         Student studentDataBase = studentRepository.findById(student.getId()).get();
         Assertions.assertEquals(student.getId(), studentDataBase.getId());
@@ -94,29 +89,29 @@ public class StudentRepositoryTest implements ExtendsUserRepositoryTest { // TES
     }
 
     @Test
-    public void updateGrades() {
+    public void updateGrades() { // Atualiza as notas de um aluno.
 
         Long idStudent = 2L;
         Student student = studentRepository.findById(idStudent).get();
 
-        Assertions.assertEquals(0.0,student.getReportCard().getGrade1());
-        Assertions.assertEquals(0.0,student.getReportCard().getGrade2());
-        Assertions.assertEquals(0.0,student.getReportCard().getGrade3());
-        Assertions.assertEquals(0.0,student.getReportCard().getAverageStudent());
+        Assertions.assertEquals(0.0, student.getReportCard().getGrade1());
+        Assertions.assertEquals(0.0, student.getReportCard().getGrade2());
+        Assertions.assertEquals(0.0, student.getReportCard().getGrade3());
+        Assertions.assertEquals(0.0, student.getReportCard().getAverageStudent());
 
         student.getReportCard().setGrade1(5.0);
         student.getReportCard().setGrade2(7.0);
         student.getReportCard().setGrade3(3.0);
 
-        student = studentRepository.save(student);
+        studentRepository.save(student);
 
         Student studentDataBase = studentRepository.findById(idStudent).get();
 
 
-        Assertions.assertEquals(5.0,student.getReportCard().getGrade1());
-        Assertions.assertEquals(7.0,student.getReportCard().getGrade2());
-        Assertions.assertEquals(3.0,student.getReportCard().getGrade3());
-        Assertions.assertEquals(5.0,student.getReportCard().getAverageStudent());
+        Assertions.assertEquals(5.0, studentDataBase.getReportCard().getGrade1());
+        Assertions.assertEquals(7.0, studentDataBase.getReportCard().getGrade2());
+        Assertions.assertEquals(3.0, studentDataBase.getReportCard().getGrade3());
+        Assertions.assertEquals(5.0, studentDataBase.getReportCard().getAverageStudent());
 
 
     }

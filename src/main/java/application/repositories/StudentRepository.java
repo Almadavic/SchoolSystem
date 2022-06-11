@@ -13,7 +13,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface StudentRepository extends ExtendsUserRepository,JpaRepository<Student,Long> { // Repositorio de alunos
+public interface StudentRepository extends ExtendsUserRepository, JpaRepository<Student, Long> { // Repositorio de alunos
 
     Page<Student> findListStudentsByClassRoomId(Long id, Pageable pagination); // Retorna uma página de alunos passando o id da Classe.
 
@@ -22,14 +22,14 @@ public interface StudentRepository extends ExtendsUserRepository,JpaRepository<S
             "inner join tb_users on tb_students.id = tb_users.id " +
             "inner join tb_address on tb_users.id = tb_address.user_id " +
             "inner join tb_users_roles on tb_users_roles.user_id = tb_users_roles.role_id " +
-            "where tb_students.class_room_id is null",nativeQuery = true)
+            "where tb_students.class_room_id is null", nativeQuery = true)
     List<Student> findAllWhereClassRoomIsNull();              // Retorna uma lista de alunos que não tem classe.
 
-    @Query(value="select * from tb_students "+
-    "inner join tb_users on tb_students.id = tb_users.id "+
-    "inner join tb_address on tb_users.id = tb_address.user_id "+
-    "inner join tb_users_roles on tb_users_roles.user_id = tb_users_roles.role_id "+
-    "where tb_students.class_room_id = :idClass AND tb_students.id = :idStudent",nativeQuery = true)
+    @Query(value = "select * from tb_students " +
+            "inner join tb_users on tb_students.id = tb_users.id " +
+            "inner join tb_address on tb_users.id = tb_address.user_id " +
+            "inner join tb_users_roles on tb_users_roles.user_id = tb_users_roles.role_id " +
+            "where tb_students.class_room_id = :idClass AND tb_students.id = :idStudent", nativeQuery = true)
     Optional<Student> findStudentByClassId(Long idClass, Long idStudent); // Retorna um aluno associado a uma classe.
 
 }

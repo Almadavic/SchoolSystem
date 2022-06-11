@@ -7,7 +7,8 @@ import application.services.exceptions.general.NoPermissionException;
 import application.services.exceptions.general.ResourceNotFoundException;
 import application.services.exceptions.studentAreaService.SamePasswordException;
 import application.services.exceptions.studentAreaService.ShortPasswordException;
-import application.services.exceptions.userService.EmailAlreadyRegisteredException;
+import application.services.exceptions.general.EmailAlreadyRegisteredException;
+import application.services.exceptions.userService.RemovePrincipalException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -78,13 +79,13 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
         return ResponseEntity.status(status).body(err);
     }
 
-   @ExceptionHandler(NullPointerException.class) // Quando algo é nulo que não poderia ser!
-   public ResponseEntity<StandardError> nullPointer(NullPointerException e, HttpServletRequest request) {
-       String error = "Value cannot be null";
-       HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+    @ExceptionHandler(NullPointerException.class) // Quando algo é nulo que não poderia ser!
+    public ResponseEntity<StandardError> nullPointer(NullPointerException e, HttpServletRequest request) {
+        String error = "Value cannot be null";
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
-       return ResponseEntity.status(status).body(err);
-   }
+        return ResponseEntity.status(status).body(err);
+    }
 
     @ExceptionHandler(IllegalArgumentException.class) // Quando passa alguma informação errada!
     public ResponseEntity<StandardError> illegalArgument(IllegalArgumentException e, HttpServletRequest request) {
@@ -94,7 +95,8 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(StudentDoesntExistInThisClassException.class) // Quando tenta buscar um usuário que não existe na sala!
+    @ExceptionHandler(StudentDoesntExistInThisClassException.class)
+    // Quando tenta buscar um usuário que não existe na sala!
     public ResponseEntity<StandardError> studentDoesntExistInThisClassRoom(StudentDoesntExistInThisClassException e, HttpServletRequest request) {
         String error = "Student wasn't found here!";
         HttpStatus status = HttpStatus.NOT_FOUND;
@@ -160,10 +162,28 @@ public class ResourceExceptionHandler {  // Se ocorrer alguma das execções aba
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(TeacherDoesntHaveAnyClass.class) // Quando tenta buscar a sala do professor porém o professor não tem nenhuma sala!
+    @ExceptionHandler(TeacherDoesntHaveAnyClass.class)
+    // Quando tenta buscar a sala do professor porém o professor não tem nenhuma sala!
     public ResponseEntity<StandardError> teacherDoesntHaveAnyClass(TeacherDoesntHaveAnyClass e, HttpServletRequest request) {
         String error = "Teacher doesn't have class";
         HttpStatus status = HttpStatus.NOT_FOUND;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(MaximumOfClassRoomsException.class)
+    // Quando tenta criar uma sala no sistema mas já tem o máximo de classes permitido!
+    public ResponseEntity<StandardError> maximumOfClassesRoom(MaximumOfClassRoomsException e, HttpServletRequest request) {
+        String error = "Too many ClassRooms";
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(RemovePrincipalException.class) // Quando tenta remover um principal(diretor) do sistema!
+    public ResponseEntity<StandardError> removePrincipal(RemovePrincipalException e, HttpServletRequest request) {
+        String error = "Deleting a Principal";
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }

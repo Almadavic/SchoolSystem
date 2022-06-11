@@ -8,7 +8,7 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
-public class GradeLimit implements UpdateCheck {
+public class GradeLimit implements UpdateGradesCheck {
 
     @Override
     public void validation(NewGradesForm newGrades, ClassRoom classRoom, Principal user) { // As notas não podem ser menores que 0 e nem maiores que 10

@@ -19,26 +19,26 @@ public class UserRepositoryTest { // TESTE DE INTEGRAÇÃO DO
     private UserRepository userRepository;
 
     @Test
-    public void findUserByEmailSuccess() {
+    public void findUserByEmailSuccess() { // Encontra um user pelo email. SUCESSO!
 
         String userEmail = "almadavic@live.com";
         User user = userRepository.findByEmail(userEmail).get();
-        Assertions.assertEquals(userEmail,user.getEmail());
+        Assertions.assertEquals(userEmail, user.getEmail());
     }
 
     @Test
-    public void findUserByEmailFail() {
+    public void findUserByEmailFail() { // Encontra um user pelo email. FALHA!
 
         String userEmail = "alojaoj@hotmail.com";
-        Assertions.assertThrows(NoSuchElementException.class,()-> userRepository.findByEmail(userEmail).get());
+        Assertions.assertThrows(NoSuchElementException.class, () -> userRepository.findByEmail(userEmail).get());
     }
 
     @Test
-    public void removeUser() {
+    public void removeUser() { // Remove um usuário do banco.
 
         String email = "almadavic@live.com";
         User user = userRepository.findByEmail(email).get();
-        Assertions.assertDoesNotThrow(()->NoSuchElementException.class);
+        Assertions.assertDoesNotThrow(() -> NoSuchElementException.class);
         userRepository.delete(user);
         Assertions.assertThrows(NoSuchElementException.class, () -> userRepository.findByEmail(email).get());
     }
@@ -48,27 +48,28 @@ public class UserRepositoryTest { // TESTE DE INTEGRAÇÃO DO
 
         String roleNameTeacher = "ROLE_TEACHER";
         List<User> teachers = userRepository.findByRolesName(roleNameTeacher);
-        boolean teacherRoleValidation = validationRole(roleNameTeacher,teachers);
+        boolean teacherRoleValidation = validationRole(roleNameTeacher, teachers);
         Assertions.assertFalse(teacherRoleValidation);
-        Assertions.assertEquals(2,teachers.size());
+        Assertions.assertEquals(2, teachers.size());
 
         String roleNamePrincipal = "ROLE_PRINCIPAL";
         List<User> principals = userRepository.findByRolesName(roleNamePrincipal);
-        boolean principalRoleValidation = validationRole(roleNamePrincipal,principals);
+        boolean principalRoleValidation = validationRole(roleNamePrincipal, principals);
         Assertions.assertFalse(principalRoleValidation);
-        Assertions.assertEquals(1,principals.size());
+        Assertions.assertEquals(1, principals.size());
 
 
         String roleNameStudent = "ROLE_STUDENT";
         List<User> students = userRepository.findByRolesName(roleNameStudent);
-        boolean studentRoleValidation = validationRole(roleNameStudent,students);
+        boolean studentRoleValidation = validationRole(roleNameStudent, students);
         Assertions.assertFalse(studentRoleValidation);
-        Assertions.assertEquals(4,students.size());
+        Assertions.assertEquals(4, students.size());
 
     }
-    private boolean validationRole(String roleName, List<User> users) {
-       boolean thereIsAnotherRole = false;
-        if(users.stream().anyMatch(user -> user.getRoles().get(0).getName()!=roleName)) {
+
+    private boolean validationRole(String roleName, List<User> users) { // Método para verificar se a role é válida.
+        boolean thereIsAnotherRole = false;
+        if (users.stream().anyMatch(user -> !user.getRoles().get(0).getName().equals(roleName))) {
             thereIsAnotherRole = true;
         }
         return thereIsAnotherRole;

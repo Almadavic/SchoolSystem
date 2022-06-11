@@ -8,7 +8,7 @@ import application.services.exceptions.classRoomService.SameTeacherException;
 public class SameTeacher implements SetTeacherCheck { // O professor não pode ser igual ao que já era
     @Override
     public void validation(Teacher teacher, Teacher classTeacher) {
-        if(classTeacher!=null) {
+        if (classTeacher != null) {
             if (classTeacher.getId() == teacher.getId()) {
                 throw new SameTeacherException("The new teacher cannot be the same than the last teacher!");
             }

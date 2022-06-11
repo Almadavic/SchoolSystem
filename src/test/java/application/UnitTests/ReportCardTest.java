@@ -13,7 +13,7 @@ public class ReportCardTest { // TESTE DE UNIDADE da entidade ReportCard.
     private ReportCard rc;
 
     @BeforeAll
-    public  void instantiateReportCard() { // Instancia um ReportCard antes dos testes começarem.
+    public void instantiateReportCard() { // Instancia um ReportCard antes dos testes começarem.
         rc = new ReportCard();
         rc.setGrade1(6.0);
         rc.setGrade2(5.0);
@@ -25,9 +25,9 @@ public class ReportCardTest { // TESTE DE UNIDADE da entidade ReportCard.
     @Test
     public void averageStudent() { // Testa a média de notas de um determinado aluno.
 
-        Assertions.assertEquals(5.0,rc.getAverageStudent()); // A média antes.
+        Assertions.assertEquals(5.0, rc.getAverageStudent()); // A média antes.
         rc.setGrade3(7.0); // Altera uma nota.
-        Assertions.assertEquals(6,rc.getAverageStudent()); // A média depois.
+        Assertions.assertEquals(6, rc.getAverageStudent()); // A média depois.
 
     }
 

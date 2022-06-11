@@ -19,13 +19,13 @@ public class ResponsibilityRepositoryTest implements GeneralExtendsRepositoryTes
 
     @Test
     @Override
-    public void  save() {
+    public void save() { // Salva uma responsibility no banco.
 
         Responsibility responsibility = new Responsibility("Testing Responsibility");
         responsibilityRepository.save(responsibility);
         Long idResponsibility = responsibility.getId();
         Responsibility responsibilityDataBase = responsibilityRepository.findById(idResponsibility).get();
-        Assertions.assertEquals(idResponsibility,responsibilityDataBase.getId());
+        Assertions.assertEquals(idResponsibility, responsibilityDataBase.getId());
         responsibilityRepository.delete(responsibilityDataBase);
     }
 }

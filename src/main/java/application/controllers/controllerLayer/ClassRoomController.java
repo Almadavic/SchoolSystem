@@ -28,7 +28,7 @@ public class ClassRoomController {          // Controller relacionado á ações
 
     @GetMapping
     // Método HTTP (GET)  , Método que me retorna uma paginação de todas as classes da plataforma, tendo algumas conf padrões para essa paginação.
-    public ResponseEntity<Page<ClassRoomDto>> findAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
+    public ResponseEntity<Page<ClassRoomDto>> findAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pagination) {
 
         Page<ClassRoomDto> classesDto = classService.findAll(pagination);
 
@@ -39,18 +39,16 @@ public class ClassRoomController {          // Controller relacionado á ações
     // Método HTTP (GET) , Método me retorna uma classe da plataforma dado o Id da classe.
     public ResponseEntity<ClassRoomDto> findById(@PathVariable Long id, Principal user) {
 
-        ClassRoomDto classRoomDto = classService.findById(id,user);
+        ClassRoomDto classRoomDto = classService.findById(id, user);
 
         return ResponseEntity.ok().body(classRoomDto);
     }
 
     @GetMapping(value = "/{idClass}/students")
     // Método HTTP (GET) , Método me retorna uma lista de alunos associados á uma classe dado o id dessa classe.
-    public ResponseEntity<Page<StudentDto>> findStudentsByClass(@PathVariable Long idClass,
-                                                                @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination,
-                                                                 Principal user) {
+    public ResponseEntity<Page<StudentDto>> findStudentsByClass(@PathVariable Long idClass, @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pagination, Principal user) {
 
-        Page<StudentDto> studentsDto = classService.findStudentsByClass(idClass, pagination,user);
+        Page<StudentDto> studentsDto = classService.findStudentsByClass(idClass, pagination, user);
 
         return ResponseEntity.ok().body(studentsDto);
     }
@@ -68,7 +66,7 @@ public class ClassRoomController {          // Controller relacionado á ações
     // Método HTTP (GET) , Método me retorna o professor associado á classe dado o id da classe.
     public ResponseEntity<TeacherDto> findTeacher(@PathVariable Long idClass, Principal user) {
 
-        TeacherDto teacherDto = classService.findTeacher(idClass,user);
+        TeacherDto teacherDto = classService.findTeacher(idClass, user);
 
         return ResponseEntity.ok().body(teacherDto);
     }
@@ -83,7 +81,7 @@ public class ClassRoomController {          // Controller relacionado á ações
         return ResponseEntity.ok().body(studentDto);
     }
 
-    @PostMapping (value = "/createclassroom")
+    @PostMapping(value = "/createclassroom")
     // Método HTTP (GET) , Método cria uma nova sala na plataforma, com a info Letter automatizada.
     public ResponseEntity<ClassRoomDto> createClassRoom(@RequestBody @Valid CreateClassForm createClassForm, UriComponentsBuilder uriBuilder) {
 
@@ -131,7 +129,7 @@ public class ClassRoomController {          // Controller relacionado á ações
     }
 
     @DeleteMapping(value = "/{idClass}/removeclass")
-    // Método HTTP ( DELETE) Apaga uma classe do sistema!
+    // Método HTTP ( DELETE), Método apaga uma classe do sistema.
     public ResponseEntity<String> removeClass(@PathVariable Long idClass) {
 
         String message = classService.removeClass(idClass);

@@ -16,14 +16,13 @@ public class AuthenticationService {
     private TokenService tokenService;
 
 
-    public String authenticate(LoginForm form, AuthenticationManager authManager) {
+    public String authenticate(LoginForm form, AuthenticationManager authManager) { // Método para fazer o login e se autenticar no sistema.
 
         UsernamePasswordAuthenticationToken loginData = form.toConvert();   // converter os dados passado pelo usuario em um token de autenticação
 
         try {
             Authentication authentication = authManager.authenticate(loginData); // autenticar usuário com base nos dados informados por ele
-            String token = tokenService.generateToken(authentication);      // geração do token .
-            return token;
+            return tokenService.generateToken(authentication);      // geração do token .
         } catch (AuthenticationException e) {
             throw new DatabaseException("E-mail and / or password is / are wrong!");       // Causará um erro caso os dados passados pelo usuário estejam errados.
         }

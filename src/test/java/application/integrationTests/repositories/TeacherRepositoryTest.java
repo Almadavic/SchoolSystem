@@ -27,25 +27,25 @@ public class TeacherRepositoryTest implements ExtendsUserRepositoryTest { // TES
 
 
     @Test
-    public void teacherExistsInClass() {
+    public void teacherExistsInClass() { // Testa se o professor existe na classe.
 
-        Long idClass = 1l;
-        Teacher teacher = teacherRepository.findByClassRoomId(idClass).get();
+        Long idClass = 1L;
+        Teacher teacher = teacherRepository.findTeacherByClassRoomId(idClass).get();
         Assertions.assertDoesNotThrow(() -> NoSuchElementException.class);
         Assertions.assertEquals(teacher, teacher.getClassRoom().getTeacher());
         Assertions.assertEquals("raphael@gmail.com", teacher.getClassRoom().getTeacher().getEmail());
     }
 
     @Test
-    public void teacherDoesntExistInClass() {
+    public void teacherDoesntExistInClass() { // Testa se o professor NÃO existe na classe.
 
-        Long idClass = 2l;
-        Assertions.assertThrows(NoSuchElementException.class, () -> teacherRepository.findByClassRoomId(idClass).get());
+        Long idClass = 2L;
+        Assertions.assertThrows(NoSuchElementException.class, () -> teacherRepository.findTeacherByClassRoomId(idClass).get());
     }
 
     @Test
     @Override
-    public void save() {
+    public void save() { // Salva um professor no banco.
 
         Teacher teacher = (Teacher) new TeacherBuilder()
                 .setNome("Guilherme")
@@ -60,14 +60,14 @@ public class TeacherRepositoryTest implements ExtendsUserRepositoryTest { // TES
     }
 
     @Test
-    public void updateTeacher() {
+    public void updateTeacher() { // Troca o teacher de classe.
 
-        Long idTeacher = 6l;
+        Long idTeacher = 6L;
         Teacher teacher = teacherRepository.findById(idTeacher).get();
-        Assertions.assertEquals(idTeacher,teacher.getId());
+        Assertions.assertEquals(idTeacher, teacher.getId());
         Assertions.assertEquals(1, teacher.getClassRoom().getId());
 
-        Long idClass = 2l;
+        Long idClass = 2L;
         ClassRoom classRoom = classRepository.findById(idClass).get();
 
         teacher.setClassRoom(classRoom);
@@ -75,19 +75,19 @@ public class TeacherRepositoryTest implements ExtendsUserRepositoryTest { // TES
         classRoom.setTeacher(teacher);
         classRoom = classRepository.save(classRoom);
 
-        Assertions.assertEquals(idTeacher,teacher.getId());
-        Assertions.assertEquals(2,teacher.getClassRoom().getId());
+        Assertions.assertEquals(idTeacher, teacher.getId());
+        Assertions.assertEquals(2, teacher.getClassRoom().getId());
         Assertions.assertEquals(teacher, classRoom.getTeacher());
     }
 
 
     @Test
     @Override
-    public void listUsersWhoDontHaveClass() {
+    public void listUsersWhoDontHaveClass() { // Testa se lista de professores, todos os professores que não estão em nenhuma sala.
 
         List<Teacher> teachers = teacherRepository.findAllWhereClassRoomIsNull();
         boolean hasClass = false;
-        if (teachers.stream().anyMatch(teacher -> teacher.getClassRoom()!=null)) {
+        if (teachers.stream().anyMatch(teacher -> teacher.getClassRoom() != null)) {
             hasClass = true;
         }
         Assertions.assertFalse(hasClass);

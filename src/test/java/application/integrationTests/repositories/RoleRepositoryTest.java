@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Profile;
 import java.util.NoSuchElementException;
 
 
-
 @SpringBootTest
 @Profile(value = "test")
 public class RoleRepositoryTest implements GeneralExtendsRepositoryTest { // TESTE DE INTEGRAÇÃO DO
@@ -21,29 +20,29 @@ public class RoleRepositoryTest implements GeneralExtendsRepositoryTest { // TES
     private RoleRepository roleRepository;
 
     @Test
-    public void findRoleByNameSuccess() {
+    public void findRoleByNameSuccess() { // Encontra uma Role pelo nome. SUCESSO!
 
         String roleName = "ROLE_TEACHER";
         Role role = roleRepository.findByName(roleName).get();
-        Assertions.assertEquals(roleName,role.getName());
+        Assertions.assertEquals(roleName, role.getName());
     }
 
     @Test
-    public void findRoleByNameFail() {
+    public void findRoleByNameFail() { //Encontra uma Role pelo nome. FALHA!
 
         String roleName = "ROLE_TEACHERR";
-        Assertions.assertThrows(NoSuchElementException.class,()-> roleRepository.findByName(roleName).get());
+        Assertions.assertThrows(NoSuchElementException.class, () -> roleRepository.findByName(roleName).get());
     }
 
     @Test
     @Override
-    public void save() {
+    public void save() { // Salva uma role no banco.
 
         String roleName = "ROLE_TEST";
         Role role = new Role(roleName);
         roleRepository.save(role);
         Role roleDataBase = roleRepository.findByName(roleName).get();
-        Assertions.assertEquals(roleName,roleDataBase.getName());
+        Assertions.assertEquals(roleName, roleDataBase.getName());
     }
 
 }

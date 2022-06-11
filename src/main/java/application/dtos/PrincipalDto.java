@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-@JsonPropertyOrder(value = {"id","name","email","classRoomId","address","roles","responsibilities"})
-public class PrincipalDto extends UserDto{
+@JsonPropertyOrder(value = {"id", "name", "email", "classRoomId", "address", "roles", "responsibilities"})
+public class PrincipalDto extends UserDto {
 
     @JsonProperty(value = "responsibilities")
     private List<ResponsibilityDto> responsibilitiesDto = new ArrayList<>();
@@ -23,7 +23,7 @@ public class PrincipalDto extends UserDto{
     public PrincipalDto(User user) {
         super(user);
         Principal principal = (Principal) user;
-        this.responsibilitiesDto=convertList(principal.getResponsibilities());
+        this.responsibilitiesDto = convertList(principal.getResponsibilities());
     }
 
     private List<ResponsibilityDto> convertList(List<Responsibility> responsibilities) {
