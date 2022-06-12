@@ -44,7 +44,6 @@ public class TeacherService implements ExtendsUserService {
 
     @Override
     public TeacherDto findById(Long id) {  // Método que retorna um teacher em específico,passando o  id.
-
         Teacher teacher = returnUser(id);
         return new TeacherDto(teacher);
     }
