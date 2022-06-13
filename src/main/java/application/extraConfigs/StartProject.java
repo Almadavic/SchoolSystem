@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 
 @Configuration
-@Profile(value = {"test"})
+@Profile(value = {"test","dev"})
 public class StartProject implements CommandLineRunner { // Essa classe é uma clase separada de configuração, Ela serve para popular o banco de dados!
     @Autowired
     private RoleRepository roleRepository;
@@ -30,7 +30,7 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
     private ResponsibilityRepository responsibilityRepository;
 
     @Override
-    public void run(String... args) throws Exception { // Esse método fala que toda vez que o programa iniciar(aplicação for pro ar)
+    public void run(String... args) { // Esse método fala que toda vez que o programa iniciar(aplicação for pro ar) em ambiente de DEV E TEST.
         // , esse método vai ser chamado, e também oq tem dentro.
         System.out.println(ApplicationDetails.text());                                // Preste atenção como as associações são feitas no método!
 
@@ -51,22 +51,22 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
         Registration registration4 = new Registration(Instant.parse("2019-06-20T19:53:07Z"), u4);
         Registration registration5 = new Registration(Instant.parse("2019-07-21T03:42:10Z"), principal);
 
-        Address a1 = new Address("Brasil", "Minas Gerais", "Belo Horizonte", u1);
-        Address a2 = new Address("EUA", "Georgia", "Atlanta", u2);
-        Address a3 = new Address("EUA", "Florida", "Tampa", u3);
-        Address a4 = new Address("EUA", "Florida", "Miami", u4);
-        Address principalAddress = new Address("Brasil", "Minas Gerais", "Contagem", principal);
+        Address a1 = new Address("Belo Horizonte", "Minas Gerais", "Brasil", u1);
+        Address a2 = new Address("Atlanta", "Georgia", "EUA", u2);
+        Address a3 = new Address("Tampa", "Florida", "EUA", u3);
+        Address a4 = new Address("Tampa", "Florida", "EUA", u4);
+        Address principalAddress = new Address("Contagem", "Minas Gerais", "Brasil", principal);
 
-        Responsibility r1 = new Responsibility("Verify what students don't have classes");
-        Responsibility r2 = new Responsibility("Verify if there is some teacher with no class");
-        Responsibility r3 = new Responsibility("Verify how many students / teachers there are on the system");
-        Responsibility r4 = new Responsibility("Has to register classes / teachers / students on the system and also delete them");
+        Responsibility res1 = new Responsibility("Verify what students don't have classes!");
+        Responsibility res2 = new Responsibility("Verify if there is some teacher with no class!");
+        Responsibility res3 = new Responsibility("Verify how many students / teachers there are on the system!");
+        Responsibility res4 = new Responsibility("Has to register classes / teachers / students on the system and also delete them!");
 
-        responsibilityRepository.saveAll(Arrays.asList(r1, r2, r3, r4));
-        principal.addResponsibility(r1);
-        principal.addResponsibility(r2);
-        principal.addResponsibility(r3);
-        principal.addResponsibility(r4);
+        responsibilityRepository.saveAll(Arrays.asList(res1, res2, res3, res4));
+        principal.addResponsibility(res1);
+        principal.addResponsibility(res2);
+        principal.addResponsibility(res3);
+        principal.addResponsibility(res4);
 
         u1.setRegistration(registration1);
         u2.setRegistration(registration2);
@@ -84,7 +84,7 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
         userRepository.saveAll(Arrays.asList(u1, u2, u3, u4, principal));
 
         Teacher teacher1 = new Teacher("Raphael", "raphael@gmail.com", passwordEncode, cr1);
-        Address a5 = new Address("EUA", "Florida", "Tampa", teacher1);
+        Address a5 = new Address("Tampa", "Florida", "EUA", teacher1);
         Registration registration6 = new Registration(Instant.parse("2019-07-21T03:42:10Z"), teacher1);
         teacher1.setAddress(a5);
         teacher1.setRegistration(registration6);
@@ -115,7 +115,7 @@ public class StartProject implements CommandLineRunner { // Essa classe é uma c
 
 
         Teacher teacher2 = new Teacher("Euni", "euni@gmail.com", passwordEncode);
-        Address a6 = new Address("Brasil", "Bahia", "Salvador", teacher2);
+        Address a6 = new Address("Salvador", "Bahia", "Brasil", teacher2);
         Registration registration7 = new Registration(Instant.parse("2019-07-21T03:42:10Z"), teacher2);
         teacher2.addRole(role2);
         teacher2.setAddress(a6);
