@@ -118,18 +118,24 @@ public class ClassRoomService {
 
         validations.forEach(v -> v.validation(classRooms)); // VALIDANDO!
 
-        char lastClassLetter = classRooms.get(classRooms.size() - 1).getLetter();
-
-        Character[] vector = letteringVector();
         char letterNewClass = '.';
-
-        for (int i = 0; i < vector.length; i++) {
-            if (lastClassLetter == vector[i]) {
-                letterNewClass = vector[i + 1];
+        if (classRooms.size() > 0) {
+           char lastClassLetter = classRooms.get(classRooms.size() - 1).getLetter();
+            Character[] vector = letteringVector();
+            for (int i = 0; i < vector.length; i++) {
+                if (lastClassLetter == vector[i]) {
+                    letterNewClass = vector[i + 1];
+                }
             }
+        } else {
+            letterNewClass = 'A';
         }
+
+
         ClassShift classShift = ClassShift.valueOf(createClassForm.getClassShift().toUpperCase());
         ClassRoom classRoom = new ClassRoom(letterNewClass, classShift);
+
+
         classRoom = classRepository.save(classRoom);
         return new ClassRoomDto(classRoom);
     }

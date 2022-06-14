@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "tb_responsabilities")
+@Table(name = "tb_responsibilities")
 public class Responsibility implements Serializable {
 
     @Serial

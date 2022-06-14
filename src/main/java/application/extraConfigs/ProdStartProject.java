@@ -52,11 +52,13 @@ public class ProdStartProject implements CommandLineRunner { // Classe chamada a
         principal.setAddress(principalAddress);
 
 
-        Role role3 = new Role("ROLE_PRINCIPAL");
+        Role role1 = new Role("ROLE_PRINCIPAL");
+        Role role2 = new Role("ROLE_TEACHER");
+        Role role3 = new Role("ROLE_STUDENT");
 
-        roleRepository.save(role3);
+        roleRepository.saveAll(Arrays.asList(role1,role2,role3));
 
-        principal.addRole(role3);
+        principal.addRole(role1);
 
         userRepository.save(principal);
 

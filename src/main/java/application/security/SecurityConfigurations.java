@@ -55,20 +55,36 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter { // Cl
                 .antMatchers("/auth").permitAll()
 
                 // CONF DE SEGURANÇA CLASSROOM CONTROLLER
-                .antMatchers(HttpMethod.GET, "/classes").hasRole("PRINCIPAL").antMatchers(HttpMethod.GET, "/classes/{id}").hasAnyRole("PRINCIPAL", "TEACHER").antMatchers(HttpMethod.GET, "/classes/{id}/students").hasAnyRole("PRINCIPAL", "TEACHER").antMatchers(HttpMethod.GET, "/classes/{id}/students/{id}").hasAnyRole("PRINCIPAL", "TEACHER").antMatchers(HttpMethod.GET, "/classes/{id}/teacher").hasAnyRole("PRINCIPAL", "TEACHER").antMatchers(HttpMethod.PUT, "/classes/{idClass}/students/{idStudent}/updategrades").hasRole("TEACHER").antMatchers(HttpMethod.POST, "/classes/createclassroom").hasRole("PRINCIPAL").antMatchers(HttpMethod.PUT, "/classes/{id}/setteacher").hasRole("PRINCIPAL").antMatchers(HttpMethod.PUT, "/classes/{id}/addstudent").hasRole("PRINCIPAL").antMatchers(HttpMethod.PUT, "/classes/{id}/removestudent").hasRole("PRINCIPAL").antMatchers(HttpMethod.PUT, "/classes/{id}/removeteacher").hasRole("PRINCIPAL").antMatchers(HttpMethod.DELETE, "/classes/{id}/removeclass").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.GET, "/classes").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.GET, "/classes/{id}").hasAnyRole("PRINCIPAL", "TEACHER")
+                .antMatchers(HttpMethod.GET, "/classes/{id}/students").hasAnyRole("PRINCIPAL", "TEACHER")
+                .antMatchers(HttpMethod.GET, "/classes/{id}/students/{id}").hasAnyRole("PRINCIPAL", "TEACHER")
+                .antMatchers(HttpMethod.GET, "/classes/{id}/teacher").hasAnyRole("PRINCIPAL", "TEACHER")
+                .antMatchers(HttpMethod.PUT, "/classes/{idClass}/students/{idStudent}/updategrades").hasRole("TEACHER")
+                .antMatchers(HttpMethod.POST, "/classes/createclassroom").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.PUT, "/classes/{id}/setteacher").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.PUT, "/classes/{id}/addstudent").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.PUT, "/classes/{id}/removestudent").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.PUT, "/classes/{id}/removeteacher").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.DELETE, "/classes/{id}/removeclass").hasRole("PRINCIPAL")
 
                 // CONF DE SEGURANÇA ÁRE DO USUÁRIO CONTROLLER
                 .antMatchers("/userarea/**").authenticated()
 
                 // CONF DE SEGURANÇA STUDENTS CONTROLLER
-                .antMatchers(HttpMethod.GET, "/students/**").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.GET, "/students").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.GET, "/students/{id}").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.POST, "/students/register").hasRole("PRINCIPAL")
 
                 // CONF DE SEGURANÇA TEACHER CONTROLLER
-                .antMatchers(HttpMethod.GET, "/teachers/**").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.GET, "/teachers/").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.GET, "/teachers/{id}").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.POST, "/teachers/register").hasRole("PRINCIPAL")
 
 
                 // // CONF DE SEGURANÇA USER CONTROLLER
-                .antMatchers(HttpMethod.GET, "/users/**").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.GET,"/users/{id}").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.DELETE,"/users/{id}/remove").hasRole("PRINCIPAL")
 
                 .and().csrf().disable() // DESABILITA SEGURANÇA CONTRA INVASÃO, DESATIVAMOS ISSO POIS NÃO VAI AFETAR A APLICAÇÃO (A APLICAÇÃO É STATELESS)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // DIZ QUE A APLICAÇÃO NÃO TEM ESTADO, NÃO GUARDA INFORMAÇÕES DE LOGIN!
