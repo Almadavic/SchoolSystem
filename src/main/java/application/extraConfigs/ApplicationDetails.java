@@ -15,7 +15,7 @@ public class ApplicationDetails {
         sb.append("*Spring Boot Version -  2.6.7  \n");                     // COLOCAR QUANTAS LINHAS DE CÓDIGO E DEPENDENCIAS!
         sb.append("*Dependencies : \n" +
                 "STARTER CACHE, STARTER DATA JPA, STARTER VALIDATION, STARTER WEB, DEVTOOLS, H2, POSTGRESQL, STARTER TEST, JSONWEBTOKEN, STARTER-SECURITY, SPRINGDOC, LOMBOK \n");
-        sb.append("*Number of lines : 3166\n");
+        sb.append("*Number of lines : 3220 \n");
         sb.append("*Number of Classes / Files : 124\n");
         sb.append("\n");
         sb.append("\n");

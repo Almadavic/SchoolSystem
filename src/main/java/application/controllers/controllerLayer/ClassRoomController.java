@@ -20,7 +20,7 @@ import java.net.URI;
 import java.security.Principal;
 
 @RestController                              // Identificando  que é um rest-controller
-@RequestMapping(value = "/classes")       // Recurso para "encontrar" esse controller
+@RequestMapping(value = "/classrooms")       // Recurso para "encontrar" esse controller
 public class ClassRoomController {          // Controller relacionado á ações dentro de uma sistema de Sala de Aluno (Apenas relacionado ás salas de aula)
 
     @Autowired  // Injeção de dependencia automatica - > ClassRoomService
