@@ -74,7 +74,7 @@ public class StudentService implements ExtendsUserService {
     @Override
     public Student returnUser(Long id) { // Método que retorna um estudante do banco.
         Optional<Student> student = studentRepository.findById(id);
-        return student.orElseThrow(() -> new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
+        return student.orElseThrow(() -> new ResourceNotFoundException("Id : " + id + ", This student wasn't found on DataBase"));
     }
 
     @Override

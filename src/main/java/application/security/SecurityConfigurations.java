@@ -77,12 +77,13 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter { // Cl
                 .antMatchers(HttpMethod.POST, "/students/register").hasRole("PRINCIPAL")
 
                 // CONF DE SEGURANÇA TEACHER CONTROLLER
-                .antMatchers(HttpMethod.GET, "/teachers/").hasRole("PRINCIPAL")
+                .antMatchers(HttpMethod.GET, "/teachers").hasRole("PRINCIPAL")
                 .antMatchers(HttpMethod.GET, "/teachers/{id}").hasRole("PRINCIPAL")
                 .antMatchers(HttpMethod.POST, "/teachers/register").hasRole("PRINCIPAL")
 
 
                 // // CONF DE SEGURANÇA USER CONTROLLER
+                .antMatchers(HttpMethod.GET,"/users").hasRole("PRINCIPAL")
                 .antMatchers(HttpMethod.GET,"/users/{id}").hasRole("PRINCIPAL")
                 .antMatchers(HttpMethod.DELETE,"/users/{id}/remove").hasRole("PRINCIPAL")
 

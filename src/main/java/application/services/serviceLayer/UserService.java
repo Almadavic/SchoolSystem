@@ -65,7 +65,7 @@ public class UserService implements UserDetailsService, AllUserTypeService {
     @Override
     public User returnUser(Long id) { // Método que retorna um usuário do sistema.
         Optional<User> user = userRepository.findById(id);
-        return user.orElseThrow(() -> new ResourceNotFoundException("Id : " + id + ", This teacher wasn't found on DataBase"));
+        return user.orElseThrow(() -> new ResourceNotFoundException("Id : " + id + ", This user wasn't found on DataBase"));
     }
 
     @Override
