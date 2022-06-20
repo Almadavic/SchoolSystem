@@ -35,7 +35,7 @@ public class ProdStartProject implements CommandLineRunner { // Classe chamada a
 
         Principal principal = new Principal("Barbara Borges", "barbara@gmail.com", passwordEncode);
         Registration registration5 = new Registration(Instant.parse("2019-07-21T03:42:10Z"), principal);
-        Address principalAddress = new Address("Brasil", "Minas Gerais", "Contagem", principal);
+        Address principalAddress = new Address("Contagem", "Minas Gerais", "Brasil", principal);
 
         Responsibility r1 = new Responsibility("Verify what students don't have classes");
         Responsibility r2 = new Responsibility("Verify if there is some teacher with no class");

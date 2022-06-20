@@ -9,7 +9,6 @@ import application.forms.RegisterUserForm;
 import application.repositories.RoleRepository;
 import application.repositories.StudentRepository;
 import application.repositories.UserRepository;
-import application.services.businessRules.registerUser.EmailAlreadyRegistered;
 import application.services.businessRules.registerUser.RegisterUserCheck;
 import application.services.exceptions.general.InvalidParamException;
 import application.services.exceptions.general.ResourceNotFoundException;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,6 +37,9 @@ public class StudentService implements ExtendsUserService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private List<RegisterUserCheck> validationsRegisterUser; // Validações para cadastrar um usuário (student no caso).
+
     @Override
     @Cacheable(value = "studentsList")
     public List<StudentDto> findAll(String noClass) { // Método que retorna todos os alunos do sistema registrados, ou eu posso filtrar a busca (ALUNOS QUE NÃO TEM CLASSE ASSOCIADA).
@@ -55,9 +56,7 @@ public class StudentService implements ExtendsUserService {
     @CacheEvict(value = {"studentsList", "usersList"}, allEntries = true)
     public StudentDto save(RegisterUserForm userForm) {       // Método cria (cadastra) um novo Estudante no banco de dados.
 
-        List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered()); // Validação para ver se o email já está cadastrado.
-
-        validations.forEach(v -> v.validation(userForm, userRepository)); // VALIDANDO!!
+        validationsRegisterUser.forEach(v -> v.validation(userForm, userRepository)); // VALIDANDO!!
 
         Student student = new Student();
         convertFromFormToUser(student, userForm);

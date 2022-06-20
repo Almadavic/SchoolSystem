@@ -10,20 +10,20 @@ import application.entities.users.User;
 import application.forms.NewPasswordForm;
 import application.repositories.UserRepository;
 import application.services.businessRules.changePassword.ChangePasswordCheck;
-import application.services.businessRules.changePassword.SamePassword;
-import application.services.businessRules.changePassword.ShortPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class UserAreaService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private List<ChangePasswordCheck> validationsChangePassword; // Validações para a nova senha.
 
     public UserDto myData(Principal user) { // Método para acessar as informações do próprio usuário logado.
 
@@ -41,13 +41,11 @@ public class UserAreaService {
 
     public String changePassword(Principal user, NewPasswordForm newPasswordForm) { // Método para alterar de senha.
 
-        List<ChangePasswordCheck> validations = Arrays.asList(new SamePassword(), new ShortPassword()); // Validações para a nova senha.
-
         User userDataBase = returnUser(user);
         String newPassword = newPasswordForm.getNewPassword();
         String oldPassword = userDataBase.getPassword();
 
-        validations.forEach(v -> v.validation(newPassword, oldPassword)); // VALIDANDO !!
+        validationsChangePassword.forEach(v -> v.validation(newPassword, oldPassword)); // VALIDANDO !!
 
         String newPasswordEncoded = new BCryptPasswordEncoder().encode(newPassword);
 

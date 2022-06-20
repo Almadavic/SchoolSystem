@@ -8,7 +8,6 @@ import application.forms.RegisterUserForm;
 import application.repositories.RoleRepository;
 import application.repositories.TeacherRepository;
 import application.repositories.UserRepository;
-import application.services.businessRules.registerUser.EmailAlreadyRegistered;
 import application.services.businessRules.registerUser.RegisterUserCheck;
 import application.services.exceptions.general.InvalidParamException;
 import application.services.exceptions.general.ResourceNotFoundException;
@@ -19,7 +18,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,6 +33,9 @@ public class TeacherService implements ExtendsUserService {
 
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private List<RegisterUserCheck> validationsRegisterUser; // Validações para cadastradar um usuário(teacher no caso).
 
     @Override
     @Cacheable(value = "teachersList")
@@ -52,9 +53,7 @@ public class TeacherService implements ExtendsUserService {
     @CacheEvict(value = {"teachersList", "usersList"}, allEntries = true)
     public TeacherDto save(RegisterUserForm userForm) {         // Método cria um novo Teacher (cadastra) no banco de dados.
 
-        List<RegisterUserCheck> validations = Arrays.asList(new EmailAlreadyRegistered()); // Validação para ver se o email já está cadastrado.
-
-        validations.forEach(v -> v.validation(userForm, userRepository)); // VALIDANDO !!
+        validationsRegisterUser.forEach(v -> v.validation(userForm, userRepository)); // VALIDANDO !!
 
         Teacher teacher = new Teacher();
         convertFromFormToUser(teacher, userForm);

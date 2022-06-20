@@ -5,6 +5,7 @@ import application.dtos.TeacherDto;
 import application.dtos.UserDto;
 import application.forms.RegisterUserForm;
 import application.services.serviceLayer.TeacherService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class TeacherController implements ExtendsUserController { // Controller 
 
     @Override
     @GetMapping
-    // Método que retorna todos os professores do sistema, ou eu posso filtrar a busca (PROFESSORES QUE NÃO TEM CLASSE ASSOCIADA).
+    @Operation(summary = "Me retorna todos os professores do sistema, ou eu posso filtrar a busca (PROFESSORES QUE NÃO TEM CLASSE ASSOCIADA).")
     public ResponseEntity<List<? extends UserDto>> findAll(@RequestParam(required = false) String noClass) {
 
         List<TeacherDto> teachersDto = teacherService.findAll(noClass);
@@ -34,7 +35,7 @@ public class TeacherController implements ExtendsUserController { // Controller 
 
     @Override
     @GetMapping("/{id}")
-    // Método que retorna um teacher em específico,passando o  id.
+    @Operation(summary = "Me retorna um teacher em específico,passando o  id.")
     public ResponseEntity<TeacherDto> findById(@PathVariable Long id) {
 
         TeacherDto teacherDto = teacherService.findById(id);
@@ -44,7 +45,7 @@ public class TeacherController implements ExtendsUserController { // Controller 
 
     @Override
     @PostMapping(value = "/register")
-    // Método cria um novo Teacher (cadastra) no banco de dados.
+    @Operation(summary = "Cria um novo Teacher (cadastra) no banco de dados.")
     public ResponseEntity<? extends UserDto> save(@RequestBody @Valid RegisterUserForm userForm, UriComponentsBuilder uriBuilder) {
 
         TeacherDto teacherDto = teacherService.save(userForm);

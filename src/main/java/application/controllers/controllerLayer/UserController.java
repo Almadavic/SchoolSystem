@@ -3,6 +3,7 @@ package application.controllers.controllerLayer;
 import application.controllers.controllerLayer.interfaces.AllUserTypeController;
 import application.dtos.UserDto;
 import application.services.serviceLayer.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class UserController implements AllUserTypeController { // Controller par
 
     @Override
     @GetMapping
-    //Método retorna todos os usuários do sistema, ou eu posso filtrar a busca (PELA ROLE),ex : todos os usuarios que tenham a role professor.
+    @Operation(summary = "Me retorna todos os usuários do sistema, ou eu posso filtrar a busca (PELA ROLE),ex : todos os usuarios que tenham a role professor.")
     public ResponseEntity<List<? extends UserDto>> findAll(@RequestParam(required = false) String rolesName) {
 
         List<UserDto> usersDto = userService.findAll(rolesName);
@@ -28,7 +29,7 @@ public class UserController implements AllUserTypeController { // Controller par
 
     @Override
     @GetMapping("/{id}")
-    // Método que me retorna um User específico do sistema, não importa a role.
+    @Operation(summary = "Me retorna um User específico do sistema, não importa a role.")
     public ResponseEntity<UserDto> findById(@PathVariable Long id) {
 
         UserDto userDto = userService.findById(id);
@@ -37,7 +38,7 @@ public class UserController implements AllUserTypeController { // Controller par
     }
 
     @DeleteMapping(value = "/{id}/remove")
-    // Método remove um usuário.
+    @Operation(summary = "Remove um usuário do sistema.")
     public ResponseEntity<String> remove(@PathVariable Long id) {
 
         String message = userService.remove(id);

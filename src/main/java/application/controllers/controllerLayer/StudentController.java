@@ -6,6 +6,7 @@ import application.dtos.UserDto;
 import application.forms.RegisterUserForm;
 import application.services.serviceLayer.StudentService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class StudentController implements ExtendsUserController {  // Controller
 
     @Override
     @GetMapping
-    // Método que retorna todos os alunos do sistema registrados, ou eu posso filtrar a busca (ALUNOS QUE NÃO TEM CLASSE ASSOCIADA).
+    @Operation(summary = "Me retorna todos os alunos do sistema registrados, ou eu posso filtrar a busca (ALUNOS QUE NÃO TEM CLASSE ASSOCIADA).")
     public ResponseEntity<List<? extends UserDto>> findAll(@RequestParam(required = false) String noClass) {
 
         List<StudentDto> studentsDto = studentService.findAll(noClass);
@@ -35,7 +36,7 @@ public class StudentController implements ExtendsUserController {  // Controller
 
     @Override
     @GetMapping(value = "/{id}")
-    // Método retorna um aluno em específico do sistema.
+    @Operation(summary = "Me retorna um aluno em específico do sistema.")
     public ResponseEntity<StudentDto> findById(@PathVariable Long id) {
 
         StudentDto studentDto = studentService.findById(id);
@@ -45,7 +46,7 @@ public class StudentController implements ExtendsUserController {  // Controller
 
     @Override
     @PostMapping(value = "/register")
-    // Método cria (cadastra) um novo estudante no banco de dados.
+    @Operation(summary = "Cria um novo Student (cadastra) no banco de dados.")
     public ResponseEntity<? extends UserDto> save(@RequestBody @Valid RegisterUserForm userForm, UriComponentsBuilder uriBuilder) {
 
         StudentDto studentDto = studentService.save(userForm);

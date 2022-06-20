@@ -3,7 +3,9 @@ package application.services.businessRules.addStudent;
 import application.entities.ClassRoom;
 import application.entities.users.Student;
 import application.services.exceptions.classRoomService.StudentHasAnotherClassException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StudentHasAnotherClass implements AddStudentCheck {
 
 

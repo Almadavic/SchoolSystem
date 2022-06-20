@@ -1,7 +1,9 @@
 package application.services.businessRules.changePassword;
 
 import application.services.exceptions.studentAreaService.ShortPasswordException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ShortPassword implements ChangePasswordCheck {
 
     @Override

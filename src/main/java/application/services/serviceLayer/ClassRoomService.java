@@ -15,15 +15,8 @@ import application.repositories.StudentRepository;
 import application.repositories.TeacherRepository;
 import application.repositories.UserRepository;
 import application.services.businessRules.addStudent.AddStudentCheck;
-import application.services.businessRules.addStudent.ClassContainsSameStudent;
-import application.services.businessRules.addStudent.FullList;
-import application.services.businessRules.addStudent.StudentHasAnotherClass;
 import application.services.businessRules.createClass.CreateClassCheck;
-import application.services.businessRules.createClass.MaximumOfClassRooms;
-import application.services.businessRules.setTeacher.SameTeacher;
 import application.services.businessRules.setTeacher.SetTeacherCheck;
-import application.services.businessRules.setTeacher.TeacherHasAnotherClass;
-import application.services.businessRules.updateGrades.GradeLimit;
 import application.services.businessRules.updateGrades.TeacherAllowed;
 import application.services.businessRules.updateGrades.UpdateGradesCheck;
 import application.services.exceptions.classRoomService.StudentDoesntExistInThisClassException;
@@ -39,7 +32,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +49,15 @@ public class ClassRoomService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private List<UpdateGradesCheck> validationsUpdateGrades; // Validações para atualizar uma nota.
+    @Autowired
+    private List<CreateClassCheck> validationsCreateClass; // Validações para criar uma sala no sistema.
+    @Autowired
+    private List<SetTeacherCheck> validationsSetTeacher; // Validações para setar um professor em uma classe.
+    @Autowired
+    private List<AddStudentCheck> validationsAddStudent; // Validação para adicionar um aluno em uma classe.
 
     @Cacheable(value = "classesRoomList")           // Aplicando Cache
     public Page<ClassRoomDto> findAll(Pageable pagination) {    // Método que me retorna uma paginação de todas as classes da plataforma, tendo algumas conf padrões para essa paginação.
@@ -96,12 +97,10 @@ public class ClassRoomService {
     @CacheEvict(value = {"classesRoomList", "studentsListByClassRoom", "studentsList"}, allEntries = true)
     public StudentDto updateGrades(Long idClass, Long idStudent, Principal user, NewGradesForm newGrades) { // Método atualiza as notas de um aluno de uma respectiva sala, passando o id do aluno e da classe.
 
-        List<UpdateGradesCheck> validations = Arrays.asList(new GradeLimit(), new TeacherAllowed()); // Validações para atualizar uma nota.
-
         ClassRoom classRoom = returnClass(idClass);
         Student student = returnStudent(classRoom, idStudent, false);
 
-        validations.forEach(v -> v.validation(newGrades, classRoom, user)); // VALIDANDO!
+        validationsUpdateGrades.forEach(v -> v.validation(newGrades, classRoom, user)); // VALIDANDO!
 
         updateGrades(student, newGrades);
         approve(student);
@@ -112,11 +111,9 @@ public class ClassRoomService {
     @CacheEvict(value = "classesRoomList", allEntries = true)
     public ClassRoomDto createClassRoom(CreateClassForm createClassForm) { // Método cria uma nova sala na plataforma, com a info Letter automatizada.
 
-        List<CreateClassCheck> validations = Arrays.asList(new MaximumOfClassRooms()); // Validações para criar uma sala no sistema.
-
         List<ClassRoom> classRooms = classRepository.findAll();
 
-        validations.forEach(v -> v.validation(classRooms)); // VALIDANDO!
+        validationsCreateClass.forEach(v -> v.validation(classRooms)); // VALIDANDO!
 
         char letterNewClass = '.';
         if (classRooms.size() > 0) {
@@ -143,17 +140,16 @@ public class ClassRoomService {
 
     @CacheEvict(value = {"classesRoomList", "teachersList"}, allEntries = true)
     public ClassRoomDto setTeacher(Long idClass, SetTeacherForm setTeacherForm) { // Método seta o professor em uma classe.
-        List<SetTeacherCheck> validations = Arrays.asList(new SameTeacher(), new TeacherHasAnotherClass()); // Validações para setar um professor em uma classe.
 
         ClassRoom classRoom = returnClass(idClass);
         Long idTeacher = setTeacherForm.getIdTeacher();
         Teacher teacher = returnTeacher(idTeacher);
         Teacher classTeacher = classRoom.getTeacher();
         if (classTeacher != null) {
-            validations.forEach(v -> v.validation(teacher, classTeacher)); // VALIDANDO!
+            validationsSetTeacher.forEach(v -> v.validation(teacher, classTeacher)); // VALIDANDO!
             classTeacher.setClassRoom(null);
         } else {
-            validations.forEach(v -> v.validation(teacher, null)); // VALIDANDO!
+            validationsSetTeacher.forEach(v -> v.validation(teacher, null)); // VALIDANDO!
         }
         updateClassTeacher(teacher, classRoom); // ATUALIZA SALVANDO NO BANCO AS NOVAS INFORMAÇÕES !
 
@@ -163,7 +159,6 @@ public class ClassRoomService {
 
     @CacheEvict(value = {"classesRoomList", "studentsList", "studentsListByClassRoom"}, allEntries = true)
     public ClassRoomDto addStudent(Long idClass, AddRemoveStudentForm addStudentForm) {  // Método adiciona um aluno na classe.
-        List<AddStudentCheck> validations = Arrays.asList(new FullList(), new ClassContainsSameStudent(), new StudentHasAnotherClass()); // Validação para adicionar um aluno em uma classe.
 
         ClassRoom classRoom = returnClass(idClass);
         Long idStudent = addStudentForm.getIdStudent();
@@ -171,7 +166,7 @@ public class ClassRoomService {
 
 
         ClassRoom finalClassRoom = classRoom;
-        validations.forEach(v -> v.validation(student, finalClassRoom)); // VALIDANDO!
+        validationsAddStudent.forEach(v -> v.validation(student, finalClassRoom)); // VALIDANDO!
 
         student.setClassRoom(classRoom);
 

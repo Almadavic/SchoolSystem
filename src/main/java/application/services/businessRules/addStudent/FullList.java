@@ -3,7 +3,9 @@ package application.services.businessRules.addStudent;
 import application.entities.ClassRoom;
 import application.entities.users.Student;
 import application.services.exceptions.classRoomService.FullListException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FullList implements AddStudentCheck { // Se a turma estiver cheia, um novo aluno não deve ser adicionado!
 
     @Override

@@ -4,7 +4,6 @@ import application.dtos.UserDto;
 import application.entities.users.Teacher;
 import application.entities.users.User;
 import application.repositories.UserRepository;
-import application.services.businessRules.removeUser.RemovePrincipal;
 import application.services.businessRules.removeUser.RemoveUserCheck;
 import application.services.exceptions.general.InvalidParamException;
 import application.services.exceptions.general.ResourceNotFoundException;
@@ -17,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +25,9 @@ public class UserService implements UserDetailsService, AllUserTypeService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private List<RemoveUserCheck> validations; // Validações para remover um usuário.
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // Método que mostra pro spring security como será feita a autenticação.
@@ -49,7 +50,6 @@ public class UserService implements UserDetailsService, AllUserTypeService {
 
     @CacheEvict(value = {"usersList", "teachersList", "studentsList", "classesRoomlist", "studentsListByClassRoom"}, allEntries = true)
     public String remove(Long id) { // Método remove um usuário.
-        List<RemoveUserCheck> validations = Arrays.asList(new RemovePrincipal()); // Validação para remover um usuário.
 
         User user = returnUser(id);
 

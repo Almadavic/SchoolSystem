@@ -4,9 +4,11 @@ import application.entities.users.User;
 import application.forms.RegisterUserForm;
 import application.repositories.UserRepository;
 import application.services.exceptions.general.EmailAlreadyRegisteredException;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 public class EmailAlreadyRegistered implements RegisterUserCheck {
 
     @Override

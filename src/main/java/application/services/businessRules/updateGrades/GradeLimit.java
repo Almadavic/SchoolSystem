@@ -3,11 +3,13 @@ package application.services.businessRules.updateGrades;
 import application.entities.ClassRoom;
 import application.forms.NewGradesForm;
 import application.services.exceptions.classRoomService.GradeLimitException;
+import org.springframework.stereotype.Component;
 
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
+@Component
 public class GradeLimit implements UpdateGradesCheck {
 
     @Override
