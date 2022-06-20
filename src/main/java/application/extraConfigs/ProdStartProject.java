@@ -1,67 +1,70 @@
 package application.extraConfigs;
 
-import application.entities.*;
-import application.entities.users.Principal;
-import application.repositories.ResponsibilityRepository;
-import application.repositories.RoleRepository;
-import application.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
-import java.time.Instant;
-import java.util.Arrays;
+// ------------------------------------------CLASSE SÓ É CHAMADA NA PRIMEIRA VEZ QUE VAI SUBIR O PROGRAMA PRO AR!-------------------------------------------------------------------
 
-@Configuration
-@Profile(value = {"prod"})
-public class ProdStartProject implements CommandLineRunner { // Classe chamada apenas quando a aplicação tiver em produção.
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ResponsibilityRepository responsibilityRepository;
-
-
-    @Override
-    public void run(String... args)  {
-
-        String passwordEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
-
-
-
-        Principal principal = new Principal("Barbara Borges", "barbara@gmail.com", passwordEncode);
-        Registration registration5 = new Registration(Instant.parse("2019-07-21T03:42:10Z"), principal);
-        Address principalAddress = new Address("Contagem", "Minas Gerais", "Brasil", principal);
-
-        Responsibility r1 = new Responsibility("Verify what students don't have classes");
-        Responsibility r2 = new Responsibility("Verify if there is some teacher with no class");
-        Responsibility r3 = new Responsibility("Verify how many students / teachers there are on the system");
-        Responsibility r4 = new Responsibility("Has to register classes / teachers / students on the system and also delete them");
-
-        responsibilityRepository.saveAll(Arrays.asList(r1, r2, r3, r4));
-        principal.addResponsibility(r1);
-        principal.addResponsibility(r2);
-        principal.addResponsibility(r3);
-        principal.addResponsibility(r4);
-
-        principal.setRegistration(registration5);
-        principal.setAddress(principalAddress);
-
-
-        Role role1 = new Role("ROLE_PRINCIPAL");
-        Role role2 = new Role("ROLE_TEACHER");
-        Role role3 = new Role("ROLE_STUDENT");
-
-        roleRepository.saveAll(Arrays.asList(role1,role2,role3));
-
-        principal.addRole(role1);
-
-        userRepository.save(principal);
-
-
-    }
-}
+//import application.entities.*;
+//import application.entities.users.Principal;
+//import application.repositories.ResponsibilityRepository;
+//import application.repositories.RoleRepository;
+//import application.repositories.UserRepository;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.CommandLineRunner;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.context.annotation.Profile;
+//
+//import java.time.Instant;
+//import java.util.Arrays;
+//
+//@Configuration
+//@Profile(value = {"prod"})
+//public class ProdStartProject implements CommandLineRunner { // Classe chamada apenas quando a aplicação tiver em produção.
+//
+//    @Autowired
+//    private RoleRepository roleRepository;
+//
+//    @Autowired
+//    private UserRepository userRepository;
+//    @Autowired
+//    private ResponsibilityRepository responsibilityRepository;
+//
+//
+//    @Override
+//    public void run(String... args)  {
+//
+//        String passwordEncode = "$2a$10$KT5rbfQTU8103kP6uEmkkO3W8XTc4MFH2peGPuL3sQ3X5ne.kz2oK";
+//
+//
+//
+//        Principal principal = new Principal("Barbara Borges", "barbara@gmail.com", passwordEncode);
+//        Registration registration5 = new Registration(Instant.parse("2019-07-21T03:42:10Z"), principal);
+//        Address principalAddress = new Address("Contagem", "Minas Gerais", "Brasil", principal);
+//
+//        Responsibility r1 = new Responsibility("Verify what students don't have classes");
+//        Responsibility r2 = new Responsibility("Verify if there is some teacher with no class");
+//        Responsibility r3 = new Responsibility("Verify how many students / teachers there are on the system");
+//        Responsibility r4 = new Responsibility("Has to register classes / teachers / students on the system and also delete them");
+//
+//        responsibilityRepository.saveAll(Arrays.asList(r1, r2, r3, r4));
+//        principal.addResponsibility(r1);
+//        principal.addResponsibility(r2);
+//        principal.addResponsibility(r3);
+//        principal.addResponsibility(r4);
+//
+//        principal.setRegistration(registration5);
+//        principal.setAddress(principalAddress);
+//
+//
+//        Role role1 = new Role("ROLE_PRINCIPAL");
+//        Role role2 = new Role("ROLE_TEACHER");
+//        Role role3 = new Role("ROLE_STUDENT");
+//
+//        roleRepository.saveAll(Arrays.asList(role1,role2,role3));
+//
+//        principal.addRole(role1);
+//
+//        userRepository.save(principal);
+//
+//
+//    }
+//}

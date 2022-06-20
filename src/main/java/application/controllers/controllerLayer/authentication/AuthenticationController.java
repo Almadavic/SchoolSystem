@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import application.forms.authenticationAuthorization.LoginForm;
 import application.dtos.authenticationAuthorization.TokenDto;
 import application.services.serviceLayer.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,8 @@ public class AuthenticationController {         // Controller para fazer a auten
     private AuthenticationService authService;  // Injeção de dependencia automatica - > AuthenticationService
 
     @PostMapping
-    public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginForm form) {  // Método para fazer o login e se autenticar no sistema.
+    @Operation(summary = "Faz o login e se autentica no sistema.")
+    public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginForm form) {
 
         String token = authService.authenticate(form, authManager); // Hash do Token que será retornado para o Client.
 
