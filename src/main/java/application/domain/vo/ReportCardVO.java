@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Embeddable
-public class ReportCardVO {  // Classe do Banco - > ReportCard |  Representa os boletim  de cada aluno |
+public class ReportCardVO {  //  Representa os boletim  de cada aluno |
 
     private Double grade1;
     private Double grade2;

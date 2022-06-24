@@ -17,7 +17,6 @@ public class TeacherAllowed implements UpdateGradesCheck {
         String userLoggedName = user.getName();
         String classTeacherName;
 
-
         if(classRoom.getTeacher() == null) {
             throw new ThereIsntTeacherInThisClassException("This class doesn't have any teacher");
         }

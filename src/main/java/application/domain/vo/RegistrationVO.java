@@ -14,7 +14,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @Embeddable
-public class RegistrationVO {
+public class RegistrationVO { // Representa a data de cadastro do usuário no Sistema.
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant registrationMoment;

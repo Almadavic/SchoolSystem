@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @Embeddable
-public class AddressVO { // Classe do Banco - > Address | Representa os endereços dos usuários
+public class AddressVO { //  Representa os endereços dos usuários
 
     private String city;
     private String state;
