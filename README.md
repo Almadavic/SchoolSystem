@@ -126,7 +126,7 @@ Bancos de Dados :
 
 ------------------------- INFORMAÇÕES ADICIONAIS ---------------------
 
-    Linhas de Código : 3221
+    Linhas de Código : 3170
     
     Classes / Arquivos implementados : 124
 
