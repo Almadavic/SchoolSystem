@@ -1,6 +1,6 @@
 package application.integrationTest.repository;
 
-import application.domain.entity.user.User;
+import application.entity.user.User;
 import application.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

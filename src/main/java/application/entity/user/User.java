@@ -1,8 +1,8 @@
-package application.domain.entity.user;
+package application.entity.user;
 
-import application.domain.entity.Role;
-import application.domain.vo.AddressVO;
-import application.domain.vo.RegistrationVO;
+import application.entity.Role;
+import application.vo.AddressVO;
+import application.vo.RegistrationVO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +10,6 @@ import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

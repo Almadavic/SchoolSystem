@@ -1,4 +1,4 @@
-package application.domain.vo;
+package application.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

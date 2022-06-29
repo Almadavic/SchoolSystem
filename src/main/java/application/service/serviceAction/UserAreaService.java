@@ -4,9 +4,9 @@ import application.dto.response.PrincipalDto;
 import application.dto.response.StudentDto;
 import application.dto.response.TeacherDto;
 import application.dto.response.UserDto;
-import application.domain.entity.user.Student;
-import application.domain.entity.user.Teacher;
-import application.domain.entity.user.User;
+import application.entity.user.Student;
+import application.entity.user.Teacher;
+import application.entity.user.User;
 import application.dto.request.NewPasswordForm;
 import application.repository.UserRepository;
 import application.service.businessRule.changePassword.ChangePasswordCheck;
@@ -32,7 +32,7 @@ public class UserAreaService {
             return new TeacherDto(userEntity);
         } else if (userEntity instanceof Student) {
             return new StudentDto(userEntity);
-        } else if (userEntity instanceof application.domain.entity.user.Principal) {
+        } else if (userEntity instanceof application.entity.user.Principal) {
             return new PrincipalDto(userEntity);
         } else {
             return null; // Isso nunca aconteceria, pois só existe instancias de teacher,student e principal. Mas eu fiz a lógica dessa maneira pois futuramente poderia haver outro cargo, assim, sendo melhor para a manutenção!

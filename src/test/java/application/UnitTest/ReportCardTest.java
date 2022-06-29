@@ -1,6 +1,6 @@
 package application.UnitTest;
 
-import application.domain.vo.ReportCardVO;
+import application.vo.ReportCardVO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

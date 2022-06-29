@@ -1,7 +1,7 @@
 package application.integrationTest.repository;
 
 
-import application.domain.entity.user.Student;
+import application.entity.user.Student;
 import application.integrationTest.repository.builder.StudentBuilder;
 import application.integrationTest.repository.interfaceRepository.ExtendsUserRepositoryTest;
 import application.repository.StudentRepository;

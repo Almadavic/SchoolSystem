@@ -1,8 +1,8 @@
 package application.service.serviceAction;
 
 import application.dto.response.UserDto;
-import application.domain.entity.user.Teacher;
-import application.domain.entity.user.User;
+import application.entity.user.Teacher;
+import application.entity.user.User;
 import application.repository.UserRepository;
 import application.service.businessRule.removeUser.RemoveUserCheck;
 import application.service.exception.general.InvalidParamException;

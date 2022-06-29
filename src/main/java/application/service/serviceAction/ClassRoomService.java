@@ -1,18 +1,18 @@
 package application.service.serviceAction;
 
 import application.dto.response.ClassRoomDto;
-import application.domain.enumerated.ClassShift;
-import application.domain.enumerated.Situation;
-import application.domain.entity.user.User;
+import application.enumerated.ClassShift;
+import application.enumerated.Situation;
+import application.entity.user.User;
 import application.dto.request.AddRemoveStudentForm;
 import application.dto.request.CreateClassForm;
 import application.dto.request.NewGradesForm;
 import application.dto.request.SetTeacherForm;
 import application.dto.response.StudentDto;
 import application.dto.response.TeacherDto;
-import application.domain.entity.ClassRoom;
-import application.domain.entity.user.Student;
-import application.domain.entity.user.Teacher;
+import application.entity.ClassRoom;
+import application.entity.user.Student;
+import application.entity.user.Teacher;
 import application.repository.ClassRoomRepository;
 import application.repository.StudentRepository;
 import application.repository.TeacherRepository;

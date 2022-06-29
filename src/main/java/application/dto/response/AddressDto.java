@@ -1,6 +1,6 @@
 package application.dto.response;
 
-import application.domain.vo.AddressVO;
+import application.vo.AddressVO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;

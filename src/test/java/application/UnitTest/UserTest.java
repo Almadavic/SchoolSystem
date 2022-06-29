@@ -1,8 +1,8 @@
 package application.UnitTest;
 
-import application.domain.entity.Role;
-import application.domain.entity.user.Teacher;
-import application.domain.entity.user.User;
+import application.entity.Role;
+import application.entity.user.Teacher;
+import application.entity.user.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package application.repository;
 
-import application.domain.entity.ClassRoom;
+import application.entity.ClassRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

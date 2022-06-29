@@ -2,8 +2,8 @@ package application.service.serviceAction.interfaceService;
 
 
 import application.dto.response.UserDto;
-import application.domain.vo.AddressVO;
-import application.domain.entity.user.User;
+import application.vo.AddressVO;
+import application.entity.user.User;
 import application.dto.request.RegisterAddressForm;
 import application.dto.request.RegisterUserForm;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

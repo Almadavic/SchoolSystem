@@ -1,16 +1,16 @@
 package application.config.extraConfig;
 
-import application.domain.entity.ClassRoom;
-import application.domain.entity.Responsibility;
-import application.domain.entity.Role;
-import application.domain.enumerated.ClassShift;
-import application.domain.entity.user.Principal;
-import application.domain.entity.user.Student;
-import application.domain.entity.user.Teacher;
+import application.entity.ClassRoom;
+import application.entity.Responsibility;
+import application.entity.Role;
+import application.enumerated.ClassShift;
+import application.entity.user.Principal;
+import application.entity.user.Student;
+import application.entity.user.Teacher;
 import application.repository.*;
 import application.repository.RoleRepository;
-import application.domain.vo.AddressVO;
-import application.domain.vo.RegistrationVO;
+import application.vo.AddressVO;
+import application.vo.RegistrationVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;

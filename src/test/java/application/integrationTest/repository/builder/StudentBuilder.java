@@ -1,6 +1,6 @@
 package application.integrationTest.repository.builder;
 
-import application.domain.entity.user.Student;
+import application.entity.user.Student;
 
 public class StudentBuilder extends UserBuilder { // Classe (FILHA) StudentBuilder.
 

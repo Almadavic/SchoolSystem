@@ -1,17 +1,15 @@
-package application.domain.entity;
+package application.entity;
 
-import application.domain.enumerated.ClassShift;
-import application.domain.entity.user.Student;
-import application.domain.entity.user.Teacher;
-import application.domain.vo.ReportCardVO;
+import application.enumerated.ClassShift;
+import application.entity.user.Student;
+import application.entity.user.Teacher;
+import application.vo.ReportCardVO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

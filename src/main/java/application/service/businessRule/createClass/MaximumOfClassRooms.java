@@ -1,12 +1,14 @@
 package application.service.businessRule.createClass;
 
-import application.domain.entity.ClassRoom;
+import application.entity.ClassRoom;
 import application.service.exception.classRoomService.MaximumOfClassRoomsException;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Order(1)
 public class MaximumOfClassRooms implements CreateClassCheck {
 
     @Override

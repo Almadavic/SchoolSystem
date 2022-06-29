@@ -1,7 +1,7 @@
 package application.integrationTest.repository.builder;
 
 
-import application.domain.entity.user.Teacher;
+import application.entity.user.Teacher;
 
 public class TeacherBuilder extends UserBuilder { // Classe (FILHA) TeacherBuilder.
     @Override

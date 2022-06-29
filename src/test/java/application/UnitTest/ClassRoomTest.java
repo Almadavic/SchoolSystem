@@ -1,9 +1,9 @@
 package application.UnitTest;
 
-import application.domain.entity.ClassRoom;
-import application.domain.vo.ReportCardVO;
-import application.domain.enumerated.ClassShift;
-import application.domain.entity.user.Student;
+import application.entity.ClassRoom;
+import application.vo.ReportCardVO;
+import application.enumerated.ClassShift;
+import application.entity.user.Student;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

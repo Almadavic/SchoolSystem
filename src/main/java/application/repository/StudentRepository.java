@@ -1,6 +1,6 @@
 package application.repository;
 
-import application.domain.entity.user.Student;
+import application.entity.user.Student;
 import application.repository.interfaceRepository.ExtendsUserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

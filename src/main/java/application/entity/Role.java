@@ -1,17 +1,15 @@
-package application.domain.entity;
+package application.entity;
 
 
 import javax.persistence.*;
 
-import application.domain.entity.user.User;
+import application.entity.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

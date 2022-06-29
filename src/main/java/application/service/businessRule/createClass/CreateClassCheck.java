@@ -1,6 +1,6 @@
 package application.service.businessRule.createClass;
 
-import application.domain.entity.ClassRoom;
+import application.entity.ClassRoom;
 
 import java.util.List;
 

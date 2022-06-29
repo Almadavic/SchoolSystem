@@ -1,6 +1,6 @@
 package application.repository.interfaceRepository;
 
-import application.domain.entity.user.User;
+import application.entity.user.User;
 
 
 import java.util.List;

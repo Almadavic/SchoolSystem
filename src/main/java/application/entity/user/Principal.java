@@ -1,6 +1,6 @@
-package application.domain.entity.user;
+package application.entity.user;
 
-import application.domain.entity.Responsibility;
+import application.entity.Responsibility;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

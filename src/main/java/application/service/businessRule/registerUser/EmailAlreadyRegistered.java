@@ -1,14 +1,16 @@
 package application.service.businessRule.registerUser;
 
-import application.domain.entity.user.User;
+import application.entity.user.User;
 import application.dto.request.RegisterUserForm;
 import application.repository.UserRepository;
 import application.service.exception.general.EmailAlreadyRegisteredException;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
+@Order(1)
 public class EmailAlreadyRegistered implements RegisterUserCheck {
 
     @Override

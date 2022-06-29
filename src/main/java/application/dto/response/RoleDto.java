@@ -1,6 +1,6 @@
 package application.dto.response;
 
-import application.domain.entity.Role;
+import application.entity.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;

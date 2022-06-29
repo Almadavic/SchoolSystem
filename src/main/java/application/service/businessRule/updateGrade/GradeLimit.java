@@ -1,8 +1,9 @@
 package application.service.businessRule.updateGrade;
 
-import application.domain.entity.ClassRoom;
+import application.entity.ClassRoom;
 import application.dto.request.NewGradesForm;
 import application.service.exception.classRoomService.GradeLimitException;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.security.Principal;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
+@Order(2)
 public class GradeLimit implements UpdateGradesCheck {
 
     @Override

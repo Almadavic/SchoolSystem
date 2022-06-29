@@ -1,14 +1,16 @@
 package application.service.businessRule.updateGrade;
 
-import application.domain.entity.ClassRoom;
+import application.entity.ClassRoom;
 import application.dto.request.NewGradesForm;
 import application.service.exception.classRoomService.ThereIsntTeacherInThisClassException;
 import application.service.exception.general.NoPermissionException;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.security.Principal;
 
 @Component
+@Order(1)
 public class TeacherAllowed implements UpdateGradesCheck {
     @Override
     public void validation(NewGradesForm newGrades, ClassRoom classRoom, Principal user) { // O professor que for alterar a nota do aluno tem q ser o mesmo professor da classe.

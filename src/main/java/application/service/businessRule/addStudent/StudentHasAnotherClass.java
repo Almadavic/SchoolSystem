@@ -1,11 +1,13 @@
 package application.service.businessRule.addStudent;
 
-import application.domain.entity.ClassRoom;
-import application.domain.entity.user.Student;
+import application.entity.ClassRoom;
+import application.entity.user.Student;
 import application.service.exception.classRoomService.StudentHasAnotherClassException;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(3)
 public class StudentHasAnotherClass implements AddStudentCheck {
 
 

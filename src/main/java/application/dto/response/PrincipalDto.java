@@ -1,8 +1,8 @@
 package application.dto.response;
 
-import application.domain.entity.Responsibility;
-import application.domain.entity.user.Principal;
-import application.domain.entity.user.User;
+import application.entity.Responsibility;
+import application.entity.user.Principal;
+import application.entity.user.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;

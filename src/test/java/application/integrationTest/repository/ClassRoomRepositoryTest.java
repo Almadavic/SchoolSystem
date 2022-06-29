@@ -1,9 +1,9 @@
 package application.integrationTest.repository;
 
 
-import application.domain.entity.ClassRoom;
-import application.domain.enumerated.ClassShift;
-import application.domain.entity.user.Teacher;
+import application.entity.ClassRoom;
+import application.enumerated.ClassShift;
+import application.entity.user.Teacher;
 import application.integrationTest.repository.interfaceRepository.GeneralExtendsRepositoryTest;
 import application.repository.ClassRoomRepository;
 import application.repository.TeacherRepository;

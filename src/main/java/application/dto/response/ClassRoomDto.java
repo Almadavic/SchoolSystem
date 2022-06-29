@@ -1,8 +1,8 @@
 package application.dto.response;
 
-import application.domain.entity.ClassRoom;
-import application.domain.enumerated.ClassShift;
-import application.domain.entity.user.Student;
+import application.entity.ClassRoom;
+import application.enumerated.ClassShift;
+import application.entity.user.Student;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;

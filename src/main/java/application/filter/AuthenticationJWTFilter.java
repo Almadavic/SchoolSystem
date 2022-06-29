@@ -1,6 +1,6 @@
 package application.filter;
 
-import application.domain.entity.user.User;
+import application.entity.user.User;
 import application.repository.UserRepository;
 import application.service.serviceAction.TokenService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

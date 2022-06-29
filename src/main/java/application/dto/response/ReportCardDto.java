@@ -1,7 +1,7 @@
 package application.dto.response;
 
-import application.domain.vo.ReportCardVO;
-import application.domain.enumerated.Situation;
+import application.vo.ReportCardVO;
+import application.enumerated.Situation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;

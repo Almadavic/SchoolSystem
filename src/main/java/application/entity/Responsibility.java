@@ -1,14 +1,12 @@
-package application.domain.entity;
+package application.entity;
 
-import application.domain.entity.user.Principal;
+import application.entity.user.Principal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

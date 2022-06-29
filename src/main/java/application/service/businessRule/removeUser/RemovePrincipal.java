@@ -1,11 +1,13 @@
 package application.service.businessRule.removeUser;
 
-import application.domain.entity.user.Principal;
-import application.domain.entity.user.User;
+import application.entity.user.Principal;
+import application.entity.user.User;
 import application.service.exception.userService.RemovePrincipalException;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(1)
 public class RemovePrincipal implements RemoveUserCheck {
 
     @Override

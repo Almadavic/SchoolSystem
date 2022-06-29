@@ -1,4 +1,4 @@
-package application.domain.vo;
+package application.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

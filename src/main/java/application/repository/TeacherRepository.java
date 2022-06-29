@@ -1,6 +1,6 @@
 package application.repository;
 
-import application.domain.entity.user.Teacher;
+import application.entity.user.Teacher;
 import application.repository.interfaceRepository.ExtendsUserRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

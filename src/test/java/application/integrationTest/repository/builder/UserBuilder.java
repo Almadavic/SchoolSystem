@@ -1,6 +1,6 @@
 package application.integrationTest.repository.builder;
 
-import application.domain.entity.ClassRoom;
+import application.entity.ClassRoom;
 import lombok.Getter;
 
 

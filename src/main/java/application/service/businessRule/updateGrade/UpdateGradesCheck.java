@@ -1,6 +1,6 @@
 package application.service.businessRule.updateGrade;
 
-import application.domain.entity.ClassRoom;
+import application.entity.ClassRoom;
 import application.dto.request.NewGradesForm;
 
 import java.security.Principal;

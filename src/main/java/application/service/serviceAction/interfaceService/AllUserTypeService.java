@@ -1,7 +1,7 @@
 package application.service.serviceAction.interfaceService;
 
 import application.dto.response.UserDto;
-import application.domain.entity.user.User;
+import application.entity.user.User;
 
 
 import java.util.List;

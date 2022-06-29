@@ -1,13 +1,11 @@
-package application.domain.vo;
+package application.vo;
 
 
-import application.domain.enumerated.Situation;
+import application.enumerated.Situation;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serial;
-import java.io.Serializable;
 
 @Getter
 @Setter

@@ -1,6 +1,6 @@
 package application.service.businessRule.removeUser;
 
-import application.domain.entity.user.User;
+import application.entity.user.User;
 
 public interface RemoveUserCheck {
 

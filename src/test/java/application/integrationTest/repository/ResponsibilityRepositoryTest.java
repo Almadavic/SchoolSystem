@@ -1,6 +1,6 @@
 package application.integrationTest.repository;
 
-import application.domain.entity.Responsibility;
+import application.entity.Responsibility;
 import application.repository.ResponsibilityRepository;
 import application.integrationTest.repository.interfaceRepository.GeneralExtendsRepositoryTest;
 import org.junit.jupiter.api.Assertions;

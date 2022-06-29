@@ -1,7 +1,7 @@
 package application.integrationTest.repository;
 
-import application.domain.entity.ClassRoom;
-import application.domain.entity.user.Teacher;
+import application.entity.ClassRoom;
+import application.entity.user.Teacher;
 import application.integrationTest.repository.builder.TeacherBuilder;
 import application.repository.ClassRoomRepository;
 import application.repository.TeacherRepository;

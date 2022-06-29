@@ -1,7 +1,7 @@
-package application.domain.entity.user;
+package application.entity.user;
 
-import application.domain.entity.ClassRoom;
-import application.domain.vo.ReportCardVO;
+import application.entity.ClassRoom;
+import application.vo.ReportCardVO;
 import lombok.Getter;
 import lombok.Setter;
 

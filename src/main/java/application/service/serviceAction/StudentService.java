@@ -2,9 +2,9 @@ package application.service.serviceAction;
 
 import application.dto.response.StudentDto;
 
-import application.domain.vo.RegistrationVO;
-import application.domain.entity.Role;
-import application.domain.entity.user.Student;
+import application.vo.RegistrationVO;
+import application.entity.Role;
+import application.entity.user.Student;
 import application.dto.request.RegisterUserForm;
 import application.repository.RoleRepository;
 import application.repository.StudentRepository;
